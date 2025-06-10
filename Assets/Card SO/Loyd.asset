@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Loyd
   m_EditorClassIdentifier: 
   name: 'Loyd '
-  description: 'Discard a card. This card can attack twice '
-  artwork: {fileID: 21300000, guid: a801b4076b0015b4eb19ff88fa76539a, type: 3}
+  description: 'Damage up + Defense down '
+  artwork: {fileID: 21300000, guid: 592186d2e4c01264e9233d9d75d98eff, type: 3}
   type: {fileID: 21300000, guid: f2e7d2b68287bb2458f498158a4bbf04, type: 3}
   isBoss: 0
   isDefenseDown: 1
-  value1: 3
+  value1: 7
   value2: 0
   value3: 0
   actionType: 2

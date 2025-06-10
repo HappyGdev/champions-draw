@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cadee058d7a1094f89dee15f1af7878, type: 3}
   m_Name: Redz
   m_EditorClassIdentifier: 
-  name: Luftikus
+  name: 'Redz '
   description: 'Discard a card. This card can attack twice '
-  artwork: {fileID: 21300000, guid: a801b4076b0015b4eb19ff88fa76539a, type: 3}
+  artwork: {fileID: 21300000, guid: 4638dcd64881ed44ab93bc4631ac405a, type: 3}
   type: {fileID: 21300000, guid: f2e7d2b68287bb2458f498158a4bbf04, type: 3}
   isBoss: 0
-  value1: 3
+  isDefenseDown: 0
+  value1: 5
   value2: 0
   value3: 0
   actionType: 2

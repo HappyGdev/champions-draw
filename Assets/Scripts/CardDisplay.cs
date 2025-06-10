@@ -16,7 +16,7 @@ public class CardDisplay : MonoBehaviour
     public TextMeshProUGUI Value2;
     public TextMeshProUGUI Value3;
 
-    void Start()
+    public void DisplayCard()
     {
         nameText.text = Card.name;
         descriptionText.text = Card.description;
@@ -29,4 +29,12 @@ public class CardDisplay : MonoBehaviour
         Value3.text=Card.value3.ToString();
     }
 
+    private void OnEnable()
+    {
+        GameManager.onCardDisplay += DisplayCard;
+    }
+    private void OnDisable()
+    {
+        GameManager.onCardDisplay -= DisplayCard;
+    }
 }

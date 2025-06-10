@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: Leontor
   m_EditorClassIdentifier: 
   name: 'Leontor '
-  description: 'Discard a card. This card can attack twice '
-  artwork: {fileID: 21300000, guid: a801b4076b0015b4eb19ff88fa76539a, type: 3}
+  description: 'Discard a card. Add a card with a value less than 7 from the field
+    to your deck. '
+  artwork: {fileID: 21300000, guid: e11ec3d7abfd4b64ea29f1005ba02185, type: 3}
   type: {fileID: 21300000, guid: f2e7d2b68287bb2458f498158a4bbf04, type: 3}
   isBoss: 0
   isDefenseDown: 0
-  value1: 3
+  value1: 7
   value2: 0
   value3: 0
   actionType: 2
