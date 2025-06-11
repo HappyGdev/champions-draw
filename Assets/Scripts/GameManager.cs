@@ -6,17 +6,25 @@ using System;
 public class GameManager : MonoBehaviour
 {
     public static Action onCardDisplay;
+
+    [Header("Player Section")]
     public RectTransform player; // Player UI image
+    [HideInInspector]public int remainingMoves = 10;
+    [HideInInspector] public float moveSpeed = 1000f;
+    [Space]
+    [Header("Waypoints")]
     public RectTransform[] waypoints; // All 38 waypoints as UI elements
-    public int currentWaypointIndex = 0;
-    public int remainingMoves = 10;
-    public float moveSpeed = 1000f;
+    private int currentWaypointIndex = 0;
+
     public GameObject MoveFinished;
+    [Space]
+    [Header("cards")]
     public List<CardDisplay> cards = new List<CardDisplay>();   
     public CardHolder cardHolder;
 
+    [Space]
+    [Header("Inventory")]
     public Inventory inventory; // Reference to inventory system
-
     private List<string> objectname= new List<string>();    
 
     public void MovePlayer(int steps)
@@ -82,10 +90,25 @@ public class GameManager : MonoBehaviour
     }
     private void SetCards()
     {
-        foreach (var card in cards)
+        // Clone the original list so the original CardHold remains unchanged
+        List<Card> shuffledCards = new List<Card>(cardHolder.CardHold);
+
+        // Shuffle the list
+        for (int i = 0; i < shuffledCards.Count; i++)
         {
-            var rand = UnityEngine.Random.Range(0, cardHolder.CardHold.Count);
-            card.Card = cardHolder.CardHold[rand];
+            int randIndex = UnityEngine.Random.Range(i, shuffledCards.Count);
+            // Swap
+            Card temp = shuffledCards[i];
+            shuffledCards[i] = shuffledCards[randIndex];
+            shuffledCards[randIndex] = temp;
+        }
+
+        // Assign shuffled cards without repetition
+        for (int i = 0; i < cards.Count && i < shuffledCards.Count; i++)
+        {
+            cards[i].Card = shuffledCards[i];
         }
     }
+
+
 }
