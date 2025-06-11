@@ -5,6 +5,7 @@ public enum CardActionType
     Attack,
     Heal,
     Multi,
+    empty
 }
 
 [CreateAssetMenu(fileName = "New Card", menuName = "Cards")]

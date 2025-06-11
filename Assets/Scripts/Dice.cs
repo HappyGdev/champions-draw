@@ -1,5 +1,7 @@
 using UnityEngine;
+using DG.Tweening;
 using UnityEngine.UI;
+using DG.Tweening.Core.Easing;
 using UnityEngine.EventSystems;
 using System.Collections;
 
@@ -10,13 +12,26 @@ public class Dice : MonoBehaviour, IPointerClickHandler
     public GameManager gameManager;   // Reference to GameManager
     public float rollTime = 1.0f;     // Total animation time
     public float frameRate = 0.1f;    // Time between frames
-
+    private AudioSource audioSource;
     private bool isRolling = false;
 
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();  
+    }
     public void OnPointerClick(PointerEventData eventData)
     {
         if (!isRolling && gameManager.remainingMoves > 0)
         {
+            //Add some Dice Animation
+            UIAnimationUtility.PunchRotation(diceImage.rectTransform, new Vector3(20,20,180), 0.5f, 10, 90, Ease.InOutFlash);
+
+            // play dice sound
+            if (!audioSource.isPlaying) {
+                audioSource.Play();
+            }
+
+            //Start dice Logic
             StartCoroutine(RollDice());
         }
     }

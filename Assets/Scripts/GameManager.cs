@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     [Header("cards")]
     public List<CardDisplay> cards = new List<CardDisplay>();   
     public CardHolder cardHolder;
+    [Header("Fallback Card")]
+    public Sprite fallbackCardSprite; // Assign a default sprite here
 
     [Space]
     [Header("Inventory")]
@@ -86,7 +88,9 @@ public class GameManager : MonoBehaviour
             player.anchoredPosition = waypoints[0].anchoredPosition;
         }
         SetCards();
+        SetNullCards();
         onCardDisplay?.Invoke();
+
     }
     private void SetCards()
     {
@@ -109,6 +113,17 @@ public class GameManager : MonoBehaviour
             cards[i].Card = shuffledCards[i];
         }
     }
+    private void SetNullCards()
+    {
 
+        int[] randomNumbers = new int[5];
+
+        for (int i = 0; i < randomNumbers.Length; i++)
+        {
+            randomNumbers[i] = UnityEngine.Random.Range(0, 26); // 0 to 25 inclusive
+        }
+
+        Debug.Log("Generated Random Numbers: " + string.Join(", ", randomNumbers));
+    }
 
 }

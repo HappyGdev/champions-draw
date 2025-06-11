@@ -37,4 +37,5 @@ public class CardDisplay : MonoBehaviour
     {
         GameManager.onCardDisplay -= DisplayCard;
     }
+
 }
