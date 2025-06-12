@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class GameManager : MonoBehaviour
     [Header("Player Section")]
     public RectTransform player; // Player UI image
     [HideInInspector]public int remainingMoves = 10;
+    public TextMeshProUGUI remainingMove_txt;
     [HideInInspector] public float moveSpeed = 1000f;
     [Space]
     [Header("Waypoints")]
@@ -21,19 +23,36 @@ public class GameManager : MonoBehaviour
     [Header("cards")]
     public List<CardDisplay> cards = new List<CardDisplay>();   
     public CardHolder cardHolder;
-    [Header("Fallback Card")]
-    public Sprite fallbackCardSprite; // Assign a default sprite here
+
+    [Header("Null Card ")]
+    public Sprite NullSprite; // Assign a default sprite here
+    public Card NullCard;
+    public int Null_Card_Amounts;
 
     [Space]
     [Header("Inventory")]
-    public Inventory inventory; // Reference to inventory system
-    private List<string> objectname= new List<string>();    
+    public UiItemSpawner uiItemSpawner; // Reference to inventory system
+    private List<string> objectname= new List<string>();
+
+    private void Start()
+    {
+        if (waypoints.Length > 0 && player != null)
+        {
+            currentWaypointIndex = 0;
+            player.anchoredPosition = waypoints[0].anchoredPosition;
+        }
+        SetCards();
+        SetNullCards();
+        GiveInitialInventory(); 
+        onCardDisplay?.Invoke();
+    }
 
     public void MovePlayer(int steps)
     {
         if (remainingMoves <= 0 || isMoving) return;
 
         remainingMoves--;
+        remainingMove_txt.text = remainingMoves.ToString();
         StartCoroutine(MoveOverSteps(steps));
     }
 
@@ -67,31 +86,25 @@ public class GameManager : MonoBehaviour
             MoveFinished.SetActive(true);
         }
         // Add an item to inventory AFTER completing all steps
-        if (inventory != null)
+        if (uiItemSpawner != null)
         {
-            string itemName = waypoints[currentWaypointIndex].GetComponentInChildren<CardDisplay>().Card.name;
-            Debug.Log("Step finished at waypoint: " + itemName);
+            // string itemName = waypoints[currentWaypointIndex].GetComponentInChildren<CardDisplay>().Card.name;
+            Card ChosenCard = waypoints[currentWaypointIndex].GetComponentInChildren<CardDisplay>().Card;
 
-            inventory.AddItem(itemName);
-            inventory.DisplayInventory();     // show the list
+            //Debug.Log("Step finished at waypoint: " + itemName);
+
+            if(ChosenCard.actionType != CardActionType.empty)
+            {
+                uiItemSpawner.SpawnItem(ChosenCard);
+                onCardDisplay?.Invoke();
+            }
+            //inventory.DisplayInventory();     // show the list
 
         }
 
         isMoving = false;
     }
 
-    private void Start()
-    {
-        if (waypoints.Length > 0 && player != null)
-        {
-            currentWaypointIndex = 0;
-            player.anchoredPosition = waypoints[0].anchoredPosition;
-        }
-        SetCards();
-        SetNullCards();
-        onCardDisplay?.Invoke();
-
-    }
     private void SetCards()
     {
         // Clone the original list so the original CardHold remains unchanged
@@ -115,15 +128,47 @@ public class GameManager : MonoBehaviour
     }
     private void SetNullCards()
     {
+        HashSet<int> uniqueRandomIndices = new HashSet<int>();
 
-        int[] randomNumbers = new int[5];
-
-        for (int i = 0; i < randomNumbers.Length; i++)
+        while (uniqueRandomIndices.Count < Null_Card_Amounts)
         {
-            randomNumbers[i] = UnityEngine.Random.Range(0, 26); // 0 to 25 inclusive
+            int rand = UnityEngine.Random.Range(0, cards.Count); 
+            uniqueRandomIndices.Add(rand);
         }
 
-        Debug.Log("Generated Random Numbers: " + string.Join(", ", randomNumbers));
-    }
+        Debug.Log("Generated Unique Random Numbers: " + string.Join(", ", uniqueRandomIndices));
 
+        foreach (int index in uniqueRandomIndices)
+        {
+            if (index >= 0 && index < cards.Count && cards[index] != null)
+            {
+                cards[index].Card = NullCard;
+            }
+        }
+    }
+    private void GiveInitialInventory()
+    {
+        if (cardHolder == null || uiItemSpawner == null || cardHolder.CardHold.Count < 4)
+        {
+            Debug.LogWarning("CardHolder or UIItemSpawner not assigned properly.");
+            return;
+        }
+
+        HashSet<int> uniqueIndexes = new HashSet<int>();
+
+        while (uniqueIndexes.Count < 4)
+        {
+            int randIndex = UnityEngine.Random.Range(0, cardHolder.CardHold.Count);
+            uniqueIndexes.Add(randIndex);
+        }
+
+        foreach (int index in uniqueIndexes)
+        {
+            Card randomCard = cardHolder.CardHold[index];
+            if (randomCard.actionType != CardActionType.empty)
+            {
+                uiItemSpawner.SpawnItem(randomCard);
+            }
+        }
+    }
 }
