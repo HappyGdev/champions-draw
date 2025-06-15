@@ -18,6 +18,7 @@ public class Card : ScriptableObject
     public Sprite type;
 
     public bool isBoss;
+    public bool isPlayerInventory;
     public bool isDefenseDown;
 
     public int value1;  // mana
