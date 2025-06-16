@@ -79,11 +79,14 @@ public class UiItemSpawner : MonoBehaviour
         }
         PlayerInventory.Clear();
 
-
+        //Player Turn over Button Apear
+        UIManager.Instance.Player_turn_Over_button_On();
+    }
+    public void Player_Turn_Over_button()
+    {
         //Now its Boss Turn
         StartCoroutine(ContinueTurn());
     }
-
     public void DestroyBossInventory()
     {
         foreach (var item in BossInventory)

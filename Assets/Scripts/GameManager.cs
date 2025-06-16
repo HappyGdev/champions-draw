@@ -297,12 +297,13 @@ public class GameManager : MonoBehaviour
         if (playerTurn)
         {
             CreatePlayerAttackInventory();
-
+            UIManager.Instance.PlyerBossTurn_Text("Player Turn");
             // Show UI prompt or wait for player action
             Debug.Log("Player's Turn");
         }
         else
         {
+            UIManager.Instance.PlyerBossTurn_Text("Boss Turn");
             CreateBossInventory();
 
            // BossAttackPhase();
