@@ -372,7 +372,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    private void CheckBattleOutcome()
+    public void CheckBattleOutcome()
     {
         if (HealthBar.instance.BosscurrentHealth <= 0)
         {

@@ -80,6 +80,8 @@ public class UiItemSpawner : MonoBehaviour
         PlayerInventory.Clear();
 
         //Player Turn over Button Apear
+        GameManager.instance.CheckBattleOutcome();
+
         UIManager.Instance.Player_turn_Over_button_On();
     }
     public void Player_Turn_Over_button()
@@ -113,8 +115,15 @@ public class UiItemSpawner : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         int ranindex = UnityEngine.Random.Range(0, BossInventory.Count);
+        foreach (var item in BossInventory)
+        {
+            item.SetActive(false);
+        }
+        BossInventory[ranindex].SetActive(true);    
 
-        UIAnimationUtility.ShakePosition(BossInventory[ranindex].GetComponent<RectTransform>(), new Vector3(2, 10, 1), 0.5f, 10, 90, Ease.InOutBounce);
+        UIAnimationUtility.ShakeScale(BossInventory[ranindex].GetComponent<RectTransform>(), new Vector3(.2f, .8f, .2f), 0.5f, 10, 90, Ease.InOutBounce);
+        UIAnimationUtility.ShakePosition(BossInventory[ranindex].GetComponent<RectTransform>(), new Vector3(1, 10, 1), 0.5f, 10, 90, Ease.InOutBounce);
+
         var bossdamage = BossInventory[ranindex].GetComponent<CardDisplay>().Card.value1;
         GameManager.instance.BossAttackPlayer(bossdamage);
     }

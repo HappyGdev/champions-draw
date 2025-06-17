@@ -1,4 +1,5 @@
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,8 @@ public class HealthBar : MonoBehaviour
     public Image BossHealthBarFIll;
     public float maxHealth = 100f;
     public float PlayercurrentHealth;
+    public TextMeshProUGUI Player_Health_text;
+    public TextMeshProUGUI Boss_Health_text;
     public float BosscurrentHealth;
 
     private void Awake()
@@ -35,8 +38,11 @@ public class HealthBar : MonoBehaviour
 
     void UpdatePlayerHealthUI()
     {
-        if (PlayerhealthBarFill != null)
+        if (PlayerhealthBarFill != null) 
+        {
             PlayerhealthBarFill.fillAmount = PlayercurrentHealth / maxHealth;
+            Player_Health_text.text = (PlayerhealthBarFill.fillAmount * 100).ToString() + " % ";
+        }
     }
 
     public void BossTakeDamage(float amount)
@@ -50,6 +56,9 @@ public class HealthBar : MonoBehaviour
     void UpdateBossHealthUI()
     {
         if (BossHealthBarFIll != null)
+        {
             BossHealthBarFIll.fillAmount = BosscurrentHealth / maxHealth;
+            Boss_Health_text.text = (BossHealthBarFIll.fillAmount*100).ToString() + " % ";
+        }
     }
 }
