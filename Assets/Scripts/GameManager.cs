@@ -296,25 +296,21 @@ public class GameManager : MonoBehaviour
         // Control From UiItem Spawner After Player Inventory Deleted(Player turn Finished) and now Its Boss Turn
         if (playerTurn)
         {
-            CreatePlayerAttackInventory();
-            UIManager.Instance.PlyerBossTurn_Text("Player Turn");
-            // Show UI prompt or wait for player action
-            Debug.Log("Player's Turn");
+            StartCoroutine(pTurn());
         }
         else
         {
-            UIManager.Instance.PlyerBossTurn_Text("Boss Turn");
             CreateBossInventory();
-
-           // BossAttackPhase();
-            Debug.Log("Boss's Turn");
-            //yield return StartCoroutine(BossAttackPhase());
         }
 
         playerTurn = !playerTurn;
-        //CheckBattleOutcome();
     }
-
+    IEnumerator pTurn()
+    {
+        UIManager.Instance.PlyerBossTurn_Text("Player Turn");
+        yield return new WaitForSeconds(1);
+        CreatePlayerAttackInventory();
+    }
     public void CreatePlayerAttackInventory()
     {
         if (PlayerFightcards == null || uiItemSpawner == null || PlayerFightcards.Count < 3)

@@ -97,6 +97,7 @@ public class UiItemSpawner : MonoBehaviour
     }
     IEnumerator ContinueTurn()
     {
+        UIManager.Instance.PlyerBossTurn_Text("Boss Turn");
         yield return new WaitForSeconds(2f);
         GameManager.instance.TurnLoop();
     }

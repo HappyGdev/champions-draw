@@ -22,6 +22,8 @@ public class UIManager : MonoBehaviour
     public void PlyerBossTurn_Text(string text)
     {
         player_BossTurn.GetComponent<TextMeshProUGUI>().text = text;
+        if (GameManager.instance.gameOver)
+            return;
         StartCoroutine(turnTextDisplay());
     }
     IEnumerator turnTextDisplay()
