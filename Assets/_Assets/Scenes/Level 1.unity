@@ -1710,7 +1710,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerhealthBarFill: {fileID: 1513472107}
   BossHealthBarFIll: {fileID: 1801196626}
-  maxHealth: 20
+  maxHealth: 100
   PlayercurrentHealth: 0
   Player_Health_text: {fileID: 1066938093}
   Boss_Health_text: {fileID: 2075774190}
@@ -1944,7 +1944,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 2
+  m_text: 10
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ce3be59464f5a0a41b95a2f59cee5f38, type: 2}
   m_sharedMaterial: {fileID: -4066531233092629528, guid: ce3be59464f5a0a41b95a2f59cee5f38, type: 2}
@@ -9265,7 +9265,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1780658666
 RectTransform:
   m_ObjectHideFlags: 0
