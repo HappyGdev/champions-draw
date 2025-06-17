@@ -34,6 +34,11 @@ public class UIManager : MonoBehaviour
         player_BossTurn.GetComponent<TextMeshProUGUI>().text = "";
         player_BossTurn.SetActive(false);
     }
+    public void BossPanel(bool stats)
+    {
+        BoosApearPanel.SetActive(stats);
+        UIAnimationUtility.ShakePosition(BoosApearPanel.GetComponent<RectTransform>(), new Vector3(2, 5, 2), 1f, 10, 90, Ease.InOutBounce);
+    }
     public void Player_turn_Over_button_On()
     {
         Player_turn_Over_button.SetActive(true);    

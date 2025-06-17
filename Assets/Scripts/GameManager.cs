@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System;
 using TMPro;
 using Unity.VisualScripting;
+using DG.Tweening;
 
 public class GameManager : MonoBehaviour
 {
@@ -246,6 +247,10 @@ public class GameManager : MonoBehaviour
     {
         //Disable Board
         MainPanel.SetActive(false);
+        yield return new WaitForSeconds(0.5f);
+        UIManager.Instance.BossPanel(true);
+        yield return new WaitForSeconds(2f);
+        UIManager.Instance.BossPanel(false);
         //Enable Boss Fight UI
         BossPanel.SetActive(true);
         yield return new WaitForSeconds(0.5f);
