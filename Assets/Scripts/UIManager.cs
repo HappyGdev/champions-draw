@@ -12,27 +12,42 @@ public class UIManager : MonoBehaviour
     public GameObject LosePanel;
     public GameObject WinPanel;
     public GameObject BoosApearPanel;
-    public GameObject player_BossTurn;
+    //public GameObject player_BossTurn;
     public GameObject Player_turn_Over_button;
+
+    public GameObject Playerturn_ui;
+    public GameObject BossturnUi;    
 
     private void Awake()
     {
         if(Instance == null) {Instance = this;}
     }
-    public void PlyerBossTurn_Text(string text)
+    public void PlyerBossTurn(int i)
     {
-        player_BossTurn.GetComponent<TextMeshProUGUI>().text = text;
+        //player_BossTurn.GetComponent<TextMeshProUGUI>().text = text;
         if (GameManager.instance.gameOver)
             return;
-        StartCoroutine(turnTextDisplay());
+        StartCoroutine(turnDisplay(i));
     }
-    IEnumerator turnTextDisplay()
+    IEnumerator turnDisplay(int turnnum)
     {
-        player_BossTurn.SetActive(true);
-        UIAnimationUtility.ShakePosition(player_BossTurn.GetComponent<RectTransform>(), new Vector3(1, 10, 1), 0.5f, 10, 90, Ease.InOutBounce);
-        yield return new WaitForSeconds(1f);
-        player_BossTurn.GetComponent<TextMeshProUGUI>().text = "";
-        player_BossTurn.SetActive(false);
+        //player turn = 0
+        if (turnnum == 0)
+        {
+            Playerturn_ui.SetActive(true);
+            UIAnimationUtility.ShakePosition(Playerturn_ui.GetComponent<RectTransform>(), new Vector3(1, 10, 1), 0.5f, 10, 90, Ease.InOutBounce);
+            yield return new WaitForSeconds(1f);
+            Playerturn_ui.SetActive(false);
+        }
+        //boss turn=1
+        else if (turnnum == 1) 
+        {
+            BossturnUi.SetActive(true);
+            UIAnimationUtility.ShakePosition(BossturnUi.GetComponent<RectTransform>(), new Vector3(1, 10, 1), 0.5f, 10, 90, Ease.InOutBounce);
+            yield return new WaitForSeconds(1f);
+            BossturnUi.SetActive(false);
+        }
+
     }
     public void BossPanel(bool stats)
     {

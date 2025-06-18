@@ -312,7 +312,7 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator pTurn()
     {
-        UIManager.Instance.PlyerBossTurn_Text("Player Turn");
+        UIManager.Instance.PlyerBossTurn(0);
         yield return new WaitForSeconds(1);
         CreatePlayerAttackInventory();
     }

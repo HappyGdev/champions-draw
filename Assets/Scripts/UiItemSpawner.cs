@@ -99,7 +99,7 @@ public class UiItemSpawner : MonoBehaviour
     }
     IEnumerator ContinueTurn()
     {
-        UIManager.Instance.PlyerBossTurn_Text("Boss Turn");
+        UIManager.Instance.PlyerBossTurn(1);
         yield return new WaitForSeconds(2f);
         GameManager.instance.TurnLoop();
     }
@@ -113,12 +113,13 @@ public class UiItemSpawner : MonoBehaviour
     }
     IEnumerator AttackFromBoss()
     {
-        yield return new WaitForSeconds(2f);
+        //yield return new WaitForSeconds(2f);
         int ranindex = UnityEngine.Random.Range(0, BossInventory.Count);
         foreach (var item in BossInventory)
         {
             item.SetActive(false);
         }
+        yield return new WaitForSeconds(0.2f);
         BossInventory[ranindex].SetActive(true);    
 
         UIAnimationUtility.ShakeScale(BossInventory[ranindex].GetComponent<RectTransform>(), new Vector3(.2f, .8f, .2f), 0.5f, 10, 90, Ease.InOutBounce);

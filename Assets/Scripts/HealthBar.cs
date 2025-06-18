@@ -41,7 +41,8 @@ public class HealthBar : MonoBehaviour
         if (PlayerhealthBarFill != null) 
         {
             PlayerhealthBarFill.fillAmount = PlayercurrentHealth / maxHealth;
-            Player_Health_text.text = (PlayerhealthBarFill.fillAmount * 100).ToString() + " % ";
+            //Player_Health_text.text = (PlayerhealthBarFill.fillAmount * 100).ToString() + " % ";
+            Player_Health_text.text = "100 / " + (PlayercurrentHealth).ToString();
         }
     }
 
@@ -58,7 +59,8 @@ public class HealthBar : MonoBehaviour
         if (BossHealthBarFIll != null)
         {
             BossHealthBarFIll.fillAmount = BosscurrentHealth / maxHealth;
-            Boss_Health_text.text = (BossHealthBarFIll.fillAmount*100).ToString() + " % ";
+            //Boss_Health_text.text = (BossHealthBarFIll.fillAmount*100).ToString() + " % ";
+            Boss_Health_text.text = "100 / " + (BosscurrentHealth).ToString();
         }
     }
 }
