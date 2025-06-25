@@ -58,6 +58,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector]public bool gameOver = false;
     private bool attackTriggered = false;
     private int attackDamage = 0;
+    private bool isChekInternet;
 
     private void Awake()
     {
