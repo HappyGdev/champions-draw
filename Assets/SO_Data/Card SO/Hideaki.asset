@@ -16,6 +16,11 @@ MonoBehaviour:
   description: Deal damage to the boss
   artwork: {fileID: 21300000, guid: 51b3ba1a47f2b88429ee7a3e5d6be400, type: 3}
   type: {fileID: 21300000, guid: 349cbc967fc589f40ade6569d0de04ed, type: 3}
+  isBoss: 0
+  isPlayerInventory: 0
+  isDefenseDown: 0
   value1: 9
   value2: 0
   value3: 0
+  actionType: 3
+  multiActionType: 0

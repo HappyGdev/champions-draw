@@ -63,4 +63,13 @@ public class HealthBar : MonoBehaviour
             Boss_Health_text.text = "100 / " + (BosscurrentHealth).ToString();
         }
     }
+
+    public void BossPoisonHelathbar()
+    {
+        BossHealthBarFIll.GetComponent<Image>().color = Color.red;
+    }
+    public void BossNormalHealthBar()
+    {
+        BossHealthBarFIll.GetComponent<Image>().color = Color.white;
+    }
 }

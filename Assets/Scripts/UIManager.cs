@@ -16,7 +16,9 @@ public class UIManager : MonoBehaviour
     public GameObject Player_turn_Over_button;
 
     public GameObject Playerturn_ui;
-    public GameObject BossturnUi;    
+    public GameObject BossturnUi;
+
+    public TextMeshProUGUI dmgBoost;
 
     private void Awake()
     {
@@ -74,5 +76,10 @@ public class UIManager : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+    public void ShowDamageBoost()
+    {
+        var dmg = CardEffectManager.Instance.CurrentBoost();
+        dmgBoost.text = " + " +  dmg.ToString() + " Boost"; 
     }
 }

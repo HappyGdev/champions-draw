@@ -3,14 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using TMPro;
-using Unity.VisualScripting;
-using DG.Tweening;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public static Action onCardDisplay;
-    public static Action onDestroyPlayedCard;
+    public static Action<bool> onDestroyPlayedCard;
     public static Action onBossAttackTurn;
     public static Action onDestroyBosscard;
 
@@ -59,6 +57,8 @@ public class GameManager : MonoBehaviour
     private bool attackTriggered = false;
     private int attackDamage = 0;
     private bool isChekInternet;
+
+    [SerializeField] private int bossPoisendCount;
 
     private void Awake()
     {
@@ -302,6 +302,7 @@ public class GameManager : MonoBehaviour
         // Control From UiItem Spawner After Player Inventory Deleted(Player turn Finished) and now Its Boss Turn
         if (playerTurn)
         {
+            CheckBossPoisioned();
             StartCoroutine(pTurn());
         }
         else
@@ -310,6 +311,26 @@ public class GameManager : MonoBehaviour
         }
 
         playerTurn = !playerTurn;
+    }
+    //this is for Poisoned Boss
+    public void ChangeTurn()
+    {
+        playerTurn = !playerTurn;
+    }
+
+    public void PoisendBoss(int remainCount)
+    {
+        bossPoisendCount+=remainCount;
+    }
+    public void CheckBossPoisioned()
+    {
+        if (bossPoisendCount <= 1)
+        {
+            HealthBar.instance.BossNormalHealthBar();
+            return;
+        }
+        bossPoisendCount--;
+        HealthBar.instance.BossTakeDamage(5f);
     }
     IEnumerator pTurn()
     {
@@ -344,6 +365,37 @@ public class GameManager : MonoBehaviour
         }
 
     }
+
+    public void ReplaceTwoFightCardsButKeep(Card keepCard)
+    {
+
+        if (PlayerFightcards == null || uiItemSpawner == null || PlayerFightcards.Count < 3)
+            return;
+
+        HashSet<int> uniqueIndexes = new HashSet<int>();
+
+        // انتخاب دو کارت که با keepCard متفاوت باشند
+        while (uniqueIndexes.Count < 2)
+        {
+            int randIndex = UnityEngine.Random.Range(0, PlayerFightcards.Count);
+            if (PlayerFightcards[randIndex] != keepCard)
+                uniqueIndexes.Add(randIndex);
+        }
+
+        foreach (int index in uniqueIndexes)
+        {
+            Card randomCard = PlayerFightcards[index];
+            uiItemSpawner.SpawnFightCardItem(randomCard);
+        }
+
+        onCardDisplay?.Invoke();
+    }
+
+
+
+
+
+
     //Call from UI (Click on card And call Zoom Script)
     public void PlayerAttack(Card mycard)
     {
@@ -351,10 +403,15 @@ public class GameManager : MonoBehaviour
             return;
 
         //HealthBar.instance.BossTakeDamage(damage);
-        Debug.Log("Card Effect Applied");
         CardEffectManager.Instance.ApplyCardEffect(mycard);
         //Send to UiItemSpawner to Destroy All Spawned card
-        onDestroyPlayedCard?.Invoke();  
+        //onDestroyPlayedCard?.Invoke();  
+    }
+
+    public void SendEndAction(bool isBoosTurnSkip)
+    {
+        //Send to UiItemSpawner to Destroy All Spawned card
+        onDestroyPlayedCard?.Invoke(isBoosTurnSkip);
     }
 
     public void BossAttackPhase()

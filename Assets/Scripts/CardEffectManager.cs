@@ -1,34 +1,48 @@
 using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class CardEffectManager : MonoBehaviour
 {
     public static CardEffectManager Instance;
 
+    public static Action<Card> Onkeepcard;
+    public static Action<Card,int> OnfiveSelect;
+
+
     private bool isBossTurnSkipped = false;
     private bool damageBoostActive = false;
 
+    public int bossPoisendRound;
+    public int dmgBoost;
     private void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
-    }
 
+        bossPoisendRound = 0;   
+        dmgBoost = 0;
+    }
+    public int CurrentBoost()
+    {
+        return dmgBoost;
+    }
     public void ApplyCardEffect(Card card)
     {
         switch (card.actionType)
         {
             case CardActionType.Attack:
                 int dmg = card.value1;   ////damageBoostActive ? card.value2 + 2 : card.value2;
-                HealthBar.instance.BossTakeDamage(dmg);
+                HealthBar.instance.BossTakeDamage(dmg + dmgBoost);
                 //GameManager.instance.BossAttackPlayer(dmg);
+                GameManager.instance.SendEndAction(false);
                 break;
 
             case CardActionType.Heal:
                 //HealPlayer(card.value3);
                 int hlth = card.value1;   
                 HealthBar.instance.PlayerTakeDamage(-hlth);
+                GameManager.instance.SendEndAction(false);
                 break;
 
             case CardActionType.Multi:
@@ -41,19 +55,13 @@ public class CardEffectManager : MonoBehaviour
         }
     }
 
-    //private void HealPlayer(int amount)
-    //{
-    //    var hb = HealthBar.instance;
-    //    hb.PlayercurrentHealth = Mathf.Min(hb.PlayercurrentHealth + amount, hb.maxPlayerHealth);
-    //    hb.UpdatePlayerHealthUI();
-    //}
 
     private void HandleMultiAction(Card card)
     {
         switch (card.multiActionType)
         {
             case MultiActionType.AttackTwice:
-                StartCoroutine(AttackTwiceRoutine());
+                StartCoroutine(AttackTwiceRoutine(card));
                 break;
 
             case MultiActionType.SwapValues:
@@ -61,29 +69,33 @@ public class CardEffectManager : MonoBehaviour
                 break;
 
             case MultiActionType.BossStun:
-                isBossTurnSkipped = true;
+                //isBossTurnSkipped = true;
+                HealthBar.instance.BossTakeDamage(card.value1 + dmgBoost);
+                GameManager.instance.SendEndAction(true);
                 Debug.Log("Boss will skip next turn.");
                 break;
 
             case MultiActionType.RollAndSwap:
-                StartCoroutine(RollAgainAndSwapRoutine());
+                StartCoroutine(RollAgainAndSwapRoutine(card));
                 break;
 
             case MultiActionType.DiscardAndAdd5:
-                TryAddCardFromField(maxValue: 5);
+                StartCoroutine(TryAddCardFromField(card,5));
                 break;
 
             case MultiActionType.DiscardAndAdd7:
-                TryAddCardFromField(maxValue: 7);
+                StartCoroutine(TryAddCardFromField(card, 7));
                 break;
 
             case MultiActionType.PoisonBoss:
-                StartCoroutine(PoisonBossRoutine());
+                StartCoroutine(PoisonBossRoutine(card));
                 break;
 
             case MultiActionType.BoostDamage:
-                damageBoostActive = true;
-                Debug.Log("Next attacks deal +2 damage.");
+                dmgBoost += 2;
+                UIManager.Instance.ShowDamageBoost();
+                HealthBar.instance.BossTakeDamage(card.value1 + dmgBoost);
+                GameManager.instance.SendEndAction(false);
                 break;
 
             default:
@@ -91,53 +103,53 @@ public class CardEffectManager : MonoBehaviour
                 break;
         }
     }
-
-    private IEnumerator AttackTwiceRoutine()
+    private IEnumerator AttackTwiceRoutine(Card crd)
     {
-        yield return new WaitForSeconds(0.2f);
-        GameManager.instance.BossAttackPlayer(10);
-        yield return new WaitForSeconds(0.3f);
-        GameManager.instance.BossAttackPlayer(10);
+        //yield return new WaitForSeconds(0.2f);
+        HealthBar.instance.BossTakeDamage(crd.value1 + dmgBoost);
+        yield return new WaitForSeconds(0.5f);
+        HealthBar.instance.BossTakeDamage(crd.value1 + dmgBoost);
+        GameManager.instance.SendEndAction(false);
     }
 
-    private IEnumerator PoisonBossRoutine()
+    private IEnumerator PoisonBossRoutine(Card crd)
     {
-        int poisonTurns = 3;
-        int poisonDamage = 5;
+        bossPoisendRound += 3;
+        HealthBar.instance.BossTakeDamage(crd.value1 + dmgBoost);
+        HealthBar.instance.BossPoisonHelathbar();
+        yield return new WaitForSeconds(0.5f);
+        //Apply poison manuelly for first time
+        HealthBar.instance.BossTakeDamage(5 + dmgBoost);
+        GameManager.instance.PoisendBoss(bossPoisendRound);
+        yield return new WaitForSeconds(1f);
+        GameManager.instance.SendEndAction(false);
+    }
 
-        for (int i = 0; i < poisonTurns; i++)
+    private IEnumerator RollAgainAndSwapRoutine(Card crd)
+    {
+        Debug.Log("RollAgainAndSwap activated.");
+
+
+        if (crd != null)
         {
-            Debug.Log($"Poison tick {i + 1}: -{poisonDamage} HP");
-            HealthBar.instance.BossTakeDamage(poisonDamage);
-            yield return new WaitForSeconds(1f);
+            //GameManager.instance.ReplaceTwoFightCardsButKeep(crd);
+            //send to uiitemspawner
+            Onkeepcard?.Invoke(crd);
         }
+
+        yield return new WaitForSeconds(1f);
     }
 
-    private IEnumerator RollAgainAndSwapRoutine()
+    private IEnumerator TryAddCardFromField(Card crd,int value)
     {
-        Debug.Log("Player rolls again and swaps a card (to be implemented).");
-        // تو این قسمت باید از GameManager تابعی برای roll مجدد صدا بزنی
-        yield return null;
-    }
 
-    private void TryAddCardFromField(int maxValue)
-    {
-        Debug.Log($"Try to add card from field with value <= {maxValue} (to be implemented).");
-        // انتخاب کارت از روی زمین + حذف یکی از کارت‌های دست فعلی
-    }
-
-    public bool ShouldSkipBossTurn()
-    {
-        if (isBossTurnSkipped)
+        if (crd != null)
         {
-            isBossTurnSkipped = false;
-            return true;
+            //send to uiitemspawner
+            OnfiveSelect?.Invoke(crd,value);
         }
-        return false;
+
+        yield return new WaitForSeconds(1f);
     }
 
-    public void ResetDamageBoost()
-    {
-        damageBoostActive = false;
-    }
 }
