@@ -99,7 +99,7 @@ public class UiItemSpawner : MonoBehaviour
     }
     IEnumerator ContinueTurn()
     {
-        UIManager.Instance.PlyerBossTurn(1);
+       // UIManager.Instance.PlyerBossTurn(1);
         yield return new WaitForSeconds(2f);
         GameManager.instance.TurnLoop();
     }

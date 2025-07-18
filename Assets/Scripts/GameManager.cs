@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         //set panels
-        MainPanel.SetActive(true); 
+        MainPanel.SetActive(true);
         BossPanel.SetActive(false);
 
         // Set Initial Player Place to Start Game (Waypoint zero)
@@ -260,7 +260,7 @@ public class GameManager : MonoBehaviour
         BossFight();
     }
 
-    private void BossFight()
+    public void BossFight()
     {
         TurnLoop();
        // StartCoroutine(TurnLoop());
@@ -345,12 +345,14 @@ public class GameManager : MonoBehaviour
 
     }
     //Call from UI (Click on card And call Zoom Script)
-    public void PlayerAttack(int damage)
+    public void PlayerAttack(Card mycard)
     {
         if (gameOver)
             return;
 
-        HealthBar.instance.BossTakeDamage(damage);
+        //HealthBar.instance.BossTakeDamage(damage);
+        Debug.Log("Card Effect Applied");
+        CardEffectManager.Instance.ApplyCardEffect(mycard);
         //Send to UiItemSpawner to Destroy All Spawned card
         onDestroyPlayedCard?.Invoke();  
     }
@@ -369,7 +371,10 @@ public class GameManager : MonoBehaviour
         HealthBar.instance.PlayerTakeDamage(damage);
         yield return new WaitForSeconds(2f);
         onDestroyBosscard?.Invoke();
-        TurnLoop();
+        ///   TurnLoop();
+        ///   
+        UIManager.Instance.Player_turn_Over_button_On();
+
     }
 
 

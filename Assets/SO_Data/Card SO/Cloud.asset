@@ -17,8 +17,10 @@ MonoBehaviour:
   artwork: {fileID: 21300000, guid: 18a77b993b6286b4a92031a6a219e04e, type: 3}
   type: {fileID: 21300000, guid: f2e7d2b68287bb2458f498158a4bbf04, type: 3}
   isBoss: 0
+  isPlayerInventory: 0
   isDefenseDown: 0
   value1: 5
   value2: 0
   value3: 0
   actionType: 2
+  multiActionType: 1

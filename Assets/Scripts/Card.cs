@@ -1,5 +1,16 @@
 using UnityEngine;
-
+public enum MultiActionType
+{
+    None,
+    AttackTwice,     // 2x
+    SwapValues,      // SW
+    BossStun,        // ST
+    RollAndSwap,     // RA
+    DiscardAndAdd5,  // D+5
+    DiscardAndAdd7,  // D+7
+    PoisonBoss,      // PO
+    BoostDamage      // A+2
+}
 public enum CardActionType
 {
     Attack,
@@ -26,4 +37,6 @@ public class Card : ScriptableObject
     public int value3;  // health
 
     public CardActionType actionType; // Add this line for enum usage
+    public MultiActionType multiActionType;  // مخصوص کارت‌های Multi
+
 }
