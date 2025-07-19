@@ -65,15 +65,12 @@ public class CardEffectManager : MonoBehaviour
                 break;
 
             case MultiActionType.SwapValues:
-                Debug.Log("Swapping values of two cards (not implemented).");
                 StartCoroutine(SwapValue(card));
                 break;
 
             case MultiActionType.BossStun:
-                //isBossTurnSkipped = true;
                 HealthBar.instance.BossTakeDamage(card.value1 + dmgBoost);
                 GameManager.instance.SendEndAction(true);
-                Debug.Log("Boss will skip next turn.");
                 break;
 
             case MultiActionType.RollAndSwap:
@@ -106,7 +103,6 @@ public class CardEffectManager : MonoBehaviour
     }
     private IEnumerator AttackTwiceRoutine(Card crd)
     {
-        //yield return new WaitForSeconds(0.2f);
         HealthBar.instance.BossTakeDamage(crd.value1 + dmgBoost);
         yield return new WaitForSeconds(0.5f);
         HealthBar.instance.BossTakeDamage(crd.value1 + dmgBoost);
@@ -136,28 +132,20 @@ public class CardEffectManager : MonoBehaviour
 
     private IEnumerator RollAgainAndSwapRoutine(Card crd)
     {
-        Debug.Log("RollAgainAndSwap activated.");
-
-
         if (crd != null)
         {
-            //GameManager.instance.ReplaceTwoFightCardsButKeep(crd);
-            //send to uiitemspawner
             Onkeepcard?.Invoke(crd);
         }
-
         yield return new WaitForSeconds(1f);
     }
 
     private IEnumerator TryAddCardFromField(Card crd,int value)
     {
-
         if (crd != null)
         {
             //send to uiitemspawner
             OnfiveSelect?.Invoke(crd,value);
         }
-
         yield return new WaitForSeconds(1f);
     }
 
