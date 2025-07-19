@@ -32,10 +32,14 @@ public class CardDisplay : MonoBehaviour
     private void OnEnable()
     {
         GameManager.onCardDisplay += DisplayCard;
+        MiniGameManager.onCardDisplay += DisplayCard;
+
     }
     private void OnDisable()
     {
         GameManager.onCardDisplay -= DisplayCard;
+        MiniGameManager.onCardDisplay -= DisplayCard;
+
     }
 
 }

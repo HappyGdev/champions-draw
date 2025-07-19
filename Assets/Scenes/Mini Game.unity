@@ -780,7 +780,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1042119630}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UiItemSpawner, Assembly-CSharp
         m_MethodName: Player_Turn_Over_button
         m_Mode: 1
@@ -925,7 +925,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1752113148}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
         m_MethodName: ShowMenu
         m_Mode: 5
@@ -1575,7 +1575,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &145080471
 Transform:
   m_ObjectHideFlags: 0
@@ -2385,7 +2385,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1752113148}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
         m_MethodName: ShowMenu
         m_Mode: 5
@@ -2666,7 +2666,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1752113148}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
         m_MethodName: ShowMenu
         m_Mode: 5
@@ -3806,7 +3806,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &401808276
 Transform:
   m_ObjectHideFlags: 0
@@ -3924,7 +3924,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1752113148}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
         m_MethodName: ShowMenu
         m_Mode: 5
@@ -5042,7 +5042,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1752113148}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
         m_MethodName: ShowMenu
         m_Mode: 5
@@ -6164,9 +6164,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1339943683}
+  - {fileID: 1178817550}
   - {fileID: 401808276}
   - {fileID: 773348126}
-  - {fileID: 1752113147}
   - {fileID: 672428496}
   - {fileID: 145080471}
   m_Father: {fileID: 0}
@@ -6629,7 +6629,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &672428496
 Transform:
   m_ObjectHideFlags: 0
@@ -7657,9 +7657,9 @@ GameObject:
   - component: {fileID: 752070301}
   - component: {fileID: 752070300}
   - component: {fileID: 752070299}
-  - component: {fileID: 752070298}
   - component: {fileID: 752070302}
   - component: {fileID: 752070303}
+  - component: {fileID: 752070305}
   m_Layer: 5
   m_Name: Dice
   m_TagString: Untagged
@@ -7686,28 +7686,6 @@ RectTransform:
   m_AnchoredPosition: {x: 239, y: -36}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &752070298
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 752070296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99f51ac37d20ace48b5b14a16914807d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  diceFaces:
-  - {fileID: 21300000, guid: 34a6bf26817828a4a895c435b341a024, type: 3}
-  - {fileID: 21300000, guid: 3899f3c4a9c9af14285664c3fdefc335, type: 3}
-  - {fileID: 21300000, guid: ed49c89cc6d15494e919b2af437f12ff, type: 3}
-  - {fileID: 21300000, guid: ff71ad0c61069ea439d12966d19a8833, type: 3}
-  - {fileID: 21300000, guid: 5e80bcbe6e522a64382f830df4cc89ac, type: 3}
-  - {fileID: 21300000, guid: 68430a15a9a53004bb8006313195eb1d, type: 3}
-  diceImage: {fileID: 752070300}
-  rollTime: 0.4
-  frameRate: 0.1
 --- !u!61 &752070299
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7997,6 +7975,28 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &752070305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 752070296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8469bccb8bf87c04f8537d3fd1f6afc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  diceFaces:
+  - {fileID: 21300000, guid: 34a6bf26817828a4a895c435b341a024, type: 3}
+  - {fileID: 21300000, guid: 3899f3c4a9c9af14285664c3fdefc335, type: 3}
+  - {fileID: 21300000, guid: ed49c89cc6d15494e919b2af437f12ff, type: 3}
+  - {fileID: 21300000, guid: ff71ad0c61069ea439d12966d19a8833, type: 3}
+  - {fileID: 21300000, guid: 5e80bcbe6e522a64382f830df4cc89ac, type: 3}
+  - {fileID: 21300000, guid: 68430a15a9a53004bb8006313195eb1d, type: 3}
+  diceImage: {fileID: 752070300}
+  rollTime: 0.4
+  frameRate: 0.1
 --- !u!1 &773348124
 GameObject:
   m_ObjectHideFlags: 0
@@ -8013,7 +8013,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &773348125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9473,7 +9473,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1752113148}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
         m_MethodName: ShowMenu
         m_Mode: 5
@@ -9894,7 +9894,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1752113148}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
         m_MethodName: ShowMenu
         m_Mode: 5
@@ -10184,9 +10184,8 @@ GameObject:
   - component: {fileID: 1042119625}
   - component: {fileID: 1042119628}
   - component: {fileID: 1042119627}
-  - component: {fileID: 1042119626}
-  - component: {fileID: 1042119630}
   - component: {fileID: 1042119631}
+  - component: {fileID: 1042119632}
   m_Layer: 5
   m_Name: Inventory Panel
   m_TagString: Untagged
@@ -10214,30 +10213,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0.00024414062, y: 0.009521484}
   m_SizeDelta: {x: 620.78, y: 462.86}
   m_Pivot: {x: 0, y: 0.5}
---- !u!114 &1042119626
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1042119624}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e33c745116897e468da467bd2217ba8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  items: []
-  inventory_txt:
-  - {fileID: 543573588}
-  - {fileID: 1259254578}
-  - {fileID: 1237051000}
-  - {fileID: 569007263}
-  - {fileID: 737677166}
-  - {fileID: 1609280396}
-  - {fileID: 127123669}
-  - {fileID: 596768289}
-  - {fileID: 1367586514}
-  - {fileID: 296682958}
 --- !u!114 &1042119627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10276,24 +10251,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1042119624}
   m_CullTransparentMesh: 1
---- !u!114 &1042119630
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1042119624}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe18bd5f3e337bb408d9d5dafa4e7ce8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 5269742808595503891, guid: 518bb659aec002b4dab7d9a20155a5f5, type: 3}
-  layoutGroupParent: {fileID: 1042119625}
-  BosslayoutGroupParent: {fileID: 1207661217}
-  PlayerlayoutGroupParent: {fileID: 447470146}
-  PlayerInventory: []
-  BossInventory: []
 --- !u!114 &1042119631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10318,6 +10275,22 @@ MonoBehaviour:
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!114 &1042119632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1042119624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f24d4a1603d31143acdebcbfa4ab8b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemPrefab: {fileID: 5269742808595503891, guid: 518bb659aec002b4dab7d9a20155a5f5, type: 3}
+  layoutGroupParent: {fileID: 1042119625}
+  BosslayoutGroupParent: {fileID: 1207661217}
+  PlayerlayoutGroupParent: {fileID: 447470146}
 --- !u!1 &1049952309
 GameObject:
   m_ObjectHideFlags: 0
@@ -11254,16 +11227,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1178817547}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.47591868, y: 0.47591868, z: 0.47591868}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1767068335}
+  m_Father: {fileID: 572946197}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 561.1548, y: -420.73288}
+  m_AnchoredPosition: {x: 106, y: 445}
   m_SizeDelta: {x: 259.2477, y: 107.8696}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1207661216
@@ -12693,7 +12666,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1339943683}
-  - component: {fileID: 1339943682}
+  - component: {fileID: 1339943684}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -12701,37 +12674,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1339943682
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1339943681}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ee3fa075fe6c8d41848bc41b4f8c032, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 1518487103}
-  remainingMoves: 1
-  remainingMove_txt: {fileID: 436602547}
-  moveSpeed: 500
-  isMoving: 0
-  waypoints: {fileID: 1040195308}
-  cardHolder: {fileID: 1258175495}
-  NullSprite: {fileID: 21300000, guid: b35a3d61310f98e44b3c5b4c750705ee, type: 3}
-  NullCard: {fileID: 11400000, guid: 19ea8fb0ced69e14e85e45e7679f680c, type: 2}
-  Null_Card_Amounts: 6
-  uiItemSpawner: {fileID: 1042119630}
-  PlayerFightcards: []
-  MainPanel: {fileID: 1780658665}
-  BossPanel: {fileID: 1767068334}
-  BossCard: []
-  playerHP: 100
-  bossHP: 200
-  gameOver: 0
-  bossPoisendCount: 0
 --- !u!4 &1339943683
 Transform:
   m_ObjectHideFlags: 0
@@ -12747,6 +12689,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 572946197}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1339943684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1339943681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9536151992bef484994003ed2fe41979, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1518487103}
+  timerText: {fileID: 436602547}
+  moveSpeed: 1000
+  isMoving: 0
+  startTime: 10
+  currentTime: 0
+  bossHP: 100
+  bossHpText: {fileID: 1178817548}
+  waypoints: {fileID: 1040195308}
+  cardHolder: {fileID: 1258175495}
+  NullCard: {fileID: 11400000, guid: 19ea8fb0ced69e14e85e45e7679f680c, type: 2}
+  Null_Card_Amounts: 8
 --- !u!1001 &1340202206
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14640,7 +14606,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1527906957
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15250,7 +15216,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1752113148}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
         m_MethodName: ShowMenu
         m_Mode: 5
@@ -16300,67 +16266,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 853411070}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1 &1752113146
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1752113147}
-  - component: {fileID: 1752113148}
-  m_Layer: 0
-  m_Name: Menu Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1752113147
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1752113146}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 572946197}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1752113148
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1752113146}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29dd8470461c4a049ab55f576692e222, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  menus:
-  - menuName: Play
-    menuObject: {fileID: 790332850}
-    canvasGroup: {fileID: 0}
-  - menuName: "\u0650Deck"
-    menuObject: {fileID: 1003955008}
-    canvasGroup: {fileID: 0}
-  - menuName: Shop
-    menuObject: {fileID: 1752990492}
-    canvasGroup: {fileID: 0}
-  - menuName: Option
-    menuObject: {fileID: 11807773}
-    canvasGroup: {fileID: 0}
-  - menuName: GamePanel
-    menuObject: {fileID: 1780658665}
-    canvasGroup: {fileID: 0}
-  fadeDuration: 0.4
 --- !u!1 &1752990492
 GameObject:
   m_ObjectHideFlags: 0
@@ -16609,7 +16514,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1767068335
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16629,7 +16534,6 @@ RectTransform:
   - {fileID: 34314901}
   - {fileID: 489164082}
   - {fileID: 268823571}
-  - {fileID: 1178817550}
   m_Father: {fileID: 866844628}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -16769,7 +16673,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1780658666
 RectTransform:
   m_ObjectHideFlags: 0
@@ -17271,7 +17175,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -91}
+  m_AnchoredPosition: {x: 0, y: -759}
   m_SizeDelta: {x: 900, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1822427189
@@ -18348,7 +18252,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1953782153
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19601,7 +19505,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1752113148}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
         m_MethodName: ShowMenu
         m_Mode: 5
