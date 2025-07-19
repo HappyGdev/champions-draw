@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class UiItemSpawner : MonoBehaviour
 {
+    public static UiItemSpawner Instance;   
     public GameObject itemPrefab;            // UI prefab (must be a RectTransform)
     public Transform layoutGroupParent;      // Parent with HorizontalLayoutGroup
 
@@ -16,6 +17,11 @@ public class UiItemSpawner : MonoBehaviour
     public List<GameObject> PlayerInventory = new List<GameObject>();
     public List<GameObject> BossInventory = new List<GameObject>();
 
+    private void Awake()
+    {
+        if(Instance == null)
+            Instance = this;    
+    }
 
     public void SpawnItem(Card chosencard, bool isboss)
     {
@@ -267,22 +273,4 @@ public class UiItemSpawner : MonoBehaviour
         GameManager.instance.BossAttackPlayer(bossdamage);
     }
 
-    private void OnEnable()
-    {
-        GameManager.onDestroyPlayedCard += DestroyPlayerInventory;
-        GameManager.onBossAttackTurn += BossAttack;
-        GameManager.onDestroyBosscard += DestroyBossInventory;
-        CardEffectManager.Onkeepcard += DestroyAllButOne;
-        CardEffectManager.OnfiveSelect += ReplaceOneCardWithLowValue;
-        CardEffectManager.onSwapValue += SwapCard;
-    }
-    private void OnDisable()
-    {
-        GameManager.onDestroyPlayedCard -= DestroyPlayerInventory;
-        GameManager.onBossAttackTurn -= BossAttack;
-        GameManager.onDestroyBosscard -= DestroyBossInventory;
-        CardEffectManager.Onkeepcard -= DestroyAllButOne;
-        CardEffectManager.OnfiveSelect -= ReplaceOneCardWithLowValue;
-        CardEffectManager.onSwapValue -= SwapCard;
-    }
 }

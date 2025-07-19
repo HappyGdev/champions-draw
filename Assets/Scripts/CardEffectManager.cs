@@ -6,13 +6,6 @@ public class CardEffectManager : MonoBehaviour
 {
     public static CardEffectManager Instance;
 
-    public static Action<Card> Onkeepcard;
-    public static Action<Card,int> OnfiveSelect;
-    public static Action<Card> onSwapValue;
-
-    private bool isBossTurnSkipped = false;
-    private bool damageBoostActive = false;
-
     public int bossPoisendRound;
     public int dmgBoost;
     private void Awake()
@@ -32,14 +25,12 @@ public class CardEffectManager : MonoBehaviour
         switch (card.actionType)
         {
             case CardActionType.Attack:
-                int dmg = card.value1;   ////damageBoostActive ? card.value2 + 2 : card.value2;
+                int dmg = card.value1;   
                 HealthBar.instance.BossTakeDamage(dmg + dmgBoost);
-                //GameManager.instance.BossAttackPlayer(dmg);
                 GameManager.instance.SendEndAction(false);
                 break;
 
             case CardActionType.Heal:
-                //HealPlayer(card.value3);
                 int hlth = card.value1;   
                 HealthBar.instance.PlayerTakeDamage(-hlth);
                 GameManager.instance.SendEndAction(false);
@@ -111,10 +102,7 @@ public class CardEffectManager : MonoBehaviour
     private IEnumerator SwapValue(Card crd)
     {
         if (crd != null)
-        {
-            //send to uiitemspawner
-            onSwapValue?.Invoke(crd);
-        }
+        {UiItemSpawner.Instance.SwapCard(crd);}
         yield return new WaitForSeconds(1f);
     }
     private IEnumerator PoisonBossRoutine(Card crd)
@@ -133,19 +121,14 @@ public class CardEffectManager : MonoBehaviour
     private IEnumerator RollAgainAndSwapRoutine(Card crd)
     {
         if (crd != null)
-        {
-            Onkeepcard?.Invoke(crd);
-        }
+        {UiItemSpawner.Instance.DestroyAllButOne(crd);}
         yield return new WaitForSeconds(1f);
     }
 
     private IEnumerator TryAddCardFromField(Card crd,int value)
     {
         if (crd != null)
-        {
-            //send to uiitemspawner
-            OnfiveSelect?.Invoke(crd,value);
-        }
+        { UiItemSpawner.Instance.ReplaceOneCardWithLowValue(crd, value); }
         yield return new WaitForSeconds(1f);
     }
 

@@ -8,9 +8,6 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public static Action onCardDisplay;
-    public static Action<bool> onDestroyPlayedCard;
-    public static Action onBossAttackTurn;
-    public static Action onDestroyBosscard;
 
     [Header("Player Section")]
     public RectTransform player; // Player UI image
@@ -409,13 +406,15 @@ public class GameManager : MonoBehaviour
     public void SendEndAction(bool isBoosTurnSkip)
     {
         //Send to UiItemSpawner to Destroy All Spawned card
-        onDestroyPlayedCard?.Invoke(isBoosTurnSkip);
+        //onDestroyPlayedCard?.Invoke(isBoosTurnSkip);
+        UiItemSpawner.Instance.DestroyPlayerInventory(isBoosTurnSkip);
     }
 
     public void BossAttackPhase()
     {
         //go to UiItemSpawner to control Boss Fight Logic
-        onBossAttackTurn?.Invoke();
+        //onBossAttackTurn?.Invoke();
+        UiItemSpawner.Instance.BossAttack();
     }
     public void BossAttackPlayer(int dmg)
     {
@@ -425,7 +424,8 @@ public class GameManager : MonoBehaviour
     {
         HealthBar.instance.PlayerTakeDamage(damage);
         yield return new WaitForSeconds(2f);
-        onDestroyBosscard?.Invoke();
+        //onDestroyBosscard?.Invoke();
+        UiItemSpawner.Instance.DestroyBossInventory();
         ///   TurnLoop();
         ///   
         UIManager.Instance.Player_turn_Over_button_On();

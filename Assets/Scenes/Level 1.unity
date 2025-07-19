@@ -7985,7 +7985,7 @@ MonoBehaviour:
   Player_turn_Over_button: {fileID: 34314900}
   Playerturn_ui: {fileID: 489164079}
   BossturnUi: {fileID: 268823568}
-  dmgBoost: {fileID: 0}
+  dmgBoost: {fileID: 1178817548}
 --- !u!4 &773348126
 Transform:
   m_ObjectHideFlags: 0
