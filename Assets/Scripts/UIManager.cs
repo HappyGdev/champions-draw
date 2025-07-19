@@ -66,7 +66,8 @@ public class UIManager : MonoBehaviour
     }
     public void Win()
     {
-        WinPanel.SetActive(true);   
+        WinPanel.SetActive(true);
+        ScoreManager.Instance.AddScore(50);
     }
 
     public void Restart()
@@ -81,5 +82,14 @@ public class UIManager : MonoBehaviour
     {
         var dmg = CardEffectManager.Instance.CurrentBoost();
         dmgBoost.text = " + " +  dmg.ToString() + " Boost"; 
+    }
+
+    private void Update()
+    {
+        //test score
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            ScoreManager.Instance.AddScore(10);
+        }
     }
 }
