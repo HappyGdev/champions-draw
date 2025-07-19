@@ -105,6 +105,48 @@ public class UiItemSpawner : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         GameManager.instance.ReplaceTwoFightCardsButKeep(keepCard);
     }
+
+    public void SwapCard(Card keepCard)
+    {
+        StartCoroutine(SwapTwoCard(keepCard));
+    }
+    IEnumerator SwapTwoCard(Card keepCard)
+    {
+        List<Card> cardsToSwap = new List<Card>();
+
+        foreach (var obj in PlayerInventory)
+        {
+            Card currentCard = obj.GetComponent<CardDisplay>().Card;
+
+            if (keepCard.name != currentCard.name)
+            {
+                cardsToSwap.Add(currentCard);
+            }
+            else
+            {
+                obj.GetComponent<Zoom>().enabled = false;
+            }
+
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        if (cardsToSwap.Count == 2)
+        {
+            var temp = cardsToSwap[0].value1;
+            cardsToSwap[0].value1 = cardsToSwap[1].value1;
+            cardsToSwap[1].value1 = temp;
+        }
+        else
+        {
+            Debug.LogWarning("Expected exactly 2 cards to swap, but found: " + cardsToSwap.Count);
+        }
+
+        yield return new WaitForSeconds(0.05f);
+        GameManager.instance.ReplaceTwoCards();
+    }
+
+
+
     public void ReplaceOneCardWithLowValue(Card keepCard, int value)
     {
         List<GameObject> removableCards = new List<GameObject>();
@@ -146,7 +188,7 @@ public class UiItemSpawner : MonoBehaviour
         // حالا در PlayerFightcards به دنبال یک کارت با value1 < 5 بگرد
         foreach (Card c in GameManager.instance.PlayerFightcards)
         {
-            if (c.value1 < value && c.actionType != CardActionType.empty)
+            if (c.value1 > value && c.actionType != CardActionType.empty)
             {
                 SpawnFightCardItem(c); // کارت جدید اضافه شود به UI
                 GameManager.onCardDisplay?.Invoke();
@@ -154,7 +196,7 @@ public class UiItemSpawner : MonoBehaviour
             }
         }
 
-        Debug.LogWarning("No card with value1 < 5 found in PlayerFightcards.");
+        Debug.LogWarning("No card with value1 > 5 found in PlayerFightcards.");
     }
 
 
@@ -232,8 +274,7 @@ public class UiItemSpawner : MonoBehaviour
         GameManager.onDestroyBosscard += DestroyBossInventory;
         CardEffectManager.Onkeepcard += DestroyAllButOne;
         CardEffectManager.OnfiveSelect += ReplaceOneCardWithLowValue;
-
-
+        CardEffectManager.onSwapValue += SwapCard;
     }
     private void OnDisable()
     {
@@ -242,5 +283,6 @@ public class UiItemSpawner : MonoBehaviour
         GameManager.onDestroyBosscard -= DestroyBossInventory;
         CardEffectManager.Onkeepcard -= DestroyAllButOne;
         CardEffectManager.OnfiveSelect -= ReplaceOneCardWithLowValue;
+        CardEffectManager.onSwapValue -= SwapCard;
     }
 }

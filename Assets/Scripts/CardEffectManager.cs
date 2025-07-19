@@ -8,7 +8,7 @@ public class CardEffectManager : MonoBehaviour
 
     public static Action<Card> Onkeepcard;
     public static Action<Card,int> OnfiveSelect;
-
+    public static Action<Card> onSwapValue;
 
     private bool isBossTurnSkipped = false;
     private bool damageBoostActive = false;
@@ -66,6 +66,7 @@ public class CardEffectManager : MonoBehaviour
 
             case MultiActionType.SwapValues:
                 Debug.Log("Swapping values of two cards (not implemented).");
+                StartCoroutine(SwapValue(card));
                 break;
 
             case MultiActionType.BossStun:
@@ -111,7 +112,15 @@ public class CardEffectManager : MonoBehaviour
         HealthBar.instance.BossTakeDamage(crd.value1 + dmgBoost);
         GameManager.instance.SendEndAction(false);
     }
-
+    private IEnumerator SwapValue(Card crd)
+    {
+        if (crd != null)
+        {
+            //send to uiitemspawner
+            onSwapValue?.Invoke(crd);
+        }
+        yield return new WaitForSeconds(1f);
+    }
     private IEnumerator PoisonBossRoutine(Card crd)
     {
         bossPoisendRound += 3;

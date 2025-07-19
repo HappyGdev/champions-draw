@@ -391,6 +391,47 @@ public class GameManager : MonoBehaviour
         onCardDisplay?.Invoke();
     }
 
+    public void ReplaceTwoCards()
+    {
+        //if (PlayerFightcards == null || uiItemSpawner == null || PlayerFightcards.Count < 3)
+        //    return;
+
+        //List<Card> cardsToSwap = new List<Card>();
+
+        //// پیدا کردن دو کارت که با keepCard متفاوت باشند
+        //foreach (var card in PlayerFightcards)
+        //{
+        //    if (card != keepCard)
+        //    {
+        //        cardsToSwap.Add(card);
+        //        if (cardsToSwap.Count == 2)
+        //            break;
+        //    }
+        //}
+
+        //// اگر دقیقاً دو کارت داریم، value1 آنها را سواپ کن
+        //if (cardsToSwap.Count == 2)
+        //{
+        //    int temp = cardsToSwap[0].value1;
+        //    cardsToSwap[0].value1 = cardsToSwap[1].value1;
+        //    cardsToSwap[1].value1 = temp;
+
+        //    // حالا کارت‌ها را نمایش بده
+        //    foreach (var card in cardsToSwap)
+        //    {
+        //        uiItemSpawner.SpawnFightCardItem(card);
+        //    }
+
+        //    // و کارت keep را هم نمایش بده
+        //    uiItemSpawner.SpawnFightCardItem(keepCard);
+
+            onCardDisplay?.Invoke();
+        //}
+        //else
+        //{
+        //    Debug.LogWarning("Couldn't find two cards to swap.");
+        //}
+    }
 
 
 
