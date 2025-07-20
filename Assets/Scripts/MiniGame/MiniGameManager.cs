@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -21,7 +22,7 @@ public class MiniGameManager : MonoBehaviour
 
     [Header("Boss Stats")]
     public int bossHP = 100;
-    public TextMeshProUGUI bossHpText;
+    public TextMeshProUGUI InfoText;
 
     [Header("Waypoints")]
     public WaypointManager waypoints;
@@ -82,6 +83,7 @@ public class MiniGameManager : MonoBehaviour
     public void AddTime(int seconds)
     {
         currentTime += seconds;
+        UIAnimationUtility.ShakePosition(timerText.GetComponent<RectTransform>(), new Vector3(1, 10, 1), 0.5f, 10, 90, Ease.InOutBounce);
         UpdateTimerUI();
     }
 
@@ -89,7 +91,7 @@ public class MiniGameManager : MonoBehaviour
     {
         if (!gameActive || isMoving) return;
 
-        AddTime(steps); // Add dice number to timer
+        //AddTime(steps); // Add dice number to timer
         StartCoroutine(MoveOverSteps(steps));
     }
 
@@ -117,10 +119,12 @@ public class MiniGameManager : MonoBehaviour
 
         // After move, check if card exists
         CardDisplay cardDisplay = waypoints.Wayp[currentWaypointIndex].GetComponentInChildren<CardDisplay>();
-        if (cardDisplay != null && cardDisplay.Card != null && cardDisplay.Card.actionType != CardActionType.empty)
+        if (cardDisplay != null && cardDisplay.Card != null)
         {
-            bossHP -= cardDisplay.Card.value1;
-            bossHpText.text = "Boss HP: " + bossHP.ToString();
+
+            DoCardAction(cardDisplay);
+
+            Debug.Log( " cart stats applied");
 
             if (bossHP <= 0)
             {
@@ -130,7 +134,88 @@ public class MiniGameManager : MonoBehaviour
 
         isMoving = false;
     }
+    public void DoCardAction(CardDisplay curcard)
+    {
+        switch (curcard.Card.actionType)
+        {
+            case CardActionType.Attack:
+                bossHP -= curcard.Card.value1;
+                //bossHpText.text = "Boss HP: " + bossHP.ToString();      
+                HealthBar.instance.BossTakeDamage(curcard.Card.value1);
+                ShowInfoOnUI("Attck + " + curcard.Card.value1);
+                break;
 
+            case CardActionType.Heal:
+                currentTime += 10;
+                UIAnimationUtility.ShakePosition(timerText.GetComponent<RectTransform>(), new Vector3(1, 10, 1), 0.5f, 10, 90, Ease.InOutBounce);
+                ShowInfoOnUI("Add Time + " + 10);
+                break;
+
+            case CardActionType.Multi:
+                MultiCardAction(curcard);
+                break;
+
+            case CardActionType.empty:
+                ShowInfoOnUI("Oops");
+                break;
+
+            default:
+                break;
+        }
+    }
+    public void MultiCardAction(CardDisplay mycard)
+    {
+        switch (mycard.Card.multiActionType)
+        {
+            case MultiActionType.None:
+                break;
+
+            case MultiActionType.AttackTwice:
+                StartCoroutine(AttackTwice(mycard.Card.value1));               
+                break;
+
+            case MultiActionType.RollAndSwap:
+                Debug.Log("Shuffle Board");
+                ShuffleBoard();
+                break;
+
+            case MultiActionType.DiscardAndAdd5:
+                bossHP -= 5;
+                //bossHpText.text = "Boss HP: " + bossHP.ToString();
+                HealthBar.instance.BossTakeDamage(5);   
+                currentTime += 5;
+                UIAnimationUtility.ShakePosition(timerText.GetComponent<RectTransform>(), new Vector3(1, 10, 1), 0.5f, 10, 90, Ease.InOutBounce);
+                ShowInfoOnUI("Attack + " + 5);
+                ShowInfoOnUI("Add Time + " + 5);
+                break;
+
+            case MultiActionType.DiscardAndAdd7:
+                bossHP -= 7;
+                HealthBar.instance.BossTakeDamage(7);
+                ShowInfoOnUI("Attack + " + 7);
+                ShowInfoOnUI("Add Time + " + 7);
+                currentTime += 7;
+                UIAnimationUtility.ShakePosition(timerText.GetComponent<RectTransform>(), new Vector3(1, 10, 1), 0.5f, 10, 90, Ease.InOutBounce);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    IEnumerator AttackTwice(int dmg)
+    {
+        bossHP -= dmg;
+        HealthBar.instance.BossTakeDamage(dmg);
+        ShowInfoOnUI("Attack 1 + => " + dmg);
+        yield return new WaitForSeconds(0.5f);
+
+        ShowInfoOnUI("Attack 2 + => " + dmg);
+        bossHP -= dmg;
+        HealthBar.instance.BossTakeDamage(dmg);
+
+
+    }
     private void SetCards()
     {
         List<Card> shuffled = new List<Card>(cardHolder.CardHold);
@@ -177,5 +262,31 @@ public class MiniGameManager : MonoBehaviour
         {
             timerText.text = "⏰ Time's Up!";
         }
+    }
+
+    public void ShowInfoOnUI(string text)
+    {
+
+        StartCoroutine(ShowInfo(text));
+    }
+    IEnumerator ShowInfo(string text)
+    {       
+        InfoText.text = text;
+        UIAnimationUtility.ShakePosition(timerText.GetComponent<RectTransform>(),
+            new Vector3(1, 10, 1), 0.5f, 10, 90, Ease.InOutBounce);
+        yield return new WaitForSeconds(0.5f);
+        InfoText.text = "";
+    }
+
+    public void ShuffleBoard()
+    {
+        StartCoroutine(DoShuffle());
+    }
+    IEnumerator DoShuffle()
+    {
+        yield return new WaitForSeconds(0.1f);
+        SetCards();
+        SetNullCards();
+        onCardDisplay?.Invoke();
     }
 }

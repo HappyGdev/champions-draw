@@ -10,14 +10,14 @@ public static class UIAnimationUtility
     /// <param name="offsetY">How much to move in the Y direction (positive for up, negative for down).</param>
     /// <param name="duration">Duration of the animation.</param>
     /// <param name="easeType">Type of easing (e.g., Ease.OutQuad, Ease.InOutSine).</param>
-    public static void MoveUIElement(RectTransform target, float offsetY, float duration, Ease easeType = Ease.OutBounce)
+    public static void MoveUIElement(RectTransform target, float offsetX, float duration, Ease easeType = Ease.OutBounce)
     {
         if (target == null) return;
 
         target.DOKill(true); // Kill any previous animation to avoid conflicts
 
         // Move to a new anchored position
-        Vector2 targetPosition = target.anchoredPosition + new Vector2(0, offsetY);
+        Vector2 targetPosition = target.anchoredPosition + new Vector2(offsetX,0);
         target.DOAnchorPos(targetPosition, duration).SetEase(easeType);
     }
 
