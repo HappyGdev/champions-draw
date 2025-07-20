@@ -9422,7 +9422,7 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1714012146}
-  m_Father: {fileID: 1222848490}
+  m_Father: {fileID: 1757933063}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
@@ -9473,10 +9473,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1752113148}
-        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
-        m_MethodName: ShowMenu
-        m_Mode: 5
+      - m_Target: {fileID: 773348125}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: MiniGame
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -11582,7 +11582,6 @@ RectTransform:
   - {fileID: 2128898894}
   - {fileID: 62769904}
   - {fileID: 512438766}
-  - {fileID: 939716398}
   m_Father: {fileID: 1757933063}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
@@ -12714,7 +12713,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1518487103}
-  remainingMoves: 1
+  remainingMoves: 10
   remainingMove_txt: {fileID: 436602547}
   moveSpeed: 500
   isMoving: 0
@@ -16472,6 +16471,7 @@ RectTransform:
   - {fileID: 256897812}
   - {fileID: 1222848490}
   - {fileID: 209042805}
+  - {fileID: 939716398}
   m_Father: {fileID: 1953782153}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

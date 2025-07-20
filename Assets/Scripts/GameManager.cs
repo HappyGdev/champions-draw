@@ -440,6 +440,7 @@ public class GameManager : MonoBehaviour
             gameOver = true;
             Debug.Log("Player Wins!");
             UIManager.Instance.Win();
+            ScoreManager.Instance.AddScore(50);
             return;
             // Show win screen or handle victory
         }

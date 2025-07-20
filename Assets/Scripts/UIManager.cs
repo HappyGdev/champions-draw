@@ -67,10 +67,18 @@ public class UIManager : MonoBehaviour
     public void Win()
     {
         WinPanel.SetActive(true);
-        ScoreManager.Instance.AddScore(50);
     }
 
     public void Restart()
+    {
+        Scene currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.name);
+    }
+    public void MiniGame()
+    {
+        SceneManager.LoadScene(1);
+    }
+    public void MainMenu()
     {
         SceneManager.LoadScene(0);
     }

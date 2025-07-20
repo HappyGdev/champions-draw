@@ -257,16 +257,17 @@ public class MiniGameManager : MonoBehaviour
         if (playerWon)
         {
             timerText.text = "🎉 You Win!";
+            UIManager.Instance.Win();
         }
         else
         {
             timerText.text = "⏰ Time's Up!";
+            UIManager.Instance.Gameover();
         }
     }
 
     public void ShowInfoOnUI(string text)
     {
-
         StartCoroutine(ShowInfo(text));
     }
     IEnumerator ShowInfo(string text)
