@@ -1,4 +1,10 @@
 using UnityEngine;
+public enum Packs
+{
+    Starter, 
+    Booster1, 
+    Booster2
+}
 public enum MultiActionType
 {
     None,
@@ -38,5 +44,6 @@ public class Card : ScriptableObject
 
     public CardActionType actionType; // Add this line for enum usage
     public MultiActionType multiActionType;  // مخصوص کارت‌های Multi
+    public Packs cardPack;  // مخصوص کارت‌های Multi
 
 }
