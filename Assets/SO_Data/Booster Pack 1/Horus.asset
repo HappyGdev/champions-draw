@@ -25,5 +25,5 @@ MonoBehaviour:
   value3: 0
   actionType: 2
   multiActionType: 6
-  cardPack: 0
+  cardPack: 1
   rarity: 1
