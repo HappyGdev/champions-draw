@@ -35,7 +35,6 @@ public class GameManager : MonoBehaviour
 
     [Header("Inventory")]
     public UiItemSpawner uiItemSpawner; // Reference to inventory system
-    private List<string> objectname = new List<string>();
     public List<Card> PlayerFightcards = new List<Card>();
     [Space]
 
@@ -51,12 +50,10 @@ public class GameManager : MonoBehaviour
 
     private bool playerTurn = true;
     [HideInInspector]public bool gameOver = false;
-    private bool attackTriggered = false;
-    private int attackDamage = 0;
-    private bool isChekInternet;
+
 
     [SerializeField] private int bossPoisendCount;
-
+    private bool isPlayerProtected;
     private void Awake()
     {
         if (instance == null) { instance = this; }
@@ -329,6 +326,11 @@ public class GameManager : MonoBehaviour
         bossPoisendCount--;
         HealthBar.instance.BossTakeDamage(5f);
     }
+    public void ProtectPlayer()
+    {
+        isPlayerProtected = true;
+    }
+
     IEnumerator pTurn()
     {
         UIManager.Instance.PlyerBossTurn(0);
@@ -418,7 +420,15 @@ public class GameManager : MonoBehaviour
     }
     public void BossAttackPlayer(int dmg)
     {
-        StartCoroutine(BossAttack(dmg));
+        if (isPlayerProtected)
+        {
+            StartCoroutine(BossAttack(dmg - 5));
+            isPlayerProtected= false;   
+        }
+        else
+        {
+            StartCoroutine(BossAttack(dmg));
+        }
     }
     public IEnumerator BossAttack(int damage)
     {

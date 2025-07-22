@@ -5,6 +5,14 @@ public enum Packs
     Booster1, 
     Booster2
 }
+public enum Rarity
+{
+    C,//Common
+    UC,// Uncommon
+    R,// Rare
+    UR,// Ultra_Rare
+    SR//Secret_Rare
+}
 public enum MultiActionType
 {
     None,
@@ -15,7 +23,11 @@ public enum MultiActionType
     DiscardAndAdd5,  // D+5
     DiscardAndAdd7,  // D+7
     PoisonBoss,      // PO
-    BoostDamage      // A+2
+    BoostDamage,      // A+2
+    Select3Card,
+    doubleDamageRound,
+    ReduceDamageNextTurn,
+    doubleHealingLess50,
 }
 public enum CardActionType
 {
@@ -45,5 +57,6 @@ public class Card : ScriptableObject
     public CardActionType actionType; // Add this line for enum usage
     public MultiActionType multiActionType;  // مخصوص کارت‌های Multi
     public Packs cardPack;  // مخصوص کارت‌های Multi
+    public Rarity rarity;   // برای rare
 
 }

@@ -6659,6 +6659,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bossPoisendRound: 0
   dmgBoost: 0
+  Attack3X: 0
 --- !u!1 &687648697
 GameObject:
   m_ObjectHideFlags: 0

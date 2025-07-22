@@ -17,6 +17,8 @@ public class UiItemSpawner : MonoBehaviour
     public List<GameObject> PlayerInventory = new List<GameObject>();
     public List<GameObject> BossInventory = new List<GameObject>();
 
+    private int use3Cards;
+
     private void Awake()
     {
         if(Instance == null)
@@ -194,7 +196,7 @@ public class UiItemSpawner : MonoBehaviour
         // حالا در PlayerFightcards به دنبال یک کارت با value1 < 5 بگرد
         foreach (Card c in GameManager.instance.PlayerFightcards)
         {
-            if (c.value1 > value && c.actionType != CardActionType.empty)
+            if (c.value1 < value && c.actionType != CardActionType.empty)
             {
                 SpawnFightCardItem(c); // کارت جدید اضافه شود به UI
                 GameManager.onCardDisplay?.Invoke();
@@ -204,7 +206,10 @@ public class UiItemSpawner : MonoBehaviour
 
         Debug.LogWarning("No card with value1 > 5 found in PlayerFightcards.");
     }
-
+    public void Choose3Card()
+    {
+        use3Cards = 3;
+    }
 
     public void DestroyPlayerInventory(bool isBoosTurnSkip)
     {
@@ -217,14 +222,26 @@ public class UiItemSpawner : MonoBehaviour
 
         //Player Turn over Button Apear
 
-        if (isBoosTurnSkip)
+        //implement use 3 moves in one logic
+        if (use3Cards >= 1)
         {
             GameManager.instance.ChangeTurn();
+            GameManager.instance.CheckBattleOutcome();
+            UIManager.Instance.Player_turn_Over_button_On();
+            use3Cards--;
+            return;
         }
+        else
+        {
+            if (isBoosTurnSkip)
+            {
+                GameManager.instance.ChangeTurn();
+            }
 
-        GameManager.instance.CheckBattleOutcome();
+            GameManager.instance.CheckBattleOutcome();
 
-        UIManager.Instance.Player_turn_Over_button_On();
+            UIManager.Instance.Player_turn_Over_button_On();
+        }
     }
 
 

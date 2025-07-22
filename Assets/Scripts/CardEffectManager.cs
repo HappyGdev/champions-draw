@@ -8,6 +8,8 @@ public class CardEffectManager : MonoBehaviour
 
     public int bossPoisendRound;
     public int dmgBoost;
+    public int Attack3X;
+    private bool isAllowTocontiunueTurn;
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -27,6 +29,7 @@ public class CardEffectManager : MonoBehaviour
             case CardActionType.Attack:
                 int dmg = card.value1;   
                 HealthBar.instance.BossTakeDamage(dmg + dmgBoost);
+
                 GameManager.instance.SendEndAction(false);
                 break;
 
@@ -87,6 +90,34 @@ public class CardEffectManager : MonoBehaviour
                 GameManager.instance.SendEndAction(false);
                 break;
 
+            case MultiActionType.doubleHealingLess50:
+                if (HealthBar.instance.PlayercurrentHealth <= 50)
+                {
+                    int hlth = card.value1;
+                    HealthBar.instance.PlayerTakeDamage(-hlth * 2);
+                    GameManager.instance.SendEndAction(false);
+                }
+                else
+                {
+                    int hlth = card.value1;
+                    HealthBar.instance.PlayerTakeDamage(-hlth);
+                    GameManager.instance.SendEndAction(false);
+                }
+                break;
+
+            case MultiActionType.ReduceDamageNextTurn:
+                StartCoroutine(NextroundMinus5(card));
+                GameManager.instance.SendEndAction(false);
+                break;
+
+            case MultiActionType.doubleDamageRound:
+                StartCoroutine(DoubleEachCard());
+                break;
+
+            case MultiActionType.Select3Card:
+                StartCoroutine(Use3Card());
+                break;
+
             default:
                 Debug.LogWarning("Unknown MultiActionType");
                 break;
@@ -124,12 +155,26 @@ public class CardEffectManager : MonoBehaviour
         {UiItemSpawner.Instance.DestroyAllButOne(crd);}
         yield return new WaitForSeconds(1f);
     }
-
+    private IEnumerator NextroundMinus5(Card crd)
+    {
+        HealthBar.instance.BossTakeDamage(crd.value1 + dmgBoost);
+        GameManager.instance.ProtectPlayer();
+        yield return new WaitForSeconds(1f);
+    }
+    private IEnumerator DoubleEachCard()
+    {
+        HealthBar.instance.DoubleDamageRound();
+        yield return new WaitForSeconds(1f);
+    }
     private IEnumerator TryAddCardFromField(Card crd,int value)
     {
         if (crd != null)
         { UiItemSpawner.Instance.ReplaceOneCardWithLowValue(crd, value); }
         yield return new WaitForSeconds(1f);
     }
-
+    private IEnumerator Use3Card()
+    {
+        UiItemSpawner.Instance.Choose3Card();
+        yield return new WaitForSeconds(1f);
+    }
 }

@@ -14,6 +14,7 @@ public class HealthBar : MonoBehaviour
     public TextMeshProUGUI Player_Health_text;
     public TextMeshProUGUI Boss_Health_text;
     public float BosscurrentHealth;
+    private bool isDoubleDamageRound;
 
     private void Awake()
     {
@@ -28,6 +29,10 @@ public class HealthBar : MonoBehaviour
         UpdateBossHealthUI();
     }
 
+    public void DoubleDamageRound()
+    {
+        isDoubleDamageRound=true;   
+    }
     public void PlayerTakeDamage(float amount)
     {
         PlayercurrentHealth -= amount;
@@ -48,10 +53,22 @@ public class HealthBar : MonoBehaviour
 
     public void BossTakeDamage(float amount)
     {
-        BosscurrentHealth -= amount;
-        BosscurrentHealth = Mathf.Clamp(BosscurrentHealth, 0, maxHealth);
-        UIAnimationUtility.ShakePosition(BossHealthBarFIll.rectTransform, new Vector3(1, 10, 1), 0.5f, 10, 90, Ease.InOutBounce);
-        UpdateBossHealthUI();
+        if (isDoubleDamageRound)
+        {
+            BosscurrentHealth -= amount * 2;
+            BosscurrentHealth = Mathf.Clamp(BosscurrentHealth, 0, maxHealth);
+            UIAnimationUtility.ShakePosition(BossHealthBarFIll.rectTransform, new Vector3(1, 10, 1), 0.5f, 10, 90, Ease.InOutBounce);
+            UpdateBossHealthUI();
+            isDoubleDamageRound = false;
+        }
+        else
+        {
+            BosscurrentHealth -= amount;
+            BosscurrentHealth = Mathf.Clamp(BosscurrentHealth, 0, maxHealth);
+            UIAnimationUtility.ShakePosition(BossHealthBarFIll.rectTransform, new Vector3(1, 10, 1), 0.5f, 10, 90, Ease.InOutBounce);
+            UpdateBossHealthUI();
+        }
+
     }
 
     void UpdateBossHealthUI()

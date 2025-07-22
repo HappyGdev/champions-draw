@@ -15,7 +15,7 @@ MonoBehaviour:
   name: 'Brynvar '
   description: 'Deal damage to the boss '
   artwork: {fileID: 21300000, guid: 0a51b5dfb498e8e4a9c871aa762401aa, type: 3}
-  type: {fileID: 21300000, guid: 349cbc967fc589f40ade6569d0de04ed, type: 3}
+  type: {fileID: 21300000, guid: 2b5ef7541b7258049915032dbbad77b3, type: 3}
   isBoss: 0
   isPlayerInventory: 0
   isDefenseDown: 0
@@ -25,3 +25,4 @@ MonoBehaviour:
   actionType: 0
   multiActionType: 0
   cardPack: 2
+  rarity: 3
