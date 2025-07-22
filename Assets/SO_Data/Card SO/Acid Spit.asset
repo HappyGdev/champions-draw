@@ -10,17 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3cadee058d7a1094f89dee15f1af7878, type: 3}
-  m_Name: Blazmut
+  m_Name: Acid Spit
   m_EditorClassIdentifier: 
-  name: 'Blazmut '
-  description: 'Discard a card. This card can attack twice '
-  artwork: {fileID: 21300000, guid: 586ef845aa7bad341bd3b4091811e0ca, type: 3}
-  type: {fileID: 21300000, guid: f2e7d2b68287bb2458f498158a4bbf04, type: 3}
+  name: Acid Spit
+  description: Deal damage to the boss
+  artwork: {fileID: 21300000, guid: 271e8474872fc5c49a125f519a3ff895, type: 3}
+  type: {fileID: 21300000, guid: 349cbc967fc589f40ade6569d0de04ed, type: 3}
   isBoss: 0
   isPlayerInventory: 0
   isDefenseDown: 0
-  value1: 6
+  value1: 8
   value2: 0
   value3: 0
-  actionType: 2
-  multiActionType: 1
+  actionType: 0
+  multiActionType: 0
+  cardPack: 1
+  rarity: 4

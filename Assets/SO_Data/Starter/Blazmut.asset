@@ -10,14 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3cadee058d7a1094f89dee15f1af7878, type: 3}
-  m_Name: Medusa
+  m_Name: Blazmut
   m_EditorClassIdentifier: 
-  name: 'Medusa '
-  description: 'Heal a player '
-  artwork: {fileID: 21300000, guid: 7517523aa1049a34393cfa4979e6cc9e, type: 3}
-  type: {fileID: 21300000, guid: 349cbc967fc589f40ade6569d0de04ed, type: 3}
+  name: 'Blazmut '
+  description: 'Discard a card. This card can attack twice '
+  artwork: {fileID: 21300000, guid: 586ef845aa7bad341bd3b4091811e0ca, type: 3}
+  type: {fileID: 21300000, guid: f2e7d2b68287bb2458f498158a4bbf04, type: 3}
   isBoss: 0
-  value1: 9
+  isPlayerInventory: 0
+  isDefenseDown: 0
+  value1: 6
   value2: 0
   value3: 0
-  actionType: 1
+  actionType: 2
+  multiActionType: 1
+  cardPack: 0
+  rarity: 4
