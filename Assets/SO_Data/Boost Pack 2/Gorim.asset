@@ -15,7 +15,7 @@ MonoBehaviour:
   name: 'Gorim '
   description: 'Heal a player by amount of number on this card.  This card can not
     attack! '
-  artwork: {fileID: 21300000, guid: 0a51b5dfb498e8e4a9c871aa762401aa, type: 3}
+  artwork: {fileID: 21300000, guid: e5dbbccdc9d511a4d8828e342df263f8, type: 3}
   type: {fileID: 21300000, guid: 9eb0c4d256fa4fe4c99a75a6e72dbac3, type: 3}
   isBoss: 0
   isPlayerInventory: 0
@@ -26,3 +26,4 @@ MonoBehaviour:
   actionType: 1
   multiActionType: 0
   cardPack: 2
+  rarity: 3

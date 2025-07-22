@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: 'Dren '
   description: 'The boss is poisoned and looses 5HP for three rounds. '
-  artwork: {fileID: 21300000, guid: 0a51b5dfb498e8e4a9c871aa762401aa, type: 3}
+  artwork: {fileID: 21300000, guid: b52d51bc8d183694288d2cb292360c56, type: 3}
   type: {fileID: 21300000, guid: 1447ad2c3db4a0540aa323254142dc3f, type: 3}
   isBoss: 0
   isPlayerInventory: 0
@@ -25,3 +25,4 @@ MonoBehaviour:
   actionType: 2
   multiActionType: 7
   cardPack: 2
+  rarity: 2

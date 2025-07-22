@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Myrrin
   description: Every Card you play after this card deals +2 damage.
-  artwork: {fileID: 21300000, guid: 0a51b5dfb498e8e4a9c871aa762401aa, type: 3}
+  artwork: {fileID: 21300000, guid: a339e03ed7eeb3940be754928468cf4b, type: 3}
   type: {fileID: 21300000, guid: 349cbc967fc589f40ade6569d0de04ed, type: 3}
   isBoss: 0
   isPlayerInventory: 0
@@ -25,3 +25,4 @@ MonoBehaviour:
   actionType: 2
   multiActionType: 8
   cardPack: 2
+  rarity: 3

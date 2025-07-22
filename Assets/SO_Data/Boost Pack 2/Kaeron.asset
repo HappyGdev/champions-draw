@@ -15,7 +15,7 @@ MonoBehaviour:
   name: 'Kaeron '
   description: 'Roll again. Swap a card from your deck with the card on the space
     you landed on '
-  artwork: {fileID: 21300000, guid: 0a51b5dfb498e8e4a9c871aa762401aa, type: 3}
+  artwork: {fileID: 21300000, guid: e4747e0ad18da114e91d6d2f59968dba, type: 3}
   type: {fileID: 21300000, guid: ace28e5e625924043ba861a3bc42096f, type: 3}
   isBoss: 0
   isPlayerInventory: 0
@@ -26,3 +26,4 @@ MonoBehaviour:
   actionType: 2
   multiActionType: 4
   cardPack: 2
+  rarity: 1

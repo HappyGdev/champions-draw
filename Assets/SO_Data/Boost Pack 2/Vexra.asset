@@ -15,7 +15,7 @@ MonoBehaviour:
   name: 'Vexra '
   description: 'Discard a card. Add a card with a value less than 5 from the field
     to your deck. '
-  artwork: {fileID: 21300000, guid: 0a51b5dfb498e8e4a9c871aa762401aa, type: 3}
+  artwork: {fileID: 21300000, guid: 112661572d68dff45975f286624e0a8c, type: 3}
   type: {fileID: 21300000, guid: f2e7d2b68287bb2458f498158a4bbf04, type: 3}
   isBoss: 0
   isPlayerInventory: 0
@@ -26,3 +26,4 @@ MonoBehaviour:
   actionType: 2
   multiActionType: 5
   cardPack: 2
+  rarity: 3

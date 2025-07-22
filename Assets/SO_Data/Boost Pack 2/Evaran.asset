@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: 'Evaran '
   description: 'Reduce damage taken next turn by 5 '
-  artwork: {fileID: 21300000, guid: 0a51b5dfb498e8e4a9c871aa762401aa, type: 3}
+  artwork: {fileID: 21300000, guid: e443adb3496767f47ae2b6b4d839afb9, type: 3}
   type: {fileID: 21300000, guid: 1447ad2c3db4a0540aa323254142dc3f, type: 3}
   isBoss: 0
   isPlayerInventory: 0
@@ -25,3 +25,4 @@ MonoBehaviour:
   actionType: 2
   multiActionType: 7
   cardPack: 2
+  rarity: 3

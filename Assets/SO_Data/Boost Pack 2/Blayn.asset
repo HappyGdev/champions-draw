@@ -15,8 +15,8 @@ MonoBehaviour:
   name: 'Blayn '
   description: 'Roll again. Swap a card from your deck with the card on the space
     you landed on '
-  artwork: {fileID: 21300000, guid: 0a51b5dfb498e8e4a9c871aa762401aa, type: 3}
-  type: {fileID: 21300000, guid: 018db460f63e7e647909f0c4dc6d014b, type: 3}
+  artwork: {fileID: 21300000, guid: 018db460f63e7e647909f0c4dc6d014b, type: 3}
+  type: {fileID: 21300000, guid: ace28e5e625924043ba861a3bc42096f, type: 3}
   isBoss: 0
   isPlayerInventory: 0
   isDefenseDown: 0

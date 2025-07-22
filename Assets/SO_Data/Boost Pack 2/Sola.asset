@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: 'Sola '
   description: 'The boss cannot attack for 1 round '
-  artwork: {fileID: 21300000, guid: 0a51b5dfb498e8e4a9c871aa762401aa, type: 3}
+  artwork: {fileID: 21300000, guid: afd863866514f9c4f8785067138167f6, type: 3}
   type: {fileID: 21300000, guid: 1dcbced4bc9b39a4d93aba1edb8f3d7d, type: 3}
   isBoss: 0
   isPlayerInventory: 0
@@ -25,3 +25,4 @@ MonoBehaviour:
   actionType: 2
   multiActionType: 3
   cardPack: 2
+  rarity: 2

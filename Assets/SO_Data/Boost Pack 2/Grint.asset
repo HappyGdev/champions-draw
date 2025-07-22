@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: 'Grint '
   description: 'Discard a card. This card can attack twice '
-  artwork: {fileID: 21300000, guid: 0a51b5dfb498e8e4a9c871aa762401aa, type: 3}
+  artwork: {fileID: 21300000, guid: 54c788b8a78a1d743bac2261d55d9e08, type: 3}
   type: {fileID: 21300000, guid: 73a645dfd88fbd8419622a7f51f05dd9, type: 3}
   isBoss: 0
   isPlayerInventory: 0
@@ -25,3 +25,4 @@ MonoBehaviour:
   actionType: 2
   multiActionType: 1
   cardPack: 2
+  rarity: 2
