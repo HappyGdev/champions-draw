@@ -35,6 +35,7 @@ public class Dice : MonoBehaviour, IPointerClickHandler
                 audioSource.Play();
             }
 
+            GameManager.instance.SetSampleCardNull();
             //Start dice Logic
             StartCoroutine(RollDice());
         }

@@ -19,8 +19,10 @@ MonoBehaviour:
   isBoss: 0
   isPlayerInventory: 0
   isDefenseDown: 0
-  value1: 5
+  value1: 6
   value2: 0
   value3: 0
   actionType: 2
-  multiActionType: 2
+  multiActionType: 10
+  cardPack: 0
+  rarity: 0

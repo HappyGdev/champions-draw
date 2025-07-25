@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using TMPro;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class GameManager : MonoBehaviour
     [Header("cards")]
     //public List<CardDisplay> cards = new List<CardDisplay>();   
     public CardHolder cardHolder;
+    public CardDisplay SampleCard;
     [Space]
 
     [Header("Null Card ")]
@@ -80,9 +82,34 @@ public class GameManager : MonoBehaviour
 
         //Create Initial Inventory with 4 Random Card (if player can't have Any Card from Board USe this Cards)
         GiveInitialInventory();
-
+        SetSampleCardNull();
         //send to CardDisplay to Set Display Data For All cards -- whenever we wanna update Display Of cards we need to Invoke This
         onCardDisplay?.Invoke();
+    }
+    public void SetSampleCardNull()
+    {
+        // when click on Dice Card Will be Null
+        var curcard = SampleCard.GetComponent<CardDisplay>();
+        curcard.Card = NullCard;
+        curcard.nameText.text = "";
+        curcard.descriptionText.text = "";
+        curcard.artworkImage.sprite = NullCard.artwork;
+        curcard.ArtworkType.sprite = NullCard.type;
+        curcard.Value1.text = "0";
+        curcard.Value2.text = "0";
+        curcard.Value3.text ="0";
+    }
+    private void SetSampleCardShowInfo(CardDisplay card)
+    {
+        var curdtoshow = SampleCard.GetComponent<CardDisplay>();
+        curdtoshow.Card = card.Card;
+        curdtoshow.nameText.text = card.Card.name;
+        curdtoshow.descriptionText.text = card.Card.description;
+        curdtoshow.artworkImage.sprite = card.Card.artwork;
+        curdtoshow.ArtworkType.sprite = card.Card.type;
+        curdtoshow.Value1.text = card.Card.value1.ToString();
+        curdtoshow.Value2.text = card.Card.value1.ToString();
+        curdtoshow.Value3.text = card.Card.value1.ToString();
     }
 
     /// <summary>
@@ -214,14 +241,15 @@ public class GameManager : MonoBehaviour
         // Add an item to inventory AFTER completing all steps
         if (uiItemSpawner != null)
         {
-            Card ChosenCard = (waypoints.Wayp[currentWaypointIndex].GetComponentInChildren<CardDisplay>().Card);
+            CardDisplay ChosenCard = (waypoints.Wayp[currentWaypointIndex].GetComponentInChildren<CardDisplay>());
 
             //if card is null don't add to Player Initial Inventory otherwise Add Card To initial Inventory (and Player Fight cards)
-            if (ChosenCard.actionType != CardActionType.empty)
+            if (ChosenCard.Card.actionType != CardActionType.empty)
             {
-                uiItemSpawner.SpawnItem(ChosenCard, false);
-                PlayerFightcards.Add(ChosenCard);
+                uiItemSpawner.SpawnItem(ChosenCard.Card, false);
+                PlayerFightcards.Add(ChosenCard.Card);
                 onCardDisplay?.Invoke();
+                SetSampleCardShowInfo(ChosenCard);
             }
         }
 
