@@ -7255,9 +7255,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ab8ab6f404dc8b4fb189a548029991e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bossPoisendRound: 0
-  dmgBoost: 0
-  Attack3X: 0
 --- !u!1 &687648697
 GameObject:
   m_ObjectHideFlags: 0

@@ -87,6 +87,8 @@ public class GameManager : MonoBehaviour
         //send to CardDisplay to Set Display Data For All cards -- whenever we wanna update Display Of cards we need to Invoke This
         onCardDisplay?.Invoke();
     }
+
+    #region Sample Big_card
     public void SetSampleCardNull()
     {
         // when click on Dice Card Will be Null
@@ -112,6 +114,7 @@ public class GameManager : MonoBehaviour
         curdtoshow.Value2.text = card.Card.value1.ToString();
         curdtoshow.Value3.text = card.Card.value1.ToString();
     }
+    #endregion
 
     /// <summary>
     /// Before Player Move On Board
@@ -198,8 +201,6 @@ public class GameManager : MonoBehaviour
     /// Now On Board we Have Dice and Playe Should Click on Dice to Call MOVEPLAYER Function
     /// </summary>
     #region MOVE_PLAYER
-
-
     public void MovePlayer(int steps)
     {
         if (remainingMoves <= 0 || isMoving) return;
@@ -208,8 +209,6 @@ public class GameManager : MonoBehaviour
         remainingMove_txt.text = remainingMoves.ToString();
         StartCoroutine(MoveOverSteps(steps));
     }
-
-
     IEnumerator MoveOverSteps(int steps)
     {
         isMoving = true;
@@ -256,7 +255,6 @@ public class GameManager : MonoBehaviour
 
         isMoving = false;
     }
-
     #endregion
 
 
@@ -269,6 +267,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator Fight()
     {
+        yield return new WaitForSeconds(2f);
         //Disable Board
         MainPanel.SetActive(false);
         yield return new WaitForSeconds(0.5f);
@@ -315,62 +314,24 @@ public class GameManager : MonoBehaviour
         }
         BossAttack();
     }
+
     public void BossAttack()
     {
         if (gameOver)
             return;
         CardEffectManager.Instance.BossCardEffect();
     }
-    public void TurnLoop()
+    #endregion
+
+    #region Player Attack
+
+    //Call from UI (Click on card And call Zoom Script)
+    public void PlayerAttack(Card mycard)
     {
         if (gameOver)
             return;
 
-        CheckBattleOutcome();
-
-        // Control From UiItem Spawner After Player Inventory Deleted(Player turn Finished) and now Its Boss Turn
-        if (playerTurn)
-        {
-            CheckBossPoisioned();
-            StartCoroutine(pTurn());
-        }
-        else
-        {
-            CreateBossInventory();
-        }
-
-        playerTurn = !playerTurn;
-    }
-    //this is for Poisoned Boss
-    public void ChangeTurn()
-    {
-        playerTurn = !playerTurn;
-    }
-
-    public void PoisendBoss(int remainCount)
-    {
-        bossPoisendCount+=remainCount;
-    }
-    public void CheckBossPoisioned()
-    {
-        if (bossPoisendCount <= 1)
-        {
-            HealthBar.instance.BossNormalHealthBar();
-            return;
-        }
-        bossPoisendCount--;
-        HealthBar.instance.BossTakeDamage(5f);
-    }
-    public void ProtectPlayer()
-    {
-        isPlayerProtected = true;
-    }
-
-    IEnumerator pTurn()
-    {
-        UIManager.Instance.PlyerBossTurn(0);
-        yield return new WaitForSeconds(1);
-        CreatePlayerAttackInventory();
+        CardEffectManager.Instance.ApplyCardEffect(mycard);
     }
     public void CreatePlayerAttackInventory()
     {
@@ -397,9 +358,29 @@ public class GameManager : MonoBehaviour
             //send to CardDisplay
             onCardDisplay?.Invoke();
         }
-
     }
+    #endregion
 
+
+    #region Player PowerUp_Effects
+    public void PoisendBoss(int remainCount)
+    {
+        bossPoisendCount += remainCount;
+    }
+    public void CheckBossPoisioned()
+    {
+        if (bossPoisendCount <= 1)
+        {
+            HealthBar.instance.BossNormalHealthBar();
+            return;
+        }
+        bossPoisendCount--;
+        HealthBar.instance.BossTakeDamage(5f);
+    }
+    public void ProtectPlayer()
+    {
+        isPlayerProtected = true;
+    }
     public void ReplaceTwoFightCardsButKeep(Card keepCard)
     {
 
@@ -430,29 +411,13 @@ public class GameManager : MonoBehaviour
             onCardDisplay?.Invoke();
     }
 
-
-    //Call from UI (Click on card And call Zoom Script)
-    public void PlayerAttack(Card mycard)
-    {
-        if (gameOver)
-            return;
-
-        CardEffectManager.Instance.ApplyCardEffect(mycard);
-    }
-
     public void SendEndAction(bool isBoosTurnSkip)
     {
-        //Send to UiItemSpawner to Destroy All Spawned card
-        //onDestroyPlayedCard?.Invoke(isBoosTurnSkip);
         UiItemSpawner.Instance.DestroyPlayerInventory(isBoosTurnSkip);
     }
+    #endregion
 
-    //public void BossAttackPhase()
-    //{
-    //    //go to UiItemSpawner to control Boss Fight Logic
-    //    //onBossAttackTurn?.Invoke();
-    //    UiItemSpawner.Instance.BossAttack();
-    //}
+    #region Boss Powerup_Effects
     public void BossAttackPlayer(int dmg,bool isMultipleTurn)
     {
         if (isPlayerProtected)
@@ -482,8 +447,9 @@ public class GameManager : MonoBehaviour
             UIManager.Instance.Player_turn_Over_button_On();
         }
     }
+    #endregion
 
-
+    #region Battle Turn Desicion
     public void CheckBattleOutcome()
     {
         if (HealthBar.instance.BosscurrentHealth <= 0)
@@ -504,6 +470,34 @@ public class GameManager : MonoBehaviour
             // Show lose screen or handle defeat
         }
     }
+    public void TurnLoop()
+    {
+        if (gameOver)
+            return;
 
+        CheckBattleOutcome();
+        // Control From UiItem Spawner After Player Inventory Deleted(Player turn Finished) and now Its Boss Turn
+        if (playerTurn)
+        {
+            CheckBossPoisioned();
+            StartCoroutine(pTurn());
+        }
+        else
+        {
+            CreateBossInventory();
+        }
+
+        playerTurn = !playerTurn;
+    }
+    public void ChangeTurn()
+    {
+        playerTurn = !playerTurn;
+    }
+    IEnumerator pTurn()
+    {
+        UIManager.Instance.PlyerBossTurn(0);
+        yield return new WaitForSeconds(1);
+        CreatePlayerAttackInventory();
+    }
     #endregion
 }
