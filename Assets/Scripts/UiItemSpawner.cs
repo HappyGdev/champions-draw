@@ -264,30 +264,30 @@ public class UiItemSpawner : MonoBehaviour
         yield return new WaitForSeconds(2f);
         GameManager.instance.TurnLoop();
     }
-    public void BossAttack()
-    {
-        if (GameManager.instance.gameOver)
-            return;
+    //public void BossAttack()
+    //{
+    //    if (GameManager.instance.gameOver)
+    //        return;
 
-        StartCoroutine(AttackFromBoss());
+    //    StartCoroutine(AttackFromBoss());
 
-    }
-    IEnumerator AttackFromBoss()
-    {
-        //yield return new WaitForSeconds(2f);
-        int ranindex = UnityEngine.Random.Range(0, BossInventory.Count);
-        foreach (var item in BossInventory)
-        {
-            item.SetActive(false);
-        }
-        yield return new WaitForSeconds(0.2f);
-        BossInventory[ranindex].SetActive(true);
+    //}
+    //IEnumerator AttackFromBoss()
+    //{
+    //    //yield return new WaitForSeconds(2f);
+    //    int ranindex = UnityEngine.Random.Range(0, BossInventory.Count);
+    //    foreach (var item in BossInventory)
+    //    {
+    //        item.SetActive(false);
+    //    }
+    //    yield return new WaitForSeconds(0.2f);
+    //    BossInventory[ranindex].SetActive(true);
 
-        UIAnimationUtility.ShakeScale(BossInventory[ranindex].GetComponent<RectTransform>(), new Vector3(.2f, .8f, .2f), 0.5f, 10, 90, Ease.InOutBounce);
-        UIAnimationUtility.ShakePosition(BossInventory[ranindex].GetComponent<RectTransform>(), new Vector3(1, 10, 1), 0.5f, 10, 90, Ease.InOutBounce);
+    //    UIAnimationUtility.ShakeScale(BossInventory[ranindex].GetComponent<RectTransform>(), new Vector3(.2f, .8f, .2f), 0.5f, 10, 90, Ease.InOutBounce);
+    //    UIAnimationUtility.ShakePosition(BossInventory[ranindex].GetComponent<RectTransform>(), new Vector3(1, 10, 1), 0.5f, 10, 90, Ease.InOutBounce);
 
-        var bossdamage = BossInventory[ranindex].GetComponent<CardDisplay>().Card.value1;
-        GameManager.instance.BossAttackPlayer(bossdamage);
-    }
+    //    var bossdamage = BossInventory[ranindex].GetComponent<CardDisplay>().Card.value1;
+    //    GameManager.instance.BossAttackPlayer(bossdamage);
+    //}
 
 }

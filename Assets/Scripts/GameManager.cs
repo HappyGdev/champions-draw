@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System;
 using TMPro;
 using Unity.VisualScripting;
+using DG.Tweening;
 
 public class GameManager : MonoBehaviour
 {
@@ -312,7 +313,13 @@ public class GameManager : MonoBehaviour
             //send to CardDisplay
             onCardDisplay?.Invoke();
         }
-        BossAttackPhase();
+        BossAttack();
+    }
+    public void BossAttack()
+    {
+        if (gameOver)
+            return;
+        CardEffectManager.Instance.BossCardEffect();
     }
     public void TurnLoop()
     {
@@ -440,25 +447,25 @@ public class GameManager : MonoBehaviour
         UiItemSpawner.Instance.DestroyPlayerInventory(isBoosTurnSkip);
     }
 
-    public void BossAttackPhase()
-    {
-        //go to UiItemSpawner to control Boss Fight Logic
-        //onBossAttackTurn?.Invoke();
-        UiItemSpawner.Instance.BossAttack();
-    }
-    public void BossAttackPlayer(int dmg)
+    //public void BossAttackPhase()
+    //{
+    //    //go to UiItemSpawner to control Boss Fight Logic
+    //    //onBossAttackTurn?.Invoke();
+    //    UiItemSpawner.Instance.BossAttack();
+    //}
+    public void BossAttackPlayer(int dmg,bool isMultipleTurn)
     {
         if (isPlayerProtected)
         {
-            StartCoroutine(BossAttack(dmg - 5));
+            StartCoroutine(BossAttack(dmg - 5, isMultipleTurn));
             isPlayerProtected= false;   
         }
         else
         {
-            StartCoroutine(BossAttack(dmg));
+            StartCoroutine(BossAttack(dmg, isMultipleTurn));
         }
     }
-    public IEnumerator BossAttack(int damage)
+    public IEnumerator BossAttack(int damage,bool isBossTurnAgain)
     {
         HealthBar.instance.PlayerTakeDamage(damage);
         yield return new WaitForSeconds(2f);
@@ -466,8 +473,14 @@ public class GameManager : MonoBehaviour
         UiItemSpawner.Instance.DestroyBossInventory();
         ///   TurnLoop();
         ///   
-        UIManager.Instance.Player_turn_Over_button_On();
-
+        if (isBossTurnAgain)
+        {
+            CreateBossInventory();
+        }
+        else
+        {
+            UIManager.Instance.Player_turn_Over_button_On();
+        }
     }
 
 

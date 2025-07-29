@@ -1,6 +1,7 @@
 using System.Collections;
 using System;
 using UnityEngine;
+using DG.Tweening;
 
 public class CardEffectManager : MonoBehaviour
 {
@@ -48,8 +49,95 @@ public class CardEffectManager : MonoBehaviour
                 break;
         }
     }
+    public void BossCardEffect()
+    {
+        BossCardsAction();
+    }
+    private void BossCardsAction()
+    {
+        StartCoroutine(AttackFromBoss());
+    }
+    IEnumerator AttackFromBoss()
+    {
+        //yield return new WaitForSeconds(2f);
+        int ranindex = UnityEngine.Random.Range(0,UiItemSpawner.Instance.BossInventory.Count);
+        foreach (var item in UiItemSpawner.Instance.BossInventory)
+        {
+            item.SetActive(false);
+        }
+        yield return new WaitForSeconds(0.2f);
+        UiItemSpawner.Instance.BossInventory[ranindex].SetActive(true);
 
+        UIAnimationUtility.ShakeScale(UiItemSpawner.Instance.BossInventory[ranindex].GetComponent<RectTransform>(), new Vector3(.2f, .8f, .2f), 0.5f, 10, 90, Ease.InOutBounce);
+        UIAnimationUtility.ShakePosition(UiItemSpawner.Instance.BossInventory[ranindex].GetComponent<RectTransform>(), new Vector3(1, 10, 1), 0.5f, 10, 90, Ease.InOutBounce);
 
+        var bosscard = UiItemSpawner.Instance.BossInventory[ranindex].GetComponent<CardDisplay>().Card;
+        //var bossdamage = UiItemSpawner.Instance.BossInventory[ranindex].GetComponent<CardDisplay>().Card.value1;
+        // GameManager.instance.BossAttackPlayer(bossdamage);
+        DecideBossAttack(bosscard);
+    }
+
+    public void DecideBossAttack(Card crd)
+    {
+        switch (crd.actionType)
+        {
+            case CardActionType.Attack:
+                GameManager.instance.BossAttackPlayer(crd.value1, false);
+                break;
+            case CardActionType.Heal:
+                HealthBar.instance.BossTakeDamage(-crd.value1);
+                StartCoroutine(ChangeTurn());
+                break;
+            case CardActionType.Multi:
+                HandleBossMultiAction(crd);
+                break;
+            case CardActionType.empty:
+                break;
+            default:
+                break;
+        }
+    }
+    private void HandleBossMultiAction(Card card)
+    {
+        switch (card.multiActionType)
+        {
+            case MultiActionType.None:
+                break;
+
+                // for boss valu3 means the attack round forexample 3 means attack 3 times
+            case MultiActionType.AttackTwice:
+                var attackRound = card.value3;
+                StartCoroutine(BossMultipleAtatck(card,attackRound));    
+                break;
+                //just used same name but its player stun not boss stun we could use seprate class but for 1 variable seems not neccessary
+            case MultiActionType.BossStun:
+                GameManager.instance.BossAttackPlayer(card.value1,true);
+                break;
+
+            case MultiActionType.PoisonBoss:
+                break;
+            case MultiActionType.BoostDamage:
+                break;
+
+                break;
+            default:
+                break;
+        }
+    }
+    private IEnumerator BossMultipleAtatck(Card crd,int round)
+    {
+        for (int i = 0; i < round; i++) 
+        {
+            GameManager.instance.BossAttackPlayer(crd.value1, false);
+            yield return new WaitForSeconds(0.4f);
+        }
+    }
+    private IEnumerator ChangeTurn()
+    {
+        yield return new WaitForSeconds(1f);
+        UiItemSpawner.Instance.DestroyBossInventory();
+        UIManager.Instance.Player_turn_Over_button_On();
+    }
     private void HandleMultiAction(Card card)
     {
         switch (card.multiActionType)
