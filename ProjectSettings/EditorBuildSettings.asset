@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Mini Game.unity
     guid: 4b3aa65d48f34504fa692e00354aecaa
+  - enabled: 1
+    path: Assets/Scenes/New Level_Bahar.unity
+    guid: 150d00e2ad900694fbaba5429f7b4161
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

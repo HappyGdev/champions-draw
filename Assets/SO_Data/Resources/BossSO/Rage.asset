@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cadee058d7a1094f89dee15f1af7878, type: 3}
+  m_Name: Rage
+  m_EditorClassIdentifier: 
+  cardId: 0b4c9107-9359-4600-8211-7842cd4a4090
+  name: Rage
+  description: 3x4 damage to random player.
+  artwork: {fileID: 21300000, guid: 3c0c4cc67f8d45c4c82e682513dc69af, type: 3}
+  type: {fileID: 21300000, guid: 349cbc967fc589f40ade6569d0de04ed, type: 3}
+  isBoss: 1
+  isPlayerInventory: 0
+  isDefenseDown: 0
+  value1: 4
+  value2: 0
+  value3: 0
+  actionType: 0
+  multiActionType: 0
+  cardPack: 0
+  rarity: 0

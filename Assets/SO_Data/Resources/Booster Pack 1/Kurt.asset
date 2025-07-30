@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cadee058d7a1094f89dee15f1af7878, type: 3}
+  m_Name: Kurt
+  m_EditorClassIdentifier: 
+  cardId: ccebc06c-8c9f-44a0-800b-f7eabc515437
+  name: 'Kurt '
+  description: 'Discard a card. This card can attack twice '
+  artwork: {fileID: 21300000, guid: fc3b8cb7a917c484e8d951c8df12d2d4, type: 3}
+  type: {fileID: 21300000, guid: f2e7d2b68287bb2458f498158a4bbf04, type: 3}
+  isBoss: 0
+  isPlayerInventory: 0
+  isDefenseDown: 0
+  value1: 4
+  value2: 0
+  value3: 0
+  actionType: 2
+  multiActionType: 5
+  cardPack: 1
+  rarity: 3
