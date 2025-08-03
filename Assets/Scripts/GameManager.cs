@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviour
     private void SetCards()
     {
         // Clone the original list so the original CardHold remains unchanged
-        List<Card> shuffledCards = new List<Card>(cardHolder.CardHold);
+        List<Card> shuffledCards = new List<Card>(cardHolder.PlayerAvaiableCards);
 
         // Shuffle the list
         for (int i = 0; i < shuffledCards.Count; i++)
@@ -169,7 +169,7 @@ public class GameManager : MonoBehaviour
     #region SET_INITIAL_INVENTORY
     private void GiveInitialInventory()
     {
-        if (cardHolder == null || uiItemSpawner == null || cardHolder.CardHold.Count < 4)
+        if (cardHolder == null || uiItemSpawner == null || cardHolder.PlayerAvaiableCards.Count < 4)
         {
             Debug.LogWarning("CardHolder or UIItemSpawner not assigned properly.");
             return;
@@ -179,13 +179,13 @@ public class GameManager : MonoBehaviour
 
         while (uniqueIndexes.Count < 4)
         {
-            int randIndex = UnityEngine.Random.Range(0, cardHolder.CardHold.Count);
+            int randIndex = UnityEngine.Random.Range(0, cardHolder.PlayerAvaiableCards.Count);
             uniqueIndexes.Add(randIndex);
         }
 
         foreach (int index in uniqueIndexes)
         {
-            Card randomCard = cardHolder.CardHold[index];
+            Card randomCard = cardHolder.PlayerAvaiableCards[index];
             if (randomCard.actionType != CardActionType.empty)
             {
                 uiItemSpawner.SpawnItem(randomCard, false);

@@ -218,7 +218,7 @@ public class MiniGameManager : MonoBehaviour
     }
     private void SetCards()
     {
-        List<Card> shuffled = new List<Card>(cardHolder.CardHold);
+        List<Card> shuffled = new List<Card>(cardHolder.PlayerAvaiableCards);
         for (int i = 0; i < shuffled.Count; i++)
         {
             int rand = Random.Range(i, shuffled.Count);

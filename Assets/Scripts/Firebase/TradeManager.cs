@@ -5,6 +5,9 @@ using Firebase;
 using Firebase.Extensions;
 using System.Collections;
 using System.Threading.Tasks;
+using UnityEngine.UI;
+using System;
+using UnityEngine.Networking;
 
 public class TradeManager : MonoBehaviour
 {
@@ -14,8 +17,6 @@ public class TradeManager : MonoBehaviour
 
     [SerializeField] List<TradeOffer> allTradeOffers = new List<TradeOffer>();
 
-    [SerializeField] TradeCardElementUI tradeCardELementPrefab;
-    [SerializeField] Transform tradeCardsParent;
 
     [SerializeField] PlayerCardsDataManager cardsDataManager;
 
@@ -25,49 +26,80 @@ public class TradeManager : MonoBehaviour
 
     [SerializeField] List<TradeOffer> otherPlayerOffers = new List<TradeOffer>();
 
-    void Start()
-    {
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
-        {
-            if (task.IsCompleted && !task.IsFaulted)
-            {
-                dbRef = FirebaseDatabase.DefaultInstance.RootReference;
-                Debug.Log("Firebase database initialized successfully.");
 
-                LoadAllOffers();
+    public Action<List<TradeOffer>, int> OnTradesLoaded;
+
+  
+    [SerializeField] int maxResults = 10;
+
+    [SerializeField] AvailableTradesUI availableTrades;
+
+    public Action OnTradeSucceded;
+    public Action OnTradeFailed;
+
+    public Action OnTradeCreated;
+
+    [SerializeField] MenuManager menuManager;
+
+    private void OnEnable()
+    {
+        cardsDataManager.OnDBRefLoaded += SetDBRef;
+    }
+
+    private void OnDisable()
+    {
+        cardsDataManager.OnDBRefLoaded -= SetDBRef;
+    }
+
+    public void OnTradeBtnClicked()
+    {
+        StartCoroutine(CheckInternetConnection());
+    }
+
+    IEnumerator CheckInternetConnection()
+    {
+        using (UnityWebRequest webRequest = UnityWebRequest.Get("https://www.google.com"))
+        {
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.LogError($"Error: {webRequest.error}");
             }
             else
             {
-                Debug.LogError("Firebase database initialization failed.");
+                // Successfully received response
+                menuManager.ShowMenu("Trade");
             }
-        });
-
-
+        }
     }
 
-
-
-    private void Update()
+    void SetDBRef(DatabaseReference dbRef)
     {
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            SaveOffer();
-        }
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            LoadAllOffers();
-        }
-
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            SaveOtherPlayerData();
-        }
-
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            SaveOtherPlayerOffer();
-        }
+        this.dbRef = dbRef;
     }
+
+    //private void Update()
+    //{
+    //    //if (Input.GetKeyDown(KeyCode.S))
+    //    //{
+    //    //    SaveOffer();
+    //    //}
+    //    if (Input.GetKeyDown(KeyCode.L))
+    //    {
+    //        LoadAllOffers();
+    //    }
+
+    //    if (Input.GetKeyDown(KeyCode.C))
+    //    {
+    //        SaveOtherPlayerData();
+    //    }
+
+    //    if (Input.GetKeyDown(KeyCode.X))
+    //    {
+    //        SaveOtherPlayerOffer();
+    //    }
+    //}
 
     IEnumerator SwapCardsIE(string offererCardId, string requestedCardId, string offererId, string acceptorId, string tradeId)
     {
@@ -106,8 +138,8 @@ public class TradeManager : MonoBehaviour
 
         // Should change
         TradeOffer tradeOffer = new TradeOffer(otherPlayerData.userId,
-            "2ec47c6c-2bbe-4da4-9613-08801beffe17",
-            "2c265c10-46ee-4371-ad48-0b208ac2aaed");
+            "2c265c10-46ee-4371-ad48-0b208ac2aaed",
+            "b50eab27-4c59-4708-a5a1-dbd14130cbf4");
 
         otherPlayerOffers.Add(tradeOffer);
 
@@ -119,19 +151,19 @@ public class TradeManager : MonoBehaviour
 
     }
 
-    void SaveOffer()
+    public void SaveTradeOffer(string offerCardId, string requestCardId)
     {
-        StartCoroutine(SaveOfferIE());
+        StartCoroutine(SaveOfferIE(offerCardId, requestCardId));
     }
 
-    IEnumerator SaveOfferIE()
+    IEnumerator SaveOfferIE(string offerCardId, string requestCardId)
     {
         yield return LoadMyOffersIE();
 
         // Should change
         TradeOffer tradeOffer = new TradeOffer(cardsDataManager.playerData.userId,
-            "19dee57e-6070-4174-b8f2-2d71bfbde234",
-            "2c265c10-46ee-4371-ad48-0b208ac2aaed");
+            offerCardId, requestCardId);
+
 
         myTradeOffers.Add(tradeOffer);
 
@@ -140,13 +172,13 @@ public class TradeManager : MonoBehaviour
         // dbRef.Child("allTrades").SetRawJsonValueAsync(json);
 
         dbRef.Child("allTrades").Child(cardsDataManager.playerData.userId).Child(tradeOffer.tradeId).SetRawJsonValueAsync(json);
-
+        OnTradeCreated?.Invoke();
     }
 
     public void SwapCards(string offerCardId, string requestCardId, string offererId, string acceptorId, string tradeId)
     {
         // should change and replace acceptorId
-        StartCoroutine(SwapCardsIE(offerCardId, requestCardId, offererId, otherPlayerData.userId, tradeId));
+        StartCoroutine(SwapCardsIE(offerCardId, requestCardId, offererId, acceptorId, tradeId));
 
     }
 
@@ -176,6 +208,7 @@ public class TradeManager : MonoBehaviour
 
         allTradeOffers.Clear();
 
+       
         foreach (var childRoot in serverData.Result.Children)
         {
             foreach (var child in childRoot.Children)
@@ -198,22 +231,13 @@ public class TradeManager : MonoBehaviour
                     foreach (var offer in wrapper.trades)
                     {
                         allTradeOffers.Add(offer);
-                        Debug.Log("OfferUserName" + offer.userId);
+                       // Debug.Log("OfferUserName" + offer.userId);
+
                     }
 
-                    foreach (Transform c in tradeCardsParent)
-                    {
-                        Destroy(c.gameObject);
-                    }
-
-                    foreach (var trade in allTradeOffers)
-                    {
-                        var tradeElement = Instantiate(tradeCardELementPrefab, tradeCardsParent);
-
-                        tradeElement.GetComponent<TradeCardElementUI>().Setup(trade.offerCardId, trade.reauestedCardId, trade.userId, cardsDataManager.playerData.userId, trade.tradeId, this);
-                    }
-
-                    // tradeOffer = JsonUtility.FromJson<TradeOffer>(jsonData);
+                    OnTradesLoaded?.Invoke(allTradeOffers, maxResults);
+                  //  Debug.Log("FOUNDfound");
+                  //  availableTrades.Setup(allTradeOffers, maxResults);
                 }
                 else
                 {
@@ -341,22 +365,7 @@ public class TradeManager : MonoBehaviour
     }
 
 
-    [System.Serializable]
-    public class TradeOffer
-    {
-        public string tradeId = System.Guid.NewGuid().ToString();
-        public string userId;
-        public string offerCardId;
-        public string reauestedCardId;
-
-        public TradeOffer(string userId, string offerCardId, string reauestedCardId)
-        {
-            this.userId = userId;
-            this.offerCardId = offerCardId;
-            this.reauestedCardId = reauestedCardId;
-        }
-    }
-
+   
 
 
     [ContextMenu("Generate Id")]
@@ -384,6 +393,7 @@ public class TradeManager : MonoBehaviour
         // Verify the players actually have the cards to trade
         if (!offererData.playerCards.Contains(offererCardId) || !acceptorData.playerCards.Contains(requestedCardId))
         {
+            OnTradeFailed?.Invoke();
             Debug.Log("COULDNT SWAP");
             return false; // Invalid trade
         }
@@ -424,10 +434,29 @@ public class TradeManager : MonoBehaviour
         cardsDataManager.LoadPlayerData();
 
         Debug.Log("SWAP COMPLETED");
+        OnTradeSucceded?.Invoke();
         return true; // Trade successful
     }
+
+   
 }
 
+
+[System.Serializable]
+public class TradeOffer
+{
+    public string tradeId = System.Guid.NewGuid().ToString();
+    public string userId;
+    public string offerCardId;
+    public string reauestedCardId;
+
+    public TradeOffer(string userId, string offerCardId, string reauestedCardId)
+    {
+        this.userId = userId;
+        this.offerCardId = offerCardId;
+        this.reauestedCardId = reauestedCardId;
+    }
+}
 
 
 
