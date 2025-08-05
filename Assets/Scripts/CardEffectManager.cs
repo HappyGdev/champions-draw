@@ -133,6 +133,8 @@ public class CardEffectManager : MonoBehaviour
         HealthBar.instance.BossTakeDamage(crd.value1 + dmgBoost);
         yield return new WaitForSeconds(0.5f);
         HealthBar.instance.BossTakeDamage(crd.value1 + dmgBoost);
+        GameManager.instance.Create_Second_Inventory(crd);
+        UiItemSpawner.Instance.DeleteCardFromInventory(crd);
         GameManager.instance.SendEndAction(false);
     }
     private IEnumerator SwapValue(Card crd)

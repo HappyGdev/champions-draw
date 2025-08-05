@@ -141,6 +141,11 @@ public class GameManager : MonoBehaviour
             waypoints.cards[i].Card = shuffledCards[i];
         }
     }
+    //public void Deletecard(Card crd)
+    //{
+    //    cardHolder.PlayerAvaiableCards.Remove(crd);
+    //    onCardDisplay?.Invoke();
+    //}
 
     private void SetNullCards()
     {
@@ -196,6 +201,13 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+    public void Create_Second_Inventory(Card crd)
+    {
+        Debug.Log("Delete card Now");
+        PlayerFightcards.Remove(crd);
+
+        onCardDisplay?.Invoke();
+    }
 
     /// <summary>
     /// Now On Board we Have Dice and Playe Should Click on Dice to Call MOVEPLAYER Function

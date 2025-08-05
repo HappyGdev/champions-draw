@@ -17,6 +17,8 @@ public class UiItemSpawner : MonoBehaviour
     public List<GameObject> PlayerInventory = new List<GameObject>();
     public List<GameObject> BossInventory = new List<GameObject>();
 
+    public List<GameObject> FightcardInventory= new List<GameObject>();
+
     private int use3Cards;
 
     private void Awake()
@@ -72,10 +74,34 @@ public class UiItemSpawner : MonoBehaviour
             CCard.GetComponent<BoxCollider2D>().enabled = true;
             PlayerInventory.Add(CCard);
         }
+        else
+        {
+            FightcardInventory.Add(CCard);
+        }
 
         if (isBoss)
         {
             BossInventory.Add(CCard);
+        }
+    }
+    public void DeleteCardFromInventory(Card crd)
+    {
+        for (int i = FightcardInventory.Count - 1; i >= 0; i--)
+        {
+            var fcard = FightcardInventory[i];
+
+            if (fcard == null)
+            {
+                FightcardInventory.RemoveAt(i); // clean up destroyed references
+                continue;
+            }
+
+            var cardDisplay = fcard.GetComponent<CardDisplay>();
+            if (cardDisplay != null && cardDisplay.Card.name == crd.name)
+            {
+                fcard.SetActive(false); // or Destroy(fcard) if needed
+                break; // stop after finding the match
+            }
         }
     }
 
