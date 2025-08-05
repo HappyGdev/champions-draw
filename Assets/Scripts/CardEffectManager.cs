@@ -269,7 +269,11 @@ public class CardEffectManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         UiItemSpawner.Instance.DestroyBossInventory();
-        UIManager.Instance.Player_turn_Over_button_On();
+        // Old Logic With Button 
+        ///UIManager.Instance.Player_turn_Over_button_On();
+        // New Logic
+        UiItemSpawner.Instance.Player_Turn_Over_button();
+
     }
 
     #endregion

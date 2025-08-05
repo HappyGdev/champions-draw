@@ -444,7 +444,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            UIManager.Instance.Player_turn_Over_button_On();
+            //UIManager.Instance.Player_turn_Over_button_On();
+            UiItemSpawner.Instance.Player_Turn_Over_button();
         }
     }
     #endregion
