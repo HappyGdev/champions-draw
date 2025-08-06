@@ -56,12 +56,18 @@ public class GameManager : MonoBehaviour
     private bool playerTurn = true;
     [HideInInspector]public bool gameOver = false;
 
+    [Header("Boss Sounds")]
+    public AudioClip[] startSounds;
+    public AudioClip[] endSounds;
+    private AudioSource audioSource;
+
 
     [SerializeField] private int bossPoisendCount;
     private bool isPlayerProtected;
     private void Awake()
     {
         if (instance == null) { instance = this; }
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
@@ -507,16 +513,48 @@ public class GameManager : MonoBehaviour
         else
         {
             CreateBossInventory();
+            PlayBossStartSounds();
         }
 
         playerTurn = !playerTurn;
     }
+    void PlayBossStartSounds()
+    {
+        if (startSounds.Length == 0 || audioSource == null)
+        {
+            Debug.LogWarning("No audio clips assigned or AudioSource missing.");
+            return;
+        }
+
+        int randomIndex =UnityEngine.Random.Range(0, startSounds.Length); // Get random index
+        audioSource.clip = startSounds[randomIndex];           // Assign clip
+        if(!audioSource.isPlaying)
+        {
+            audioSource.Play();
+        }
+    }
+    //void PlayBossEndSounds()
+    //{
+    //    if (endSounds.Length == 0 || audioSource == null)
+    //    {
+    //        Debug.LogWarning("No audio clips assigned or AudioSource missing.");
+    //        return;
+    //    }
+
+    //    int randomIndex = UnityEngine.Random.Range(0, endSounds.Length); // Get random index
+    //    audioSource.clip = endSounds[randomIndex];           // Assign clip
+    //    if (!audioSource.isPlaying)
+    //    {
+    //        audioSource.Play();
+    //    }
+    //}
     public void ChangeTurn()
     {
         playerTurn = !playerTurn;
     }
     IEnumerator pTurn()
     {
+        //PlayBossEndSounds();
         UIManager.Instance.PlyerBossTurn(0);
         yield return new WaitForSeconds(1);
         CreatePlayerAttackInventory();

@@ -23,7 +23,7 @@ public class UIManager : MonoBehaviour
 
     public TextMeshProUGUI dmgBoost;
     public TextMeshProUGUI bossInfoText;
-    public Image playerImage;
+    //public Image playerImage;
 
     private void Awake()
     {
@@ -33,7 +33,7 @@ public class UIManager : MonoBehaviour
     {
         BossInfoPanel.SetActive(false); 
         bossInfoText.text = "";
-        playerImage.sprite = null;
+        //playerImage.sprite = null;
     }
     public void PlyerBossTurn(int i)
     {
@@ -78,7 +78,7 @@ public class UIManager : MonoBehaviour
     }
     public void BossPanel(bool stats)
     {
-        playerImage.sprite = GameManager.instance.SetPlayerPhoto();
+        //playerImage.sprite = GameManager.instance.SetPlayerPhoto();
         BoosApearPanel.SetActive(stats);
         UIAnimationUtility.ShakePosition(BoosApearPanel.GetComponent<RectTransform>(), new Vector3(2, 5, 2), 1f, 10, 90, Ease.InOutBounce);
     }
