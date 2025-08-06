@@ -230,6 +230,12 @@ public class CardEffectManager : MonoBehaviour
             default:
                 break;
         }
+        ShowBossInfo(crd);
+    }
+
+    private void ShowBossInfo(Card card)
+    {
+        UIManager.Instance.ShowBossInformation(card.description);
     }
     private void HandleBossMultiAction(Card card)
     {

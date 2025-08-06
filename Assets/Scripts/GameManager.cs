@@ -5,6 +5,8 @@ using System;
 using TMPro;
 using Unity.VisualScripting;
 using DG.Tweening;
+using UnityEngine.UI;
+using Unity.Mathematics;
 
 public class GameManager : MonoBehaviour
 {
@@ -197,6 +199,13 @@ public class GameManager : MonoBehaviour
                 PlayerFightcards.Add(randomCard);
             }
         }
+    }
+
+    public Sprite SetPlayerPhoto()
+    {
+        var randnum = UnityEngine.Random.Range(0, cardHolder.StarterCards.Count);
+
+        return cardHolder.StarterCards[randnum].artwork;
     }
 
     #endregion

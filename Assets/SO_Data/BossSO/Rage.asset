@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cadee058d7a1094f89dee15f1af7878, type: 3}
   m_Name: Rage
   m_EditorClassIdentifier: 
+  cardId: 
   name: Rage
-  description: 3x4 damage to random player.
+  description: 3x4 damage to  player.
   artwork: {fileID: 21300000, guid: 3c0c4cc67f8d45c4c82e682513dc69af, type: 3}
   type: {fileID: 21300000, guid: 349cbc967fc589f40ade6569d0de04ed, type: 3}
   isBoss: 1

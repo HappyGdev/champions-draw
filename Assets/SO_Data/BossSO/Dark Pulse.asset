@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cadee058d7a1094f89dee15f1af7878, type: 3}
   m_Name: Dark Pulse
   m_EditorClassIdentifier: 
+  cardId: 
   name: 'Dark Pulse '
-  description: 'Deals 7 damage to player. '
+  description: 'Deals 7 damage '
   artwork: {fileID: 21300000, guid: 7e25dba60a5e6ad418af6bf0098f964f, type: 3}
   type: {fileID: 21300000, guid: 349cbc967fc589f40ade6569d0de04ed, type: 3}
   isBoss: 1

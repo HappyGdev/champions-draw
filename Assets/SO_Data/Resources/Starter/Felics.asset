@@ -20,7 +20,7 @@ MonoBehaviour:
   isBoss: 0
   isPlayerInventory: 0
   isDefenseDown: 0
-  value1: 3
+  value1: 4
   value2: 0
   value3: 0
   actionType: 2

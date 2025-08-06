@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cadee058d7a1094f89dee15f1af7878, type: 3}
   m_Name: Ice Blast
   m_EditorClassIdentifier: 
+  cardId: 
   name: Ice Blast
-  description: Deals 6 damage, slows player.
+  description: Deals 6 damage
   artwork: {fileID: 21300000, guid: 7b227b15984e6574380f6873187ec610, type: 3}
   type: {fileID: 21300000, guid: 349cbc967fc589f40ade6569d0de04ed, type: 3}
   isBoss: 1

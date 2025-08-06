@@ -2,7 +2,9 @@ using DG.Tweening;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -17,12 +19,21 @@ public class UIManager : MonoBehaviour
 
     public GameObject Playerturn_ui;
     public GameObject BossturnUi;
+    public GameObject BossInfoPanel;
 
     public TextMeshProUGUI dmgBoost;
+    public TextMeshProUGUI bossInfoText;
+    public Image playerImage;
 
     private void Awake()
     {
         if(Instance == null) {Instance = this;}
+    }
+    private void Start()
+    {
+        BossInfoPanel.SetActive(false); 
+        bossInfoText.text = "";
+        playerImage.sprite = null;
     }
     public void PlyerBossTurn(int i)
     {
@@ -51,8 +62,23 @@ public class UIManager : MonoBehaviour
         }
 
     }
+
+    public void ShowBossInformation(string info)
+    {
+        StartCoroutine(ShowInfo(info));
+    }
+    IEnumerator ShowInfo(string inf)
+    {
+        BossInfoPanel.SetActive(true);
+        bossInfoText.text = inf;
+        UIAnimationUtility.ShakePosition(BossInfoPanel.GetComponent<RectTransform>(), new Vector3(1, 10, 1), 0.5f, 10, 90, Ease.InOutBounce);
+        yield return new WaitForSeconds(2.5f);
+        bossInfoText.text = "";
+        BossInfoPanel.SetActive(false);
+    }
     public void BossPanel(bool stats)
     {
+        playerImage.sprite = GameManager.instance.SetPlayerPhoto();
         BoosApearPanel.SetActive(stats);
         UIAnimationUtility.ShakePosition(BoosApearPanel.GetComponent<RectTransform>(), new Vector3(2, 5, 2), 1f, 10, 90, Ease.InOutBounce);
     }
