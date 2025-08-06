@@ -298,6 +298,7 @@ public class GameManager : MonoBehaviour
         //Disable Board
         MainPanel.SetActive(false);
         yield return new WaitForSeconds(0.5f);
+        GameManager.instance.PlayBossStartSounds();
         UIManager.Instance.BossPanel(true);
         yield return new WaitForSeconds(2f);
         UIManager.Instance.BossPanel(false);
@@ -518,7 +519,7 @@ public class GameManager : MonoBehaviour
 
         playerTurn = !playerTurn;
     }
-    void PlayBossStartSounds()
+    public void PlayBossStartSounds()
     {
         if (startSounds.Length == 0 || audioSource == null)
         {
@@ -531,23 +532,24 @@ public class GameManager : MonoBehaviour
         if(!audioSource.isPlaying)
         {
             audioSource.Play();
+            Debug.Log("Play sounds mow");
         }
     }
-    //void PlayBossEndSounds()
-    //{
-    //    if (endSounds.Length == 0 || audioSource == null)
-    //    {
-    //        Debug.LogWarning("No audio clips assigned or AudioSource missing.");
-    //        return;
-    //    }
+    public void PlayBossEndSounds()
+    {
+        if (endSounds.Length == 0 || audioSource == null)
+        {
+            Debug.LogWarning("No audio clips assigned or AudioSource missing.");
+            return;
+        }
 
-    //    int randomIndex = UnityEngine.Random.Range(0, endSounds.Length); // Get random index
-    //    audioSource.clip = endSounds[randomIndex];           // Assign clip
-    //    if (!audioSource.isPlaying)
-    //    {
-    //        audioSource.Play();
-    //    }
-    //}
+        int randomIndex = UnityEngine.Random.Range(0, endSounds.Length); // Get random index
+        audioSource.clip = endSounds[randomIndex];           // Assign clip
+        if (!audioSource.isPlaying)
+        {
+            audioSource.Play();
+        }
+    }
     public void ChangeTurn()
     {
         playerTurn = !playerTurn;

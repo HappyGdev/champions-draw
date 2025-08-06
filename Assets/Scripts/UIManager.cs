@@ -75,6 +75,7 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(2.5f);
         bossInfoText.text = "";
         BossInfoPanel.SetActive(false);
+
     }
     public void BossPanel(bool stats)
     {
@@ -88,6 +89,7 @@ public class UIManager : MonoBehaviour
     }
     public void Gameover()
     {
+        GameManager.instance.PlayBossEndSounds();
         LosePanel.SetActive(true);
     }
     public void Win()
