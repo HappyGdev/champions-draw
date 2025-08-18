@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class AuthManager : MonoBehaviour
+public class AuthManagerold : MonoBehaviour
 {
     private FirebaseAuth auth;
 
