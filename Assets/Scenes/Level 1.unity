@@ -11589,8 +11589,8 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 0
-  m_InputType: 0
+  m_ContentType: 7
+  m_InputType: 2
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 0
@@ -11845,8 +11845,8 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 0
-  m_InputType: 0
+  m_ContentType: 7
+  m_InputType: 2
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 0
@@ -19511,8 +19511,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1327740147}
-        m_TargetAssemblyTypeName: AuthManager, Assembly-CSharp
+      - m_Target: {fileID: 1327740149}
+        m_TargetAssemblyTypeName: Auth, Assembly-CSharp
         m_MethodName: LoginButton
         m_Mode: 1
         m_Arguments:
@@ -23193,14 +23193,14 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 0
+  m_ContentType: 6
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 7
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 7
   m_RegexValue: 
   m_GlobalPointSize: 14
   m_CharacterLimit: 0
@@ -25161,7 +25161,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1327740148}
-  - component: {fileID: 1327740147}
+  - component: {fileID: 1327740149}
   m_Layer: 0
   m_Name: Auth Manager
   m_TagString: Untagged
@@ -25169,28 +25169,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1327740147
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1327740146}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82347e208a1952643ac9b5486cecd281, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dependencyStatus: 0
-  emailLoginField: {fileID: 792766022}
-  passwordLoginField: {fileID: 323978626}
-  warningLoginText: {fileID: 1997957042}
-  confirmLoginText: {fileID: 633395614}
-  usernameRegisterField: {fileID: 686052719}
-  emailRegisterField: {fileID: 1221310157}
-  passwordRegisterField: {fileID: 573856501}
-  passwordRegisterVerifyField: {fileID: 589985156}
-  warningRegisterText: {fileID: 1997957042}
 --- !u!4 &1327740148
 Transform:
   m_ObjectHideFlags: 0
@@ -25206,6 +25184,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1327740149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327740146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 403e28bba6930ff448aad5e2bd34f62a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dependencyStatus: 0
+  emailLoginField: {fileID: 792766022}
+  passwordLoginField: {fileID: 323978626}
+  warningLoginText: {fileID: 1997957042}
+  confirmLoginText: {fileID: 633395614}
+  usernameRegisterField: {fileID: 686052719}
+  emailRegisterField: {fileID: 1221310157}
+  passwordRegisterField: {fileID: 573856501}
+  passwordRegisterVerifyField: {fileID: 589985156}
+  warningRegisterText: {fileID: 1997957042}
 --- !u!1 &1339943681
 GameObject:
   m_ObjectHideFlags: 0
@@ -29241,8 +29241,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1327740147}
-        m_TargetAssemblyTypeName: AuthManager, Assembly-CSharp
+      - m_Target: {fileID: 1327740149}
+        m_TargetAssemblyTypeName: Auth, Assembly-CSharp
         m_MethodName: RegisterButton
         m_Mode: 1
         m_Arguments:

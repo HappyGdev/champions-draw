@@ -1,10 +1,10 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Firebase;
 using Firebase.Auth;
 using TMPro;
 using System.Threading.Tasks;
 
-public class AuthManager : MonoBehaviour
+public class Auth : MonoBehaviour
 {
     [Header("Firebase")]
     public DependencyStatus dependencyStatus;
