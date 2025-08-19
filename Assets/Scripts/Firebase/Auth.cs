@@ -26,6 +26,11 @@ public class Auth : MonoBehaviour
 
     private bool firebaseReady = false;
 
+    [Header("User Info")]
+    [SerializeField] private string userGmail;
+    [SerializeField] private GameObject logPanel;
+    public TextMeshProUGUI playerGmail;
+
     // Initialize Firebase in Start instead of Awake
     private async void Start()
     {
@@ -82,6 +87,9 @@ public class Auth : MonoBehaviour
             Debug.LogFormat("User signed in successfully: {0} ({1})", User.DisplayName, User.Email);
             warningLoginText.text = "";
             confirmLoginText.text = "Logged In";
+            userGmail = User.Email;
+            logPanel.SetActive(false);
+            playerGmail.text = User.Email;
         }
         catch (FirebaseException ex)
         {
@@ -138,6 +146,9 @@ public class Auth : MonoBehaviour
 
                 warningRegisterText.text = "";
                 Debug.Log("User registered and username set successfully.");
+                userGmail = User.Email;
+                logPanel.SetActive(false);
+                playerGmail.text = User.Email;
             }
         }
         catch (FirebaseException ex)
