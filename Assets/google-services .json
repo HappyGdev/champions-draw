@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "721999273845",
+    "firebase_url": "https://champions-draw-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "champions-draw",
+    "storage_bucket": "champions-draw.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:721999273845:android:3be148d3b4c384f1fb7d3c",
+        "android_client_info": {
+          "package_name": "com.arushasoft.championsdraw"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCP_NGjhw6pCnpW1sYndj-02gkBQyvVHHA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

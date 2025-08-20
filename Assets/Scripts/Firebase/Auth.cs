@@ -219,6 +219,7 @@ public class FirebaseManager : MonoBehaviour
 
 
             //UIManager.instance.UserDataScreen(); // Change to user data UI
+            loginPanel.SetActive(false);
             dataPanel.SetActive(true);
 
 
