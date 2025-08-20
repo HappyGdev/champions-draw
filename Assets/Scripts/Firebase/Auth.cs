@@ -44,6 +44,8 @@ public class FirebaseManager : MonoBehaviour
     public GameObject dataPanel;
     public GameObject loginPanel;
     public GameObject registerPanel;
+    public TextMeshProUGUI inGameName;
+    public GameObject mainSignPanel;
 
 
     private bool firebaseReady = false;
@@ -222,7 +224,6 @@ public class FirebaseManager : MonoBehaviour
             loginPanel.SetActive(false);
             dataPanel.SetActive(true);
 
-
             confirmLoginText.text = "";
             ClearLoginFeilds();
             ClearRegisterFeilds();
@@ -302,7 +303,11 @@ public class FirebaseManager : MonoBehaviour
 
 
                         //UIManager.instance.LoginScreen();
+                        // loginPanel.SetActive(true);
+                        inGameName.text = User.DisplayName;
                         loginPanel.SetActive(true);
+                        registerPanel.SetActive(false);
+                        mainSignPanel.SetActive(false);
 
                         warningRegisterText.text = "";
                         ClearRegisterFeilds();

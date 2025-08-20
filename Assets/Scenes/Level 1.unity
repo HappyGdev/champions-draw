@@ -32684,6 +32684,8 @@ MonoBehaviour:
   dataPanel: {fileID: 387579401}
   loginPanel: {fileID: 2080459335}
   registerPanel: {fileID: 19223693}
+  inGameName: {fileID: 1506605371}
+  mainSignPanel: {fileID: 1510039925}
 --- !u!1 &1339943681
 GameObject:
   m_ObjectHideFlags: 0
