@@ -1,11 +1,11 @@
 using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Audio;
 using UnityEngine.EventSystems;
+using System;
 
 public class Zoom : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
+    public static Action<int> onCardIndex;
     private Vector3 originalScale;
     public float zoomFactor = 1.2f;
     public float zoomSpeed = 10f;
@@ -35,7 +35,8 @@ public class Zoom : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         //GameManager.instance.PlayerAttack(Damage);
         var curCard = GetComponent<CardDisplay>().Card;
         GameManager.instance.PlayerAttack(curCard);
-
+        var curIndex = GetComponent<CardDisplay>();
+        onCardIndex?.Invoke(curIndex.CardIndex);
     }
     public void OnPointerExit(PointerEventData eventData)
     {

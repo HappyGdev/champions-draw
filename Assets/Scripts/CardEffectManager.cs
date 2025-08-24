@@ -34,6 +34,7 @@ public class CardEffectManager : MonoBehaviour
                 HealthBar.instance.BossTakeDamage(dmg + dmgBoost);
 
                 GameManager.instance.SendEndAction(false);
+
                 break;
 
             case CardActionType.Heal:

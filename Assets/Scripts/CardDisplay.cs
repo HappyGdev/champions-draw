@@ -16,6 +16,10 @@ public class CardDisplay : MonoBehaviour
     public TextMeshProUGUI Value2;
     public TextMeshProUGUI Value3;
 
+    public int CardIndex;   // ایندکس کارت در PlayerFightcards
+
+
+
     public void DisplayCard()
     {
         nameText.text = Card.name;

@@ -21,12 +21,21 @@ public class UiItemSpawner : MonoBehaviour
 
     private int use3Cards;
 
+    private int deleteBuffer;
+
     private void Awake()
     {
         if(Instance == null)
             Instance = this;    
     }
-
+    private void OnEnable()
+    {
+        Zoom.onCardIndex += DeleteIndexBuffer;
+    }
+    private void OnDisable()
+    {
+        Zoom.onCardIndex -= DeleteIndexBuffer;
+    }
     public void SpawnItem(Card chosencard, bool isboss)
     {
         if (itemPrefab == null || layoutGroupParent == null)
@@ -45,6 +54,16 @@ public class UiItemSpawner : MonoBehaviour
         }
 
     }
+    //public void SpawnFightCardItem(Card chosencard)
+    //{
+    //    if (itemPrefab == null || layoutGroupParent == null)
+    //    {
+    //        Debug.LogWarning("Prefab or LayoutGroup not assigned.");
+    //        return;
+    //    }
+
+    //    CreateCard(itemPrefab, PlayerlayoutGroupParent, chosencard, true, false);
+    //}
     public void SpawnFightCardItem(Card chosencard)
     {
         if (itemPrefab == null || layoutGroupParent == null)
@@ -53,8 +72,78 @@ public class UiItemSpawner : MonoBehaviour
             return;
         }
 
-        CreateCard(itemPrefab, PlayerlayoutGroupParent, chosencard, true, false);
+       CreateCard(itemPrefab, PlayerlayoutGroupParent, chosencard, true, false);
+
+        // همیشه بعد از اضافه کردن کارت، تعداد رو تنظیم کن
+        EnsurePlayerInventoryCount();
     }
+    //public void SpawnFightCardItem(Card chosencard, int cardIndex)
+    //{
+    //    if (itemPrefab == null || PlayerlayoutGroupParent == null)
+    //    {
+    //        Debug.LogWarning("Prefab or LayoutGroup not assigned.");
+    //        return;
+    //    }
+
+    //    var CCard = Instantiate(itemPrefab, PlayerlayoutGroupParent);
+    //    var display = CCard.GetComponent<CardDisplay>();
+
+    //    // مقداردهی کارت
+    //    display.Card = chosencard;
+    //    display.CardIndex = cardIndex;   // ایندکس کارت هم ذخیره میشه
+
+    //    // کپی مشخصات کارت
+    //    display.Card.name = chosencard.name;
+    //    display.Card.type = chosencard.type;
+    //    display.Card.actionType = chosencard.actionType;
+    //    display.Card.artwork = chosencard.artwork;
+    //    display.Card.value1 = chosencard.value1;
+    //    display.Card.value2 = chosencard.value2;
+    //    display.Card.value3 = chosencard.value3;
+
+    //    // قابلیت انتخاب/زوم فقط برای پلیر
+    //    CCard.GetComponent<Zoom>().enabled = true;
+    //    CCard.GetComponent<BoxCollider2D>().enabled = true;
+
+    //    PlayerInventory.Add(CCard);
+
+    //    // همیشه بعد از اضافه کردن کارت، تعداد رو تنظیم کن
+    //    EnsurePlayerInventoryCount();
+    //}
+
+    public void EnsurePlayerInventoryCount()
+    {
+        // اگر کارت‌ها بیشتر از 3 باشن → اضافی‌ها حذف بشن
+        while (PlayerInventory.Count > 3)
+        {
+            var lastCard = PlayerInventory[PlayerInventory.Count - 1];
+            PlayerInventory.RemoveAt(PlayerInventory.Count - 1);
+            Destroy(lastCard);
+        }
+
+        // اگر کارت‌ها کمتر از 3 باشن → کارت جدید اسپاون بشه
+        while (PlayerInventory.Count < 3)
+        {
+            // از کارت‌های موجود در FightCards یا PlayerFightcards انتخاب کن
+            if (GameManager.instance.PlayerFightcards.Count > 0)
+            {
+                int randIndex = UnityEngine.Random.Range(0, GameManager.instance.PlayerFightcards.Count);
+                Card newCard = GameManager.instance.PlayerFightcards[randIndex];
+
+                if (newCard.actionType != CardActionType.empty)
+                {
+                    SpawnFightCardItem(newCard);
+                    GameManager.onCardDisplay?.Invoke();
+                }
+            }
+            else
+            {
+                Debug.LogWarning("No available cards to refill PlayerInventory!");
+                break;
+            }
+        }
+    }
+
 
     public void CreateCard(GameObject itemPF, Transform LayoutGroup, Card Chosen, bool isZoomable, bool isBoss)
     {
@@ -73,6 +162,11 @@ public class UiItemSpawner : MonoBehaviour
             CCard.GetComponent<Zoom>().enabled = true;
             CCard.GetComponent<BoxCollider2D>().enabled = true;
             PlayerInventory.Add(CCard);
+
+            // گرفتن اندیس کارت جدید
+            int index = PlayerInventory.Count - 1;
+            CCard.GetComponent<CardDisplay>().CardIndex = index;   // فرض بر این که CardDisplay یک فیلد CardIndex دارد
+            Debug.Log($"New Player card added at index {index}");
         }
         else
         {
@@ -103,6 +197,39 @@ public class UiItemSpawner : MonoBehaviour
                 break; // stop after finding the match
             }
         }
+    }
+    private void DeleteIndexBuffer(int buf)
+    {
+        deleteBuffer = buf;
+    }
+    public void DeleteCardFromInventoryByIndex(int index)
+    {
+        if (index < 0 || index >= PlayerInventory.Count)
+        {
+            Debug.LogWarning($"Index {index} is out of range for PlayerInventory!");
+            return;
+        }
+
+        GameObject cardToRemove = PlayerInventory[index];
+
+        if (cardToRemove != null)
+        {
+            Destroy(cardToRemove);   // نابود کردن گیم‌آبجکت
+        }
+
+        PlayerInventory.RemoveAt(index); // حذف از لیست
+
+        // بعد از حذف، اندیس کارت‌ها را دوباره آپدیت کن
+        for (int i = 0; i < PlayerInventory.Count; i++)
+        {
+            var display = PlayerInventory[i].GetComponent<CardDisplay>();
+            if (display != null)
+            {
+                display.CardIndex = i;
+            }
+        }
+
+        Debug.Log($"Deleted card at index {index} from PlayerInventory.");
     }
 
     public void DestroyAllButOne(Card keepCard)
@@ -239,12 +366,15 @@ public class UiItemSpawner : MonoBehaviour
 
     public void DestroyPlayerInventory(bool isBoosTurnSkip)
     {
-        foreach (var item in PlayerInventory)
-        {
-            item.GetComponent<Zoom>().enabled = false;
-            Destroy(item, 1f);
-        }
-        PlayerInventory.Clear();
+        //don't destroy or clear player inventory
+
+        //foreach (var item in PlayerInventory)
+        //{
+        //    item.GetComponent<Zoom>().enabled = false;
+        //    Destroy(item, 1f);
+        //}
+
+        //PlayerInventory.Clear();
 
         //Player Turn over Button Apear
 
@@ -275,6 +405,7 @@ public class UiItemSpawner : MonoBehaviour
     {
         //Now its Boss Turn
         StartCoroutine(ContinueTurn());
+        DeleteCardFromInventoryByIndex(deleteBuffer);
     }
     public void DestroyBossInventory()
     {

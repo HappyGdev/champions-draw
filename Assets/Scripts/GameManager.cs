@@ -362,17 +362,52 @@ public class GameManager : MonoBehaviour
 
         CardEffectManager.Instance.ApplyCardEffect(mycard);
     }
+    //public void CreatePlayerAttackInventory()
+    //{
+    //    if (PlayerFightcards == null || uiItemSpawner == null || PlayerFightcards.Count < 3)
+    //    {
+    //        Debug.LogWarning("Player Fight Card or UIItemSpawner not assigned properly.");
+    //        return;
+    //    }
+
+    //    HashSet<int> uniqueIndexes = new HashSet<int>();
+
+    //    while (uniqueIndexes.Count < 3)
+    //    {
+    //        int randIndex = UnityEngine.Random.Range(0, PlayerFightcards.Count);
+    //        uniqueIndexes.Add(randIndex);
+    //    }
+
+    //    foreach (int index in uniqueIndexes)
+    //    {
+    //        Card randomCard = PlayerFightcards[index];
+
+    //        uiItemSpawner.SpawnFightCardItem(randomCard);
+
+    //        //send to CardDisplay
+    //        onCardDisplay?.Invoke();
+    //    }
+    //}
+
     public void CreatePlayerAttackInventory()
     {
-        if (PlayerFightcards == null || uiItemSpawner == null || PlayerFightcards.Count < 3)
+        if (PlayerFightcards == null || uiItemSpawner == null)
         {
             Debug.LogWarning("Player Fight Card or UIItemSpawner not assigned properly.");
             return;
         }
 
+        int neededCards = Mathf.Min(3, PlayerFightcards.Count);
+
+        if (neededCards == 0)
+        {
+            Debug.LogWarning("No player fight cards available!");
+            return;
+        }
+
         HashSet<int> uniqueIndexes = new HashSet<int>();
 
-        while (uniqueIndexes.Count < 3)
+        while (uniqueIndexes.Count < neededCards)
         {
             int randIndex = UnityEngine.Random.Range(0, PlayerFightcards.Count);
             uniqueIndexes.Add(randIndex);
@@ -381,13 +416,13 @@ public class GameManager : MonoBehaviour
         foreach (int index in uniqueIndexes)
         {
             Card randomCard = PlayerFightcards[index];
-
-            uiItemSpawner.SpawnFightCardItem(randomCard);
-
-            //send to CardDisplay
-            onCardDisplay?.Invoke();
+            uiItemSpawner.SpawnFightCardItem(randomCard); 
         }
+
+        onCardDisplay?.Invoke();
     }
+
+
     #endregion
 
 
