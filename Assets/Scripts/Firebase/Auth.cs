@@ -44,7 +44,7 @@ public class FirebaseManager : MonoBehaviour
     public GameObject dataPanel;
     public GameObject loginPanel;
     public GameObject registerPanel;
-    public TextMeshProUGUI inGameName;
+    public TextMeshProUGUI[] inGameName;
     public GameObject mainSignPanel;
 
 
@@ -219,7 +219,10 @@ public class FirebaseManager : MonoBehaviour
 
             usernameField.text = User.DisplayName;
 
-
+            foreach (var user in inGameName)
+            {
+                user.text = User.DisplayName;
+            }
             //UIManager.instance.UserDataScreen(); // Change to user data UI
             loginPanel.SetActive(false);
             dataPanel.SetActive(true);
@@ -304,7 +307,11 @@ public class FirebaseManager : MonoBehaviour
 
                         //UIManager.instance.LoginScreen();
                         // loginPanel.SetActive(true);
-                        inGameName.text = User.DisplayName;
+                        foreach (var user in inGameName)
+                        {
+                            user.text = User.DisplayName;
+                        }
+
                         loginPanel.SetActive(true);
                         registerPanel.SetActive(false);
                         mainSignPanel.SetActive(false);

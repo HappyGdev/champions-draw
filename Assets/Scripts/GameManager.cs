@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
     [Header("Inventory")]
     public UiItemSpawner uiItemSpawner; // Reference to inventory system
     public List<Card> PlayerFightcards = new List<Card>();
+    public GameObject PlayerDisplayProfile;
     [Space]
 
     [Header("Boss Section")]
@@ -305,7 +306,7 @@ public class GameManager : MonoBehaviour
         //Enable Boss Fight UI
         BossPanel.SetActive(true);
         yield return new WaitForSeconds(0.5f);
-
+        PlayerDisplayProfile.SetActive(true);   
         //Start Boss Fight
         BossFight();
     }
