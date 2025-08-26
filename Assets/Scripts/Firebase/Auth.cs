@@ -6,6 +6,7 @@ using Firebase.Database;
 using TMPro;
 using System.Linq;
 using System.Threading.Tasks;
+using UnityEngine.UI;
 
 public class FirebaseManager : MonoBehaviour
 {
@@ -30,6 +31,8 @@ public class FirebaseManager : MonoBehaviour
     public TMP_InputField passwordRegisterField;
     public TMP_InputField passwordRegisterVerifyField;
     public TMP_Text warningRegisterText;
+    [Space]
+    public TMP_InputField userProfileRegisterNumber;
 
     //User Data variables
     [Header("UserData")]
@@ -39,6 +42,9 @@ public class FirebaseManager : MonoBehaviour
     public TMP_InputField deathsField;
     public GameObject scoreElement;
     public Transform scoreboardContent;
+    //public int userProfileNumber;
+    public TMP_InputField userProfileNumber_txt;
+
 
     [Header("UI")]
     public GameObject dataPanel;
@@ -46,6 +52,7 @@ public class FirebaseManager : MonoBehaviour
     public GameObject registerPanel;
     public TextMeshProUGUI[] inGameName;
     public GameObject mainSignPanel;
+    public Button profile_Button;
 
 
     private bool firebaseReady = false;
@@ -54,6 +61,25 @@ public class FirebaseManager : MonoBehaviour
     {
         StartCoroutine(CheckAndInitializeFirebase());
     }
+    private void Start()
+    {
+        profile_Button.interactable = false;
+    }
+    private void Update()
+    {
+        // وقتی E روی کیبورد زده شد
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Debug.Log("Loading user data from Firebase...");
+            StartCoroutine(LoadUserData());
+        }
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            Debug.Log("Loading UserProfileNumber...");
+            StartCoroutine(LoadUserProfileNumber());
+        }
+    }
+
     private IEnumerator CheckAndInitializeFirebase()
     {
         var check = FirebaseApp.CheckAndFixDependenciesAsync();
@@ -75,39 +101,56 @@ public class FirebaseManager : MonoBehaviour
             Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus);
         }
     }
-    //private async void Start()
-    //{
-    //    var checkDependencies = await FirebaseApp.CheckAndFixDependenciesAsync();
-    //    dependencyStatus = checkDependencies;
 
-    //    if (dependencyStatus == DependencyStatus.Available)
-    //    {
-    //        Debug.Log("Firebase dependencies resolved.");
-    //        InitializeFirebase();
-    //        firebaseReady = true;
-    //    }
-    //    else
-    //    {
-    //        Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus);
-    //    }
-    //}
-    //void Awake()
-    //{
-    //    //Check that all of the necessary dependencies for Firebase are present on the system
-    //    FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
-    //    {
-    //        dependencyStatus = task.Result;
-    //        if (dependencyStatus == DependencyStatus.Available)
-    //        {
-    //            //If they are avalible Initialize Firebase
-    //            InitializeFirebase();
-    //        }
-    //        else
-    //        {
-    //            Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus);
-    //        }
-    //    });
-    //}
+    #region User Profile
+
+    // this is my manuell Function to Save USer Profile number
+    public void SaveUserProfileNumber(int number)
+    {
+        StartCoroutine(UpdateUserProfileNumber(number));
+    }
+
+    private IEnumerator UpdateUserProfileNumber(int number)
+    {
+        Task DBTask = DBreference.Child("users").Child(User.UserId).Child("userProfileNumber").SetValueAsync(number);
+
+        yield return new WaitUntil(() => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning($"Failed to update UserProfileNumber: {DBTask.Exception}");
+        }
+    }
+
+    // --- لود کردن UserProfileNumber ---   this is my Manuell Load Profile Data
+    private IEnumerator LoadUserProfileNumber()
+    {
+        Task<DataSnapshot> DBTask = DBreference.Child("users").Child(User.UserId).Child("userProfileNumber").GetValueAsync();
+
+        yield return new WaitUntil(() => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning($"Failed to load UserProfileNumber: {DBTask.Exception}");
+        }
+        else if (DBTask.Result.Value == null)
+        {
+            Debug.Log("No UserProfileNumber set yet. Default = 0");
+        }
+        else
+        {
+            int number = int.Parse(DBTask.Result.Value.ToString());
+            Debug.Log("Loaded UserProfileNumber: " + number);
+
+            // نمایش در UI (فرض کنیم xpField رو تستی استفاده کنیم یا یه TMP_Text جدید تعریف کنی)
+            if (userProfileNumber_txt != null)
+            {
+                userProfileNumber_txt.text = number.ToString();
+            }
+        }
+    }
+
+    #endregion
 
     private void InitializeFirebase()
     {
@@ -163,6 +206,8 @@ public class FirebaseManager : MonoBehaviour
         StartCoroutine(UpdateXp(int.Parse(xpField.text)));
         StartCoroutine(UpdateKills(int.Parse(killsField.text)));
         StartCoroutine(UpdateDeaths(int.Parse(deathsField.text)));
+        StartCoroutine(UpdateUserProfileNumber(int.Parse(userProfileNumber_txt.text)));  // New User Profile Data
+
     }
     //Function for the scoreboard button
     public void ScoreboardButton()
@@ -224,8 +269,12 @@ public class FirebaseManager : MonoBehaviour
                 user.text = User.DisplayName;
             }
             //UIManager.instance.UserDataScreen(); // Change to user data UI
-            loginPanel.SetActive(false);
-            dataPanel.SetActive(true);
+            //loginPanel.SetActive(false);
+            profile_Button.interactable = true;
+            mainSignPanel.SetActive(false);
+
+           // if we manuelly wanna set Data we can use this field
+           // dataPanel.SetActive(true);
 
             confirmLoginText.text = "";
             ClearLoginFeilds();
@@ -301,6 +350,7 @@ public class FirebaseManager : MonoBehaviour
                     }
                     else
                     {
+                        //Register is Fuinished Completely
                         //Username is now set
                         //Now return to login screen
 
@@ -312,8 +362,12 @@ public class FirebaseManager : MonoBehaviour
                             user.text = User.DisplayName;
                         }
 
-                        loginPanel.SetActive(true);
-                        registerPanel.SetActive(false);
+                        profile_Button.interactable = true;
+
+                        //Here we Set Panel 
+                        //loginPanel.SetActive(true);
+                        //registerPanel.SetActive(false);
+
                         mainSignPanel.SetActive(false);
 
                         warningRegisterText.text = "";
@@ -428,7 +482,7 @@ public class FirebaseManager : MonoBehaviour
         }
 
         Task<DataSnapshot> DBTask = DBreference.Child("users").Child(User.UserId).GetValueAsync();
-        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+        yield return new WaitUntil(() => DBTask.IsCompleted);
 
         if (DBTask.Exception != null)
         {
@@ -441,6 +495,7 @@ public class FirebaseManager : MonoBehaviour
             if (xpField != null) xpField.text = "0";
             if (killsField != null) killsField.text = "0";
             if (deathsField != null) deathsField.text = "0";
+            if (userProfileNumber_txt != null) userProfileNumber_txt.text = "0";   // 🔥
         }
         else
         {
@@ -449,8 +504,10 @@ public class FirebaseManager : MonoBehaviour
             if (xpField != null) xpField.text = snapshot.Child("xp").Value?.ToString() ?? "0";
             if (killsField != null) killsField.text = snapshot.Child("kills").Value?.ToString() ?? "0";
             if (deathsField != null) deathsField.text = snapshot.Child("deaths").Value?.ToString() ?? "0";
+            if (userProfileNumber_txt != null) userProfileNumber_txt.text = snapshot.Child("userProfileNumber").Value?.ToString() ?? "0";  // 🔥
         }
     }
+
 
 
     private IEnumerator LoadScoreboardData()
@@ -492,4 +549,21 @@ public class FirebaseManager : MonoBehaviour
             //UIManager.instance.ScoreboardScreen();
         }
     }
+
+    #region Guest Login
+
+    public void GuestLogin()
+    {
+
+        Debug.Log("Button Clicked");
+        profile_Button.interactable = false;
+        foreach (var user in inGameName)
+        {
+            user.text = "GUEST";
+        }
+        mainSignPanel.SetActive(false);
+    }
+
+
+    #endregion
 }
