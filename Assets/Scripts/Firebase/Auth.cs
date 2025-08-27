@@ -10,6 +10,8 @@ using UnityEngine.UI;
 
 public class FirebaseManager : MonoBehaviour
 {
+    public static FirebaseManager Instance;
+
     //Firebase variables
     [Header("Firebase")]
     public DependencyStatus dependencyStatus;
@@ -54,13 +56,19 @@ public class FirebaseManager : MonoBehaviour
     public GameObject mainSignPanel;
     public Button profile_Button;
 
+    [Header("UI")]
+    public ShopManager shopManager;
 
     private bool firebaseReady = false;
 
     private void Awake()
     {
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+
         StartCoroutine(CheckAndInitializeFirebase());
     }
+
     private void Start()
     {
         profile_Button.interactable = false;
@@ -141,7 +149,7 @@ public class FirebaseManager : MonoBehaviour
         {
             int number = int.Parse(DBTask.Result.Value.ToString());
             Debug.Log("Loaded UserProfileNumber: " + number);
-
+            PlayerPrefs.SetInt("UserProfileNumnber", number);
             // نمایش در UI (فرض کنیم xpField رو تستی استفاده کنیم یا یه TMP_Text جدید تعریف کنی)
             if (userProfileNumber_txt != null)
             {
@@ -495,18 +503,28 @@ public class FirebaseManager : MonoBehaviour
             if (xpField != null) xpField.text = "0";
             if (killsField != null) killsField.text = "0";
             if (deathsField != null) deathsField.text = "0";
-            if (userProfileNumber_txt != null) userProfileNumber_txt.text = "0";   // 🔥
+            if (userProfileNumber_txt != null) userProfileNumber_txt.text = "0";
         }
         else
         {
-            DataSnapshot snapshot = DBTask.Result;
+            DataSnapshot snapshot = DBTask.Result;   // ✅ اینجا snapshot تعریف میشه
 
             if (xpField != null) xpField.text = snapshot.Child("xp").Value?.ToString() ?? "0";
             if (killsField != null) killsField.text = snapshot.Child("kills").Value?.ToString() ?? "0";
             if (deathsField != null) deathsField.text = snapshot.Child("deaths").Value?.ToString() ?? "0";
-            if (userProfileNumber_txt != null) userProfileNumber_txt.text = snapshot.Child("userProfileNumber").Value?.ToString() ?? "0";  // 🔥
+            if (userProfileNumber_txt != null) userProfileNumber_txt.text = snapshot.Child("userProfileNumber").Value?.ToString() ?? "0";
+
+            // ✅ این قسمت برای لود کردن آیتم‌های شاپ
+            if (snapshot.Child("unlockedItems").Value != null)
+            {
+                string jsonArray = snapshot.Child("unlockedItems").GetRawJsonValue();
+                int[] unlocked = JsonHelper.FromJson<int>(jsonArray);
+
+                shopManager.LoadUnlockedItems(unlocked);
+            }
         }
     }
+
 
 
 
@@ -549,11 +567,55 @@ public class FirebaseManager : MonoBehaviour
             //UIManager.instance.ScoreboardScreen();
         }
     }
+    #region Shop
+
+    public void SaveUnlockedItems(ShopItem[] items)
+    {
+        int[] unlocked = items.Select(i => i.isUnlocked ? 1 : 0).ToArray();
+        StartCoroutine(UpdateUnlockedItems(unlocked));
+    }
+
+    private IEnumerator UpdateUnlockedItems(int[] unlockedArray)
+    {
+        string jsonArray = JsonHelper.ToJson(unlockedArray, true);
+
+        Task DBTask = DBreference.Child("users").Child(User.UserId).Child("unlockedItems").SetRawJsonValueAsync(jsonArray);
+
+        yield return new WaitUntil(() => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+            Debug.LogWarning($"Failed to save unlocked items: {DBTask.Exception}");
+        else
+            Debug.Log("Unlocked items saved successfully!");
+    }
+    public static class JsonHelper
+    {
+        public static T[] FromJson<T>(string json)
+        {
+            Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(json);
+            return wrapper.Items;
+        }
+
+        public static string ToJson<T>(T[] array, bool prettyPrint = false)
+        {
+            Wrapper<T> wrapper = new Wrapper<T> { Items = array };
+            return JsonUtility.ToJson(wrapper, prettyPrint);
+        }
+
+        [System.Serializable]
+        private class Wrapper<T>
+        {
+            public T[] Items;
+        }
+    }
+
+    #endregion
 
     #region Guest Login
 
     public void GuestLogin()
     {
+        PlayerPrefs.SetInt("UserProfileNumnber", 0);
 
         Debug.Log("Button Clicked");
         profile_Button.interactable = false;
@@ -563,7 +625,6 @@ public class FirebaseManager : MonoBehaviour
         }
         mainSignPanel.SetActive(false);
     }
-
 
     #endregion
 }
