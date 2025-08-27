@@ -11,6 +11,7 @@ public class ShopItem
     public Button button;
     public TextMeshProUGUI priceText;
     public Image avatar;
+    public GameObject lockIco;
 
 }
 public class ShopManager : MonoBehaviour
@@ -37,18 +38,24 @@ public class ShopManager : MonoBehaviour
 
         for (int i = 0; i < shopItems.Length; i++)
         {
-            if (i == 0) shopItems[i].isUnlocked = true; // first Item Unlocked
+            if (i == 0)
+            {
+                shopItems[i].isUnlocked = true; // first Item Unlocked
+                shopItems[i].lockIco.SetActive(false);
+            }
 
             if (shopItems[i].isUnlocked)
             {
-                shopItems[i].priceText.text = "Unlocked";
+                shopItems[i].priceText.text = " ";
                 shopItems[i].button.interactable = true;
+                shopItems[i].lockIco.SetActive(false);    
             }
             else
             {
                 shopItems[i].priceText.text = shopItems[i].price.ToString();
                 // if we have Enough Money Enabled
                 shopItems[i].button.interactable = playerCoins >= shopItems[i].price;
+                shopItems[i].lockIco.SetActive(true);
             }
         }
     }
