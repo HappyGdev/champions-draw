@@ -18,6 +18,7 @@ public class ShopManager : MonoBehaviour
 {
     public int playerCoins = 100;  
     public TextMeshProUGUI coinText;
+    public TextMeshProUGUI shopCoinText;
 
     public ShopItem[] shopItems;
     public GameObject userPic;
@@ -72,7 +73,6 @@ public class ShopManager : MonoBehaviour
                 item.isUnlocked = true;
                 Debug.Log(item.itemName + " Sold!");
 
-                // ذخیره در Firebase
                 FirebaseManager.Instance.SaveUnlockedItems(shopItems);
             }
             else
@@ -82,10 +82,9 @@ public class ShopManager : MonoBehaviour
             }
         }
 
-        // انتخاب آیتم
         Debug.Log("Item Selected: " + index);
-        PlayerPrefs.SetInt("UserProfileNumnber", index); // آیتم انتخاب شده
-        FirebaseManager.Instance.SaveUserProfileNumber(index); // سیو انتخاب کاربر
+        PlayerPrefs.SetInt("UserProfileNumnber", index); 
+        FirebaseManager.Instance.SaveUserProfileNumber(index); 
         UpdateUserPhoto();
         UpdateUI();
     }
@@ -106,4 +105,36 @@ public class ShopManager : MonoBehaviour
         UpdateUI();
     }
 
+    public void Coin100Button()
+    {
+        Debug.Log("Coin 100");
+        AddCoin(100);
+    }
+    public void Coin500Button()
+    {
+        Debug.Log("Coin 500");
+        AddCoin(500);
+    }
+    public void RemoveAdsButton()
+    {
+        Debug.Log("Remove Ads");
+    }
+
+    //public void AddCoin(int coinAmounts)
+    //{
+    //    int currentValue;
+    //    if(int.TryParse(shopCoinText.text, out currentValue))
+    //    {
+    //        currentValue += coinAmounts;
+    //        shopCoinText.text=currentValue.ToString();   
+    //    }
+    //}
+    public void AddCoin(int coinAmounts)
+    {
+        playerCoins += coinAmounts;
+        shopCoinText.text = playerCoins.ToString();
+    }
+    public void RemoveAds()
+    {
+    }
 }
