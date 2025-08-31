@@ -3,15 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using TMPro;
-using Unity.VisualScripting;
-using DG.Tweening;
-using UnityEngine.UI;
-using Unity.Mathematics;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public static Action onCardDisplay;
+
+    //Boss Number
+    public static int bossNumber;
 
     [Header("Player Section")]
     public RectTransform player; // Player UI image
@@ -55,7 +54,7 @@ public class GameManager : MonoBehaviour
     public int bossHP = 200;
 
     private bool playerTurn = true;
-    [HideInInspector]public bool gameOver = false;
+    public bool gameOver = false;
 
     [Header("Boss Sounds")]
     public AudioClip[] startSounds;
@@ -73,10 +72,22 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        PlayerPrefs.SetInt("BossType", 0);
         //set panels
+
+        GameStart();
+    }
+    public void ResetGame()
+    {
+        remainingMoves = 10;
+        HealthBar.instance.ResetAllHealth();
+        Debug.Log("reseting Game");
+        GameStart();
+    }
+    public void GameStart()
+    {
         MainPanel.SetActive(true);
         BossPanel.SetActive(false);
-
         // Set Initial Player Place to Start Game (Waypoint zero)
         if (waypoints.Wayp.Length > 0 && player != null)
         {
@@ -95,6 +106,7 @@ public class GameManager : MonoBehaviour
         SetSampleCardNull();
         //send to CardDisplay to Set Display Data For All cards -- whenever we wanna update Display Of cards we need to Invoke This
         onCardDisplay?.Invoke();
+        MainPanel.SetActive(false);
     }
 
     #region Sample Big_card
@@ -131,6 +143,7 @@ public class GameManager : MonoBehaviour
     #region SET_CARD
     private void SetCards()
     {
+        Debug.Log("SetCards Now");
         // Clone the original list so the original CardHold remains unchanged
         List<Card> shuffledCards = new List<Card>(cardHolder.PlayerAvaiableCards);
 
@@ -362,32 +375,6 @@ public class GameManager : MonoBehaviour
 
         CardEffectManager.Instance.ApplyCardEffect(mycard);
     }
-    //public void CreatePlayerAttackInventory()
-    //{
-    //    if (PlayerFightcards == null || uiItemSpawner == null || PlayerFightcards.Count < 3)
-    //    {
-    //        Debug.LogWarning("Player Fight Card or UIItemSpawner not assigned properly.");
-    //        return;
-    //    }
-
-    //    HashSet<int> uniqueIndexes = new HashSet<int>();
-
-    //    while (uniqueIndexes.Count < 3)
-    //    {
-    //        int randIndex = UnityEngine.Random.Range(0, PlayerFightcards.Count);
-    //        uniqueIndexes.Add(randIndex);
-    //    }
-
-    //    foreach (int index in uniqueIndexes)
-    //    {
-    //        Card randomCard = PlayerFightcards[index];
-
-    //        uiItemSpawner.SpawnFightCardItem(randomCard);
-
-    //        //send to CardDisplay
-    //        onCardDisplay?.Invoke();
-    //    }
-    //}
 
     public void CreatePlayerAttackInventory()
     {
@@ -519,7 +506,6 @@ public class GameManager : MonoBehaviour
     {
         if (HealthBar.instance.BosscurrentHealth <= 0)
         {
-            gameOver = true;
             Debug.Log("Player Wins!");
             UIManager.Instance.Win();
             ScoreManager.Instance.AddScore(50);

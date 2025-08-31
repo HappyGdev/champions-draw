@@ -100,7 +100,6 @@ public class ShopManager : MonoBehaviour
         for (int i = 0; i < shopItems.Length && i < unlocked.Length; i++)
         {
             shopItems[i].isUnlocked = unlocked[i] == 1;
-            Debug.Log("Vazaiate item : " + i + "  " + shopItems[i].isUnlocked);
         }
         UpdateUI();
     }

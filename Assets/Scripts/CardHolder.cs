@@ -3,7 +3,15 @@ using UnityEngine;
 
 public class CardHolder : MonoBehaviour
 {
-  //  public List<Card> CardHold = new List<Card>();    
+    private void OnEnable()
+    {
+        StoryManagere.OnBossCards += SetBossObjects;
+    }
+    private void OnDisable()
+    {
+        StoryManagere.OnBossCards -= SetBossObjects;
+    }
+    //  public List<Card> CardHold = new List<Card>();    
     public List<Card> BossCard = new List<Card>();
 
     public List<Card> StarterCards = new List<Card>();
@@ -20,6 +28,11 @@ public class CardHolder : MonoBehaviour
             PlayerAvaiableCards.Add(Card.GetFromID(newCard));
         }
     }
+    public void SetBossObjects(List<Card> bossList)
+    {
+        Debug.Log("Setting Cards inventorrryyyyyyyy bossss");
+        BossCard.Clear();             // clear old data
+        BossCard.AddRange(bossList);  // copy all from boss list
+    }
 
-  
 }

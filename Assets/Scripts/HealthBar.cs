@@ -23,12 +23,18 @@ public class HealthBar : MonoBehaviour
 
     void Start()
     {
+        ResetAllHealth();
+    }
+    public void ResetAllHealth()
+    {
         PlayercurrentHealth = maxHealth;
         BosscurrentHealth = maxHealth;
         UpdatePlayerHealthUI();
         UpdateBossHealthUI();
+        isDoubleDamageRound = false;
+        UpdatePlayerHealthUI();
+        UpdateBossHealthUI();
     }
-
     public void DoubleDamageRound()
     {
         isDoubleDamageRound=true;   

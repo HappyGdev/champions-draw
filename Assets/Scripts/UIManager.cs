@@ -23,6 +23,8 @@ public class UIManager : MonoBehaviour
 
     public TextMeshProUGUI dmgBoost;
     public TextMeshProUGUI bossInfoText;
+    [Space]
+    [SerializeField] private int currentBossNumber;
     //public Image playerImage;
 
     private void Awake()
@@ -95,8 +97,16 @@ public class UIManager : MonoBehaviour
     public void Win()
     {
         WinPanel.SetActive(true);
+        LoadAndSaveBoss();
+        GameManager.instance.ResetGame();
     }
-
+    private void LoadAndSaveBoss()
+    {
+        currentBossNumber = PlayerPrefs.GetInt("BossType");
+        currentBossNumber++;
+        PlayerPrefs.SetInt("BossType", currentBossNumber);
+        StoryManagere.instance.ContinueButton();
+    }
     public void Restart()
     {
         Scene currentScene = SceneManager.GetActiveScene();
