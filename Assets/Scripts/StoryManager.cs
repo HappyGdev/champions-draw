@@ -20,22 +20,11 @@ public class StoryManagere : MonoBehaviour
     [Header("Panels")]
     public GameObject bossSelectionPanel;
     [SerializeField] private int currentBoss;
-
+    public GameObject badgePanel;
 
     private void Awake()
     {
         if(instance == null) { instance = this; }
-    }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-       // ContinueButton();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
     public void ContinueButton()
     {
@@ -77,11 +66,13 @@ public class StoryManagere : MonoBehaviour
             case 1:
                 OnBossCards?.Invoke(bossBetaCards);
                 Debug.Log("bossBetaCards");
+                //sendbadge to leaderBoard
                 break;
 
             case 2:
                 OnBossCards?.Invoke(bossAlphaCards);
                 Debug.Log("bossBetaCards");
+                //sendbadgetoleaderboard
                 break;
 
             default:
@@ -91,5 +82,16 @@ public class StoryManagere : MonoBehaviour
 
 
         }
+    }
+
+    private void EarnBadgePanel()
+    {
+        StartCoroutine(ActiveBadge());
+    }
+    IEnumerator ActiveBadge()
+    {
+        badgePanel.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        badgePanel.SetActive(false);
     }
 }
