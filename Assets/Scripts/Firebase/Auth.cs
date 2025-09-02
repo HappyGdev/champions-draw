@@ -305,124 +305,175 @@ public class FirebaseManager : MonoBehaviour
 
     public void SaveDataButton()
     {
-        // Save all user data to Firebase
-        if (int.TryParse(xpField.text, out int xp))
-            StartCoroutine(UpdateXp(xp));
-        if (int.TryParse(killsField.text, out int kills))
-            StartCoroutine(UpdateKills(kills));
-        if (int.TryParse(deathsField.text, out int deaths))
-            StartCoroutine(UpdateDeaths(deaths));
-        if (int.TryParse(userProfileNumber_txt.text, out int profileNum))
-            StartCoroutine(UpdateUserProfileNumber(profileNum));
-
         StartCoroutine(UpdateUsernameAuth(usernameField.text));
         StartCoroutine(UpdateUsernameDatabase(usernameField.text));
+
+        StartCoroutine(UpdateXp(int.Parse(xpField.text)));
+        StartCoroutine(UpdateKills(int.Parse(killsField.text)));
+        StartCoroutine(UpdateDeaths(int.Parse(deathsField.text)));
     }
-
-    private IEnumerator UpdateUsernameAuth(string _username)
-    {
-        var task = User.UpdateUserProfileAsync(new UserProfile { DisplayName = _username });
-        yield return new WaitUntil(() => task.IsCompleted);
-    }
-
-    private IEnumerator UpdateUsernameDatabase(string _username)
-    {
-        var task = DBreference.Child("users").Child(User.UserId).Child("username").SetValueAsync(_username);
-        yield return new WaitUntil(() => task.IsCompleted);
-    }
-
-    private IEnumerator UpdateXp(int _xp)
-    {
-        var task = DBreference.Child("users").Child(User.UserId).Child("xp").SetValueAsync(_xp);
-        yield return new WaitUntil(() => task.IsCompleted);
-    }
-
-    private IEnumerator UpdateKills(int _kills)
-    {
-        var task = DBreference.Child("users").Child(User.UserId).Child("kills").SetValueAsync(_kills);
-        yield return new WaitUntil(() => task.IsCompleted);
-    }
-
-    private IEnumerator UpdateDeaths(int _deaths)
-    {
-        var task = DBreference.Child("users").Child(User.UserId).Child("deaths").SetValueAsync(_deaths);
-        yield return new WaitUntil(() => task.IsCompleted);
-    }
-
-    public void SaveUserProfileNumber(int number)
-    {
-        StartCoroutine(UpdateUserProfileNumber(number));
-    }
-
-    private IEnumerator UpdateUserProfileNumber(int number)
-    {
-        var task = DBreference.Child("users").Child(User.UserId).Child("userProfileNumber").SetValueAsync(number);
-        yield return new WaitUntil(() => task.IsCompleted);
-        PlayerPrefs.SetInt("UserProfileNumnber", number);
-        PlayerPrefs.Save();
-    }
-
-    private IEnumerator LoadUserData()
-    {
-        if (DBreference == null || User == null) yield break;
-
-        var task = DBreference.Child("users").Child(User.UserId).GetValueAsync();
-        yield return new WaitUntil(() => task.IsCompleted);
-
-        if (task.Exception != null)
-        {
-            Debug.LogWarning($"Failed to load user data: {task.Exception}");
-        }
-        else if (task.Result.Value != null)
-        {
-            DataSnapshot snapshot = task.Result;
-
-            // Load basic user stats
-            xpField.text = snapshot.Child("xp").Value?.ToString() ?? "0";
-            killsField.text = snapshot.Child("kills").Value?.ToString() ?? "0";
-            deathsField.text = snapshot.Child("deaths").Value?.ToString() ?? "0";
-            userProfileNumber_txt.text = snapshot.Child("userProfileNumber").Value?.ToString() ?? "0";
-
-            // Load shop items if they exist
-            if (snapshot.Child("unlockedItems").Value != null)
-            {
-                string jsonArray = snapshot.Child("unlockedItems").GetRawJsonValue();
-                int[] unlocked = JsonHelper.FromJson<int>(jsonArray);
-                shopManager.LoadUnlockedItems(unlocked);
-            }
-        }
-    }
-
-    #endregion
-
-    #region Scoreboard
     public void ScoreboardButton()
     {
         StartCoroutine(LoadScoreboardData());
     }
 
-    private IEnumerator LoadScoreboardData()
+    private IEnumerator UpdateUsernameAuth(string _username)
     {
-        var task = DBreference.Child("users").OrderByChild("kills").GetValueAsync();
-        yield return new WaitUntil(() => task.IsCompleted);
+        //Create a user profile and set the username
+        UserProfile profile = new UserProfile { DisplayName = _username };
 
-        if (task.Exception != null) yield break;
+        //Call the Firebase auth update user profile function passing the profile with the username
+        Task ProfileTask = User.UpdateUserProfileAsync(profile);
+        //Wait until the task completes
+        yield return new WaitUntil(predicate: () => ProfileTask.IsCompleted);
 
-        // Clear previous scoreboard
-        foreach (Transform child in scoreboardContent) Destroy(child.gameObject);
-
-        // Populate scoreboard
-        foreach (DataSnapshot childSnapshot in task.Result.Children.Reverse<DataSnapshot>())
+        if (ProfileTask.Exception != null)
         {
-            string username = childSnapshot.Child("username").Value?.ToString() ?? "Unknown";
-            int kills = int.Parse(childSnapshot.Child("kills").Value?.ToString() ?? "0");
-            int deaths = int.Parse(childSnapshot.Child("deaths").Value?.ToString() ?? "0");
-            int xp = int.Parse(childSnapshot.Child("xp").Value?.ToString() ?? "0");
-
-            GameObject element = Instantiate(scoreElement, scoreboardContent);
-            // element.GetComponent<ScoreElement>().NewScoreElement(username, kills, deaths, xp);
+            Debug.LogWarning(message: $"Failed to register task with {ProfileTask.Exception}");
+        }
+        else
+        {
+            //Auth username is now updated
         }
     }
+
+    private IEnumerator UpdateUsernameDatabase(string _username)
+    {
+        //Set the currently logged in user username in the database
+        Task DBTask = DBreference.Child("users").Child(User.UserId).Child("username").SetValueAsync(_username);
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //Database username is now updated
+        }
+    }
+
+    private IEnumerator UpdateXp(int _xp)
+    {
+        //Set the currently logged in user xp
+        Task DBTask = DBreference.Child("users").Child(User.UserId).Child("xp").SetValueAsync(_xp);
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //Xp is now updated
+        }
+    }
+
+    private IEnumerator UpdateKills(int _kills)
+    {
+        //Set the currently logged in user kills
+        Task DBTask = DBreference.Child("users").Child(User.UserId).Child("kills").SetValueAsync(_kills);
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //Kills are now updated
+        }
+    }
+
+    private IEnumerator UpdateDeaths(int _deaths)
+    {
+        //Set the currently logged in user deaths
+        Task DBTask = DBreference.Child("users").Child(User.UserId).Child("deaths").SetValueAsync(_deaths);
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //Deaths are now updated
+        }
+    }
+
+    private IEnumerator LoadUserData()
+    {
+        //Get the currently logged in user data
+        Task<DataSnapshot> DBTask = DBreference.Child("users").Child(User.UserId).GetValueAsync();
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else if (DBTask.Result.Value == null)
+        {
+            //No data exists yet
+            xpField.text = "0";
+            killsField.text = "0";
+            deathsField.text = "0";
+        }
+        else
+        {
+            //Data has been retrieved
+            DataSnapshot snapshot = DBTask.Result;
+
+            xpField.text = snapshot.Child("xp").Value.ToString();
+            killsField.text = snapshot.Child("kills").Value.ToString();
+            deathsField.text = snapshot.Child("deaths").Value.ToString();
+        }
+    }
+
+    private IEnumerator LoadScoreboardData()
+    {
+        //Get all the users data ordered by kills amount
+        Task<DataSnapshot> DBTask = DBreference.Child("users").OrderByChild("kills").GetValueAsync();
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //Data has been retrieved
+            DataSnapshot snapshot = DBTask.Result;
+
+            //Destroy any existing scoreboard elements
+            foreach (Transform child in scoreboardContent.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            //Loop through every users UID
+            foreach (DataSnapshot childSnapshot in snapshot.Children.Reverse<DataSnapshot>())
+            {
+                string username = childSnapshot.Child("username").Value.ToString();
+                int kills = int.Parse(childSnapshot.Child("kills").Value.ToString());
+                int deaths = int.Parse(childSnapshot.Child("deaths").Value.ToString());
+                int xp = int.Parse(childSnapshot.Child("xp").Value.ToString());
+
+                //Instantiate new scoreboard elements
+                GameObject scoreboardElement = Instantiate(scoreElement, scoreboardContent);
+                scoreboardElement.GetComponent<ScoreElement>().NewScoreElement(username, kills, deaths, xp);
+            }
+
+            //Go to scoareboard screen
+            //UIManager.instance.ScoreboardScreen();
+        }
+    }
+
     #endregion
 
     #region Shop

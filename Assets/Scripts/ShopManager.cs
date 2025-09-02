@@ -84,7 +84,7 @@ public class ShopManager : MonoBehaviour
 
         Debug.Log("Item Selected: " + index);
         PlayerPrefs.SetInt("UserProfileNumnber", index); 
-        FirebaseManager.Instance.SaveUserProfileNumber(index); 
+        //FirebaseManager.Instance.SaveUserProfileNumber(index); 
         UpdateUserPhoto();
         UpdateUI();
     }
