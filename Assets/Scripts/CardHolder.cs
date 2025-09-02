@@ -30,7 +30,6 @@ public class CardHolder : MonoBehaviour
     }
     public void SetBossObjects(List<Card> bossList)
     {
-        Debug.Log("Setting Cards inventorrryyyyyyyy bossss");
         BossCard.Clear();             // clear old data
         BossCard.AddRange(bossList);  // copy all from boss list
     }

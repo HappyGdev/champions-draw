@@ -53,6 +53,7 @@ public class UIManager : MonoBehaviour
             UIAnimationUtility.ShakePosition(Playerturn_ui.GetComponent<RectTransform>(), new Vector3(1, 10, 1), 0.5f, 10, 90, Ease.InOutBounce);
             yield return new WaitForSeconds(1f);
             Playerturn_ui.SetActive(false);
+            UiItemSpawner.Instance.TurnOnInventory();
         }
         //boss turn=1
         else if (turnnum == 1) 
@@ -87,7 +88,8 @@ public class UIManager : MonoBehaviour
     }
     public void Player_turn_Over_button_On()
     {
-        Player_turn_Over_button.SetActive(true);    
+        Player_turn_Over_button.SetActive(true);
+        UiItemSpawner.Instance.TurnOffInventory();
     }
     public void Gameover()
     {
@@ -105,7 +107,7 @@ public class UIManager : MonoBehaviour
         currentBossNumber = PlayerPrefs.GetInt("BossType");
         currentBossNumber++;
         PlayerPrefs.SetInt("BossType", currentBossNumber);
-        StoryManagere.instance.ContinueButton();
+        //StoryManagere.instance.ContinueButton();
     }
     public void Restart()
     {
@@ -130,12 +132,4 @@ public class UIManager : MonoBehaviour
         dmgBoost.text = " + " +  dmg.ToString() + " Boost"; 
     }
 
-    private void Update()
-    {
-        //test score
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            ScoreManager.Instance.AddScore(10);
-        }
-    }
 }

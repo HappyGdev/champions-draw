@@ -3,14 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using TMPro;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
+
     public static GameManager instance;
+
     public static Action onCardDisplay;
 
     //Boss Number
-    public static int bossNumber;
+    [HideInInspector] public static int bossNumber;
 
     [Header("Player Section")]
     public RectTransform player; // Player UI image
@@ -80,8 +83,11 @@ public class GameManager : MonoBehaviour
     public void ResetGame()
     {
         remainingMoves = 10;
+        bossPoisendCount = 0;
         HealthBar.instance.ResetAllHealth();
-        Debug.Log("reseting Game");
+        playerTurn = true;
+        gameOver = false;
+        remainingMove_txt.text = remainingMoves.ToString();
         GameStart();
     }
     public void GameStart()
@@ -89,6 +95,7 @@ public class GameManager : MonoBehaviour
         MainPanel.SetActive(true);
         BossPanel.SetActive(false);
         // Set Initial Player Place to Start Game (Waypoint zero)
+
         if (waypoints.Wayp.Length > 0 && player != null)
         {
             currentWaypointIndex = 0;
@@ -107,6 +114,7 @@ public class GameManager : MonoBehaviour
         //send to CardDisplay to Set Display Data For All cards -- whenever we wanna update Display Of cards we need to Invoke This
         onCardDisplay?.Invoke();
         MainPanel.SetActive(false);
+        
     }
 
     #region Sample Big_card
@@ -143,7 +151,6 @@ public class GameManager : MonoBehaviour
     #region SET_CARD
     private void SetCards()
     {
-        Debug.Log("SetCards Now");
         // Clone the original list so the original CardHold remains unchanged
         List<Card> shuffledCards = new List<Card>(cardHolder.PlayerAvaiableCards);
 
@@ -163,11 +170,6 @@ public class GameManager : MonoBehaviour
             waypoints.cards[i].Card = shuffledCards[i];
         }
     }
-    //public void Deletecard(Card crd)
-    //{
-    //    cardHolder.PlayerAvaiableCards.Remove(crd);
-    //    onCardDisplay?.Invoke();
-    //}
 
     private void SetNullCards()
     {
@@ -194,6 +196,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region SET_INITIAL_INVENTORY
+    //if Player didn't Obtain Any Cards this is default Cards (3 cards)
     private void GiveInitialInventory()
     {
         if (cardHolder == null || uiItemSpawner == null || cardHolder.PlayerAvaiableCards.Count < 4)
@@ -221,18 +224,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public Sprite SetPlayerPhoto()
-    {
-        var randnum = UnityEngine.Random.Range(0, cardHolder.StarterCards.Count);
-
-        return cardHolder.StarterCards[randnum].artwork;
-    }
-
     #endregion
 
     public void Create_Second_Inventory(Card crd)
     {
-        Debug.Log("Delete card Now");
         PlayerFightcards.Remove(crd);
 
         onCardDisplay?.Invoke();
@@ -440,7 +435,6 @@ public class GameManager : MonoBehaviour
 
         HashSet<int> uniqueIndexes = new HashSet<int>();
 
-        // انتخاب دو کارت که با keepCard متفاوت باشند
         while (uniqueIndexes.Count < 2)
         {
             int randIndex = UnityEngine.Random.Range(0, PlayerFightcards.Count);
@@ -506,7 +500,6 @@ public class GameManager : MonoBehaviour
     {
         if (HealthBar.instance.BosscurrentHealth <= 0)
         {
-            Debug.Log("Player Wins!");
             UIManager.Instance.Win();
             ScoreManager.Instance.AddScore(50);
             return;
@@ -516,7 +509,6 @@ public class GameManager : MonoBehaviour
         {
             gameOver = true;
             UIManager.Instance.Gameover();
-            Debug.Log("Boss Wins!");
             return;
             // Show lose screen or handle defeat
         }
@@ -554,7 +546,6 @@ public class GameManager : MonoBehaviour
         if(!audioSource.isPlaying)
         {
             audioSource.Play();
-            Debug.Log("Play sounds mow");
         }
     }
     public void PlayBossEndSounds()
@@ -574,11 +565,13 @@ public class GameManager : MonoBehaviour
     }
     public void ChangeTurn()
     {
+        Debug.Log("Now Change Turn");
         playerTurn = !playerTurn;
     }
     IEnumerator pTurn()
     {
         //PlayBossEndSounds();
+        Debug.Log("in P turn");
         UIManager.Instance.PlyerBossTurn(0);
         yield return new WaitForSeconds(1);
         CreatePlayerAttackInventory();

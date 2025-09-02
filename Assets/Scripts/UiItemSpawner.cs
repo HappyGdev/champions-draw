@@ -54,16 +54,7 @@ public class UiItemSpawner : MonoBehaviour
         }
 
     }
-    //public void SpawnFightCardItem(Card chosencard)
-    //{
-    //    if (itemPrefab == null || layoutGroupParent == null)
-    //    {
-    //        Debug.LogWarning("Prefab or LayoutGroup not assigned.");
-    //        return;
-    //    }
 
-    //    CreateCard(itemPrefab, PlayerlayoutGroupParent, chosencard, true, false);
-    //}
     public void SpawnFightCardItem(Card chosencard)
     {
         if (itemPrefab == null || layoutGroupParent == null)
@@ -74,46 +65,11 @@ public class UiItemSpawner : MonoBehaviour
 
        CreateCard(itemPrefab, PlayerlayoutGroupParent, chosencard, true, false);
 
-        // همیشه بعد از اضافه کردن کارت، تعداد رو تنظیم کن
         EnsurePlayerInventoryCount();
     }
-    //public void SpawnFightCardItem(Card chosencard, int cardIndex)
-    //{
-    //    if (itemPrefab == null || PlayerlayoutGroupParent == null)
-    //    {
-    //        Debug.LogWarning("Prefab or LayoutGroup not assigned.");
-    //        return;
-    //    }
-
-    //    var CCard = Instantiate(itemPrefab, PlayerlayoutGroupParent);
-    //    var display = CCard.GetComponent<CardDisplay>();
-
-    //    // مقداردهی کارت
-    //    display.Card = chosencard;
-    //    display.CardIndex = cardIndex;   // ایندکس کارت هم ذخیره میشه
-
-    //    // کپی مشخصات کارت
-    //    display.Card.name = chosencard.name;
-    //    display.Card.type = chosencard.type;
-    //    display.Card.actionType = chosencard.actionType;
-    //    display.Card.artwork = chosencard.artwork;
-    //    display.Card.value1 = chosencard.value1;
-    //    display.Card.value2 = chosencard.value2;
-    //    display.Card.value3 = chosencard.value3;
-
-    //    // قابلیت انتخاب/زوم فقط برای پلیر
-    //    CCard.GetComponent<Zoom>().enabled = true;
-    //    CCard.GetComponent<BoxCollider2D>().enabled = true;
-
-    //    PlayerInventory.Add(CCard);
-
-    //    // همیشه بعد از اضافه کردن کارت، تعداد رو تنظیم کن
-    //    EnsurePlayerInventoryCount();
-    //}
 
     public void EnsurePlayerInventoryCount()
     {
-        // اگر کارت‌ها بیشتر از 3 باشن → اضافی‌ها حذف بشن
         while (PlayerInventory.Count > 3)
         {
             var lastCard = PlayerInventory[PlayerInventory.Count - 1];
@@ -121,10 +77,8 @@ public class UiItemSpawner : MonoBehaviour
             Destroy(lastCard);
         }
 
-        // اگر کارت‌ها کمتر از 3 باشن → کارت جدید اسپاون بشه
         while (PlayerInventory.Count < 3)
         {
-            // از کارت‌های موجود در FightCards یا PlayerFightcards انتخاب کن
             if (GameManager.instance.PlayerFightcards.Count > 0)
             {
                 int randIndex = UnityEngine.Random.Range(0, GameManager.instance.PlayerFightcards.Count);
@@ -165,8 +119,7 @@ public class UiItemSpawner : MonoBehaviour
 
             // گرفتن اندیس کارت جدید
             int index = PlayerInventory.Count - 1;
-            CCard.GetComponent<CardDisplay>().CardIndex = index;   // فرض بر این که CardDisplay یک فیلد CardIndex دارد
-            Debug.Log($"New Player card added at index {index}");
+            CCard.GetComponent<CardDisplay>().CardIndex = index; 
         }
         else
         {
@@ -214,12 +167,11 @@ public class UiItemSpawner : MonoBehaviour
 
         if (cardToRemove != null)
         {
-            Destroy(cardToRemove);   // نابود کردن گیم‌آبجکت
+            Destroy(cardToRemove);   
         }
 
-        PlayerInventory.RemoveAt(index); // حذف از لیست
+        PlayerInventory.RemoveAt(index); 
 
-        // بعد از حذف، اندیس کارت‌ها را دوباره آپدیت کن
         for (int i = 0; i < PlayerInventory.Count; i++)
         {
             var display = PlayerInventory[i].GetComponent<CardDisplay>();
@@ -238,7 +190,6 @@ public class UiItemSpawner : MonoBehaviour
     }
     IEnumerator SwapAndRoll(Card keepCard)
     {
-        // کپی از لیست برای جلوگیری از تغییر همزمان
         var objectsToRemove = new List<GameObject>();
 
         foreach (var obj in PlayerInventory)
@@ -246,7 +197,7 @@ public class UiItemSpawner : MonoBehaviour
             if (keepCard.name != obj.GetComponent<CardDisplay>().Card.name)
             {
                 obj.GetComponent<Zoom>().enabled = false;
-                objectsToRemove.Add(obj);  // اضافه به لیست حذف
+                objectsToRemove.Add(obj);  
             }
             else
             {
@@ -256,11 +207,10 @@ public class UiItemSpawner : MonoBehaviour
             yield return new WaitForSeconds(0.3f);
         }
 
-        // حذف واقعی از لیست و Destroy
         foreach (var obj in objectsToRemove)
         {
-            PlayerInventory.Remove(obj);  // حذف از لیست
-            Destroy(obj);                 // نابودی گیم‌آبجکت
+            PlayerInventory.Remove(obj); 
+            Destroy(obj);                 
         }
 
         yield return new WaitForSeconds(0.2f);
@@ -312,7 +262,6 @@ public class UiItemSpawner : MonoBehaviour
     {
         List<GameObject> removableCards = new List<GameObject>();
 
-        // پیدا کردن کارت‌های غیر از keepCard در PlayerInventory
         foreach (var obj in PlayerInventory)
         {
             var display = obj.GetComponent<CardDisplay>();
@@ -324,34 +273,31 @@ public class UiItemSpawner : MonoBehaviour
         //disable cart for just act once
         foreach (var obj in PlayerInventory)
         {
-            Debug.Log("Keep Crd name is " + keepCard.name);
-            Debug.Log("select Crd name is " + obj.GetComponent<CardDisplay>().Card.name);
+            //Debug.Log("Keep Crd name is " + keepCard.name);
+            //Debug.Log("select Crd name is " + obj.GetComponent<CardDisplay>().Card.name);
             if (keepCard.name == obj.GetComponent<CardDisplay>().Card.name)
             {
                 obj.GetComponent<Zoom>().enabled = false;
             }
         }
 
-        // اگر هیچ کارتی برای حذف نیست، خروج
         if (removableCards.Count == 0)
         {
             Debug.LogWarning("No removable cards found.");
             return;
         }
 
-        // انتخاب رندوم یک کارت از بین قابل حذف‌ها
         int randIndex = UnityEngine.Random.Range(0, removableCards.Count);
         GameObject toRemove = removableCards[randIndex];
 
         PlayerInventory.Remove(toRemove);
         Destroy(toRemove);
 
-        // حالا در PlayerFightcards به دنبال یک کارت با value1 < 5 بگرد
         foreach (Card c in GameManager.instance.PlayerFightcards)
         {
             if (c.value1 < value && c.actionType != CardActionType.empty)
             {
-                SpawnFightCardItem(c); // کارت جدید اضافه شود به UI
+                SpawnFightCardItem(c); 
                 GameManager.onCardDisplay?.Invoke();
                 return;
             }
@@ -366,18 +312,6 @@ public class UiItemSpawner : MonoBehaviour
 
     public void DestroyPlayerInventory(bool isBoosTurnSkip)
     {
-        //don't destroy or clear player inventory
-
-        //foreach (var item in PlayerInventory)
-        //{
-        //    item.GetComponent<Zoom>().enabled = false;
-        //    Destroy(item, 1f);
-        //}
-
-        //PlayerInventory.Clear();
-
-        //Player Turn over Button Apear
-
         //implement use 3 moves in one logic
         if (use3Cards >= 1)
         {
@@ -421,30 +355,19 @@ public class UiItemSpawner : MonoBehaviour
         yield return new WaitForSeconds(2f);
         GameManager.instance.TurnLoop();
     }
-    //public void BossAttack()
-    //{
-    //    if (GameManager.instance.gameOver)
-    //        return;
 
-    //    StartCoroutine(AttackFromBoss());
-
-    //}
-    //IEnumerator AttackFromBoss()
-    //{
-    //    //yield return new WaitForSeconds(2f);
-    //    int ranindex = UnityEngine.Random.Range(0, BossInventory.Count);
-    //    foreach (var item in BossInventory)
-    //    {
-    //        item.SetActive(false);
-    //    }
-    //    yield return new WaitForSeconds(0.2f);
-    //    BossInventory[ranindex].SetActive(true);
-
-    //    UIAnimationUtility.ShakeScale(BossInventory[ranindex].GetComponent<RectTransform>(), new Vector3(.2f, .8f, .2f), 0.5f, 10, 90, Ease.InOutBounce);
-    //    UIAnimationUtility.ShakePosition(BossInventory[ranindex].GetComponent<RectTransform>(), new Vector3(1, 10, 1), 0.5f, 10, 90, Ease.InOutBounce);
-
-    //    var bossdamage = BossInventory[ranindex].GetComponent<CardDisplay>().Card.value1;
-    //    GameManager.instance.BossAttackPlayer(bossdamage);
-    //}
-
+    public void TurnOffInventory()
+    {
+        foreach(var item in PlayerInventory)
+        {
+            item.SetActive(false);
+        }
+    }
+    public void TurnOnInventory()
+    {
+        foreach (var item in PlayerInventory)
+        {
+            item.SetActive(true);
+        }
+    }
 }

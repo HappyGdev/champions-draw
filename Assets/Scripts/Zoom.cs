@@ -29,7 +29,6 @@ public class Zoom : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     }
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("Mouse Clicked now");
         UIAnimationUtility.ShakePosition(gameObject.GetComponent<RectTransform>(), new Vector3(2, 10, 1), 0.5f, 10, 90, Ease.InOutBounce);
         //var Damage = GetComponent<CardDisplay>().Card.value1;
         //GameManager.instance.PlayerAttack(Damage);
