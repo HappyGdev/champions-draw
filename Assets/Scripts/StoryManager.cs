@@ -34,6 +34,13 @@ public class StoryManagere : MonoBehaviour
 
     IEnumerator ContinueGame()
     {
+        if (currentBoss != 0) 
+        {
+            badgePanel.SetActive(true);
+            yield return new WaitForSeconds(2f);
+            badgePanel.SetActive(false);
+        }
+        yield return new WaitForSeconds(0.5f);
         bossSelectionPanel.SetActive(true);
         SetBossUI();
         SetBossCards();
@@ -66,12 +73,14 @@ public class StoryManagere : MonoBehaviour
             case 1:
                 OnBossCards?.Invoke(bossBetaCards);
                 Debug.Log("bossBetaCards");
+                FirebaseManager.Instance.SaveBadge(1);
                 //sendbadge to leaderBoard
                 break;
 
             case 2:
                 OnBossCards?.Invoke(bossAlphaCards);
                 Debug.Log("bossBetaCards");
+                FirebaseManager.Instance.SaveBadge(2);
                 //sendbadgetoleaderboard
                 break;
 
@@ -84,14 +93,14 @@ public class StoryManagere : MonoBehaviour
         }
     }
 
-    private void EarnBadgePanel()
-    {
-        StartCoroutine(ActiveBadge());
-    }
-    IEnumerator ActiveBadge()
-    {
-        badgePanel.SetActive(true);
-        yield return new WaitForSeconds(2f);
-        badgePanel.SetActive(false);
-    }
+    //private void EarnBadgePanel()
+    //{
+    //    StartCoroutine(ActiveBadge());
+    //}
+    //IEnumerator ActiveBadge()
+    //{
+    //    badgePanel.SetActive(true);
+    //    yield return new WaitForSeconds(2f);
+    //    badgePanel.SetActive(false);
+    //}
 }

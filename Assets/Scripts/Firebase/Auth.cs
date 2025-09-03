@@ -7,6 +7,7 @@ using Firebase.Auth;
 using Firebase.Database;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 public class FirebaseManager : MonoBehaviour
 {
@@ -78,6 +79,8 @@ public class FirebaseManager : MonoBehaviour
 
     private IEnumerator Start()
     {
+        PlayerPrefs.SetInt("Badge1", 0);
+        PlayerPrefs.SetInt("Badge2", 0);
         profile_Button.interactable = false;
 
         // صبر کن تا Firebase Auth آماده بشه
@@ -154,6 +157,8 @@ public class FirebaseManager : MonoBehaviour
 
     private IEnumerator Login(string _email, string _password)
     {
+        PlayerPrefs.SetInt("Badge1", 0);
+        PlayerPrefs.SetInt("Badge2", 0);
         // Firebase login request
         var loginTask = auth.SignInWithEmailAndPasswordAsync(_email, _password);
         yield return new WaitUntil(() => loginTask.IsCompleted);
@@ -230,7 +235,9 @@ public class FirebaseManager : MonoBehaviour
             // Update display name
             var profileTask = User.UpdateUserProfileAsync(new UserProfile { DisplayName = _username });
             yield return new WaitUntil(() => profileTask.IsCompleted);
-
+            shopManager.ResetShop();
+            PlayerPrefs.SetString("SavedEmail", _email);
+            PlayerPrefs.SetString("SavedPassword", _password);
             SetUIAfterLogin(_username);
         }
     }
@@ -285,6 +292,8 @@ public class FirebaseManager : MonoBehaviour
     #region Guest Login
     public void GuestLogin()
     {
+        PlayerPrefs.SetInt("Badge1", 0);
+        PlayerPrefs.SetInt("Badge2", 0);
         // Save guest profile number = 0
         PlayerPrefs.SetInt("UserProfileNumnber", 0);
         PlayerPrefs.Save();
@@ -390,7 +399,26 @@ public class FirebaseManager : MonoBehaviour
             //Kills are now updated
         }
     }
+    public void SaveUserProfileNumber(int number)
+    {
+        StartCoroutine(UpdateUserProfileNumber(number));
+    }
 
+    private IEnumerator UpdateUserProfileNumber(int number)
+    {
+        var task = DBreference.Child("users").Child(User.UserId).Child("userProfileNumber").SetValueAsync(number);
+        yield return new WaitUntil(() => task.IsCompleted);
+        PlayerPrefs.SetInt("UserProfileNumnber", number);
+        PlayerPrefs.Save();
+        if (task.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {task.Exception}");
+        }
+        else
+        {
+            //Deaths are now updated
+        }
+    }
     private IEnumerator UpdateDeaths(int _deaths)
     {
         //Set the currently logged in user deaths
@@ -425,22 +453,30 @@ public class FirebaseManager : MonoBehaviour
             //scoreField.text = "0";
             //killsField.text = "0";
             //deathsField.text = "0";
+
         }
         else
         {
             //Data has been retrieved
             DataSnapshot snapshot = DBTask.Result;
-
+            if (snapshot.Child("unlockedItems").Value != null)
+            {
+                string jsonArray = snapshot.Child("unlockedItems").GetRawJsonValue();
+                int[] unlocked = JsonHelper.FromJson<int>(jsonArray);
+                shopManager.LoadUnlockedItems(unlocked);
+               
+            }
             //scoreField.text = snapshot.Child("score").Value.ToString();
             //killsField.text = snapshot.Child("kills").Value.ToString();
             //deathsField.text = snapshot.Child("deaths").Value.ToString();
+            LoadBadges(snapshot);
         }
     }
 
     private IEnumerator LoadScoreboardData()
     {
         //Get all the users data ordered by kills amount
-        Task<DataSnapshot> DBTask = DBreference.Child("users").OrderByChild("kills").GetValueAsync();
+        Task<DataSnapshot> DBTask = DBreference.Child("users").OrderByChild("score").GetValueAsync();
 
         yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
 
@@ -524,5 +560,63 @@ public class FirebaseManager : MonoBehaviour
         passwordRegisterField.text = "";
         passwordRegisterVerifyField.text = "";
     }
+    #endregion
+
+    #region Badge
+
+    public void SaveBadge(int badgeNumber)
+    {
+        StartCoroutine(UpdateBadge(badgeNumber));
+    }
+
+    private IEnumerator UpdateBadge(int badgeNumber)
+    {
+        Task task = DBreference.Child("users").Child(User.UserId).Child("badges").Child("badge" + badgeNumber).SetValueAsync(1);
+        yield return new WaitUntil(() => task.IsCompleted);
+
+        if (task.Exception != null)
+        {
+            Debug.LogWarning("Failed to save badge: " + task.Exception);
+        }
+        else
+        {
+            Debug.Log($"Badge {badgeNumber} saved successfully.");
+        }
+    }
+    private void LoadBadges(DataSnapshot snapshot)
+    {
+        DataSnapshot badgesSnapshot = snapshot.Child("badges");
+
+        if (badgesSnapshot.Exists)
+        {
+            int badge1 = 0;
+            int badge2 = 0;
+
+            if (badgesSnapshot.HasChild("badge1") && badgesSnapshot.Child("badge1").Value != null)
+            {
+                badge1 = Convert.ToInt32(badgesSnapshot.Child("badge1").Value);
+            }
+
+            if (badgesSnapshot.HasChild("badge2") && badgesSnapshot.Child("badge2").Value != null)
+            {
+                badge2 = Convert.ToInt32(badgesSnapshot.Child("badge2").Value);
+            }
+            PlayerPrefs.SetInt("Badge1", badge1);
+            PlayerPrefs.SetInt("Badge2", badge2);
+
+            Debug.Log("Badge 1: " + badge1);
+            Debug.Log("Badge 2: " + badge2);
+
+            // TODO UI
+        }
+        else
+        {
+            PlayerPrefs.SetInt("Badge1", 0);
+            PlayerPrefs.SetInt("Badge2", 0);
+            Debug.Log("No badges found for this user.");
+        }
+    }
+
+
     #endregion
 }

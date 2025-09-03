@@ -565,13 +565,11 @@ public class GameManager : MonoBehaviour
     }
     public void ChangeTurn()
     {
-        Debug.Log("Now Change Turn");
         playerTurn = !playerTurn;
     }
     IEnumerator pTurn()
     {
         //PlayBossEndSounds();
-        Debug.Log("in P turn");
         UIManager.Instance.PlyerBossTurn(0);
         yield return new WaitForSeconds(1);
         CreatePlayerAttackInventory();

@@ -13,17 +13,27 @@ public class ShopItem
     public Image avatar;
     public GameObject lockIco;
 
+
+
 }
 public class ShopManager : MonoBehaviour
 {
+
     public int playerCoins = 100;  
     public TextMeshProUGUI coinText;
     public TextMeshProUGUI shopCoinText;
 
     public ShopItem[] shopItems;
     public GameObject userPic;
+    [Header ("badge")]
+    public GameObject badge1;
+    public GameObject badge2;
+
+
     void Start()
     {
+        badge1.SetActive(false);
+        badge2.SetActive(false);
         UpdateUI();
 
         for (int i = 0; i < shopItems.Length; i++)
@@ -32,7 +42,27 @@ public class ShopManager : MonoBehaviour
             shopItems[i].button.onClick.AddListener(() => OnItemClick(index));
         }
     }
+    public void ResetShop()
+    {
+        for (int i = 0; i < shopItems.Length; i++)
+        {
+            if (i == 0)
+            {
+                shopItems[i].isUnlocked = true; // first Item Unlocked
+                shopItems[i].lockIco.SetActive(false);
+            }
 
+            else
+            {
+                shopItems[i].priceText.text = shopItems[i].price.ToString();
+                // if we have Enough Money Enabled
+                shopItems[i].button.interactable = playerCoins >= shopItems[i].price;
+                shopItems[i].lockIco.SetActive(true);
+            }
+        }
+        badge1.SetActive(false);
+        badge2.SetActive(false);
+    }
     void UpdateUI()
     {
         coinText.text = "Coins: " + playerCoins;
@@ -135,5 +165,23 @@ public class ShopManager : MonoBehaviour
     }
     public void RemoveAds()
     {
+    }
+    public void LoadBadges()
+    {
+        if (PlayerPrefs.HasKey("Badge1"))
+        {
+            if (PlayerPrefs.GetInt("Badge1") == 1)
+            {
+                badge1.SetActive(true);
+            }
+        }
+
+        if (PlayerPrefs.HasKey("Badge2"))
+        {
+            if (PlayerPrefs.GetInt("Badge2") == 1)
+            {
+                badge2.SetActive(true);
+            }
+        }
     }
 }
