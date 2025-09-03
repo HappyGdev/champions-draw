@@ -36,6 +36,7 @@ public class Zoom : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         GameManager.instance.PlayerAttack(curCard);
         var curIndex = GetComponent<CardDisplay>();
         onCardIndex?.Invoke(curIndex.CardIndex);
+        ScoreManager.Instance.AddScore(curCard.GetCardScore());
     }
     public void OnPointerExit(PointerEventData eventData)
     {

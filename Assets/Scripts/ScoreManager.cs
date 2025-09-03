@@ -6,7 +6,7 @@ public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance;
 
-    public int Score { get; private set; }
+    public int Score;// { get; private set; }
     public int HighScore { get; private set; }
 
     public TextMeshProUGUI scoreText;
@@ -22,7 +22,7 @@ public class ScoreManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            LoadScores();
+            //LoadScores();
         }
         else
         {
@@ -42,22 +42,25 @@ public class ScoreManager : MonoBehaviour
         {
             HighScore = Score;
         }
-        SaveScores();
+        //SaveScores();
         UpdateUI();
     }
-
-    public void SaveScores()
+    public int GetScore()
     {
-        PlayerPrefs.SetInt(ScoreKey, Score);
-        PlayerPrefs.SetInt(HighScoreKey, HighScore);
-        PlayerPrefs.Save();
+        return Score;   
     }
+    //public void SaveScores()
+    //{
+    //    PlayerPrefs.SetInt(ScoreKey, Score);
+    //    PlayerPrefs.SetInt(HighScoreKey, HighScore);
+    //    PlayerPrefs.Save();
+    //}
 
-    public void LoadScores()
-    {
-        Score = PlayerPrefs.GetInt(ScoreKey, 0);
-        HighScore = PlayerPrefs.GetInt(HighScoreKey, 0);
-    }
+    //public void LoadScores()
+    //{
+    //    Score = PlayerPrefs.GetInt(ScoreKey, 0);
+    //    HighScore = PlayerPrefs.GetInt(HighScoreKey, 0);
+    //}
 
     public void ResetScores()
     {

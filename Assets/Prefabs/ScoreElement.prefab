@@ -114,9 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   usernameText: {fileID: 1879445941766762466}
-  killsText: {fileID: 1879445941406722336}
-  deathsText: {fileID: 1879445942200089366}
-  xpText: {fileID: 1879445941144027540}
+  scoreText: {fileID: 1879445941144027540}
 --- !u!1 &1879445941144027542
 GameObject:
   m_ObjectHideFlags: 0
@@ -129,7 +127,7 @@ GameObject:
   - component: {fileID: 1879445941144027541}
   - component: {fileID: 1879445941144027540}
   m_Layer: 0
-  m_Name: Xp
+  m_Name: Score
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -270,7 +268,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1879445941406722339
 RectTransform:
   m_ObjectHideFlags: 0
@@ -542,7 +540,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1879445942200089369
 RectTransform:
   m_ObjectHideFlags: 0

@@ -110,6 +110,7 @@ public class UiItemSpawner : MonoBehaviour
         CCard.GetComponent<CardDisplay>().Card.value1 = Chosen.value1;
         CCard.GetComponent<CardDisplay>().Card.value2 = Chosen.value2;
         CCard.GetComponent<CardDisplay>().Card.value3 = Chosen.value3;
+        CCard.GetComponent<CardDisplay>().Card.cardScore = Chosen.cardScore;
 
         if (isZoomable)
         {

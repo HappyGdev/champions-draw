@@ -501,7 +501,7 @@ public class GameManager : MonoBehaviour
         if (HealthBar.instance.BosscurrentHealth <= 0)
         {
             UIManager.Instance.Win();
-            ScoreManager.Instance.AddScore(50);
+           // ScoreManager.Instance.AddScore(50);
             return;
             // Show win screen or handle victory
         }

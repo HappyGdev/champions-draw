@@ -15,6 +15,7 @@ public class CardDisplay : MonoBehaviour
     public TextMeshProUGUI Value1;
     public TextMeshProUGUI Value2;
     public TextMeshProUGUI Value3;
+    //public TextMeshProUGUI cardPoint_txt;
 
     public int CardIndex;   // ایندکس کارت در PlayerFightcards
 
@@ -31,6 +32,7 @@ public class CardDisplay : MonoBehaviour
         Value1.text=Card.value1.ToString();
         Value2.text=Card.value2.ToString();
         Value3.text=Card.value3.ToString();
+        //cardPoint_txt.text = Card.cardScore.ToString();
     }
 
     private void OnEnable()
