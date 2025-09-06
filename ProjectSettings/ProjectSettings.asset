@@ -954,11 +954,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: 5a85e451-177d-47ac-9ea5-905b91541363
+  cloudProjectId: 9cf0b161-9155-46e1-9f43-592bf4adb0db
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: pro gui
-  organizationId: emla-game
+  projectName: ChampionDraw
+  organizationId: arusha-soft
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
