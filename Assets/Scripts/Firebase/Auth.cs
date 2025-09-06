@@ -83,7 +83,7 @@ public class FirebaseManager : MonoBehaviour
         PlayerPrefs.SetInt("Badge2", 0);
         profile_Button.interactable = false;
 
-        // صبر کن تا Firebase Auth آماده بشه
+
         while (auth == null)
             yield return null;
 
@@ -157,8 +157,6 @@ public class FirebaseManager : MonoBehaviour
 
     private IEnumerator Login(string _email, string _password)
     {
-        PlayerPrefs.SetInt("Badge1", 0);
-        PlayerPrefs.SetInt("Badge2", 0);
         // Firebase login request
         var loginTask = auth.SignInWithEmailAndPasswordAsync(_email, _password);
         yield return new WaitUntil(() => loginTask.IsCompleted);
@@ -176,8 +174,8 @@ public class FirebaseManager : MonoBehaviour
             PlayerPrefs.SetString("SavedEmail", _email);
             PlayerPrefs.SetString("SavedPassword", _password);
             PlayerPrefs.Save();
-
             StartCoroutine(LoadUserData());
+
             SetUIAfterLogin(User.DisplayName);
         }
     }
@@ -324,6 +322,7 @@ public class FirebaseManager : MonoBehaviour
         //StartCoroutine(UpdateKills(int.Parse(killsField.text)));
         //StartCoroutine(UpdateDeaths(int.Parse(deathsField.text)));
     }
+
     public void ScoreboardButton()
     {
         StartCoroutine(LoadScoreboardData());
@@ -408,8 +407,9 @@ public class FirebaseManager : MonoBehaviour
     {
         var task = DBreference.Child("users").Child(User.UserId).Child("userProfileNumber").SetValueAsync(number);
         yield return new WaitUntil(() => task.IsCompleted);
-        PlayerPrefs.SetInt("UserProfileNumnber", number);
-        PlayerPrefs.Save();
+        //PlayerPrefs.SetInt("UserProfileNumnber", number);
+        shopManager.UpdateUserPhoto(number);
+        //PlayerPrefs.Save();
         if (task.Exception != null)
         {
             Debug.LogWarning(message: $"Failed to register task with {task.Exception}");
@@ -438,6 +438,8 @@ public class FirebaseManager : MonoBehaviour
 
     private IEnumerator LoadUserData()
     {
+        Debug.Log("Loading User Data");
+
         //Get the currently logged in user data
         Task<DataSnapshot> DBTask = DBreference.Child("users").Child(User.UserId).GetValueAsync();
 
@@ -453,10 +455,13 @@ public class FirebaseManager : MonoBehaviour
             //scoreField.text = "0";
             //killsField.text = "0";
             //deathsField.text = "0";
+            Debug.Log("In Value Null");
 
         }
         else
         {
+            Debug.Log("In Value Not Null");
+
             //Data has been retrieved
             DataSnapshot snapshot = DBTask.Result;
             if (snapshot.Child("unlockedItems").Value != null)
@@ -465,6 +470,18 @@ public class FirebaseManager : MonoBehaviour
                 int[] unlocked = JsonHelper.FromJson<int>(jsonArray);
                 shopManager.LoadUnlockedItems(unlocked);
                
+            }
+            // ✅ Read userProfileNumber
+            if (snapshot.Child("userProfileNumber").Value != null)
+            {
+                int profileNumber = Convert.ToInt32(snapshot.Child("userProfileNumber").Value);
+                Debug.Log("User Profile Number: " + profileNumber);
+                shopManager.UpdateUserPhoto(profileNumber);
+                // Use profileNumber as needed here...
+            }
+            else
+            {
+                shopManager.UpdateUserPhoto(0);
             }
             //scoreField.text = snapshot.Child("score").Value.ToString();
             //killsField.text = snapshot.Child("kills").Value.ToString();
@@ -498,7 +515,20 @@ public class FirebaseManager : MonoBehaviour
             //Loop through every users UID
             foreach (DataSnapshot childSnapshot in snapshot.Children.Reverse<DataSnapshot>())
             {
-                string username = childSnapshot.Child("username").Value.ToString();
+                //Instantiate new scoreboard elements
+                string username = "Unknown";
+
+                if (childSnapshot.HasChild("username") && childSnapshot.Child("username").Value != null)
+                {
+                    username = childSnapshot.Child("username").Value.ToString();
+                }
+                else
+                {
+                    Debug.LogWarning("Username missing for user: " + childSnapshot.Key);
+                    continue; // or skip this user if username is critical
+                }
+                //string username = childSnapshot.Child("username").Value.ToString();
+
                 //int kills = int.Parse(childSnapshot.Child("kills").Value.ToString());
                 //int deaths = int.Parse(childSnapshot.Child("deaths").Value.ToString());
                 int score = int.Parse(childSnapshot.Child("score").Value.ToString());
@@ -585,8 +615,8 @@ public class FirebaseManager : MonoBehaviour
     }
     private void LoadBadges(DataSnapshot snapshot)
     {
-        DataSnapshot badgesSnapshot = snapshot.Child("badges");
-
+        Debug.Log("Loading badges");
+        DataSnapshot badgesSnapshot = snapshot.Child("badges");    
         if (badgesSnapshot.Exists)
         {
             int badge1 = 0;
@@ -595,14 +625,22 @@ public class FirebaseManager : MonoBehaviour
             if (badgesSnapshot.HasChild("badge1") && badgesSnapshot.Child("badge1").Value != null)
             {
                 badge1 = Convert.ToInt32(badgesSnapshot.Child("badge1").Value);
+                shopManager.LoadBadges(badge1, 0);
+            }
+            else
+            {
+                shopManager.LoadBadges(0, 0);
             }
 
             if (badgesSnapshot.HasChild("badge2") && badgesSnapshot.Child("badge2").Value != null)
             {
                 badge2 = Convert.ToInt32(badgesSnapshot.Child("badge2").Value);
+                shopManager.LoadBadges(badge2, 1);
             }
-            PlayerPrefs.SetInt("Badge1", badge1);
-            PlayerPrefs.SetInt("Badge2", badge2);
+            else
+            {
+                shopManager.LoadBadges(0, 1);
+            }
 
             Debug.Log("Badge 1: " + badge1);
             Debug.Log("Badge 2: " + badge2);
@@ -611,10 +649,12 @@ public class FirebaseManager : MonoBehaviour
         }
         else
         {
-            PlayerPrefs.SetInt("Badge1", 0);
-            PlayerPrefs.SetInt("Badge2", 0);
-            Debug.Log("No badges found for this user.");
+            Debug.Log("badges dont exists");
+            shopManager.LoadBadges(0, 0);
+            shopManager.LoadBadges(0, 0);
+
         }
+
     }
 
 

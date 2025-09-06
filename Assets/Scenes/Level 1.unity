@@ -1942,7 +1942,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 131, y: -28.649994}
+  m_AnchoredPosition: {x: 131, y: 25}
   m_SizeDelta: {x: 1314, y: 421}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &49178635
@@ -11770,8 +11770,9 @@ MonoBehaviour:
     avatar: {fileID: 1997631526}
     lockIco: {fileID: 1513229960}
   userPic: {fileID: 1715535896}
-  badge1: {fileID: 1340972199}
-  badge2: {fileID: 1073154563}
+  badges:
+  - {fileID: 1340972199}
+  - {fileID: 1073154563}
 --- !u!1 &316766384
 GameObject:
   m_ObjectHideFlags: 0
@@ -15019,7 +15020,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &418732231
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15092,18 +15093,6 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 1327740149}
-        m_TargetAssemblyTypeName: FirebaseManager, Assembly-CSharp
-        m_MethodName: SaveBadge
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 1
@@ -20375,7 +20364,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -459, y: -28.649994}
+  m_AnchoredPosition: {x: 132, y: -259}
   m_SizeDelta: {x: 1314, y: 421}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &564817036
@@ -39189,7 +39178,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1073154564
 RectTransform:
   m_ObjectHideFlags: 0
@@ -47407,7 +47396,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 131, y: -187}
+  m_AnchoredPosition: {x: 131, y: -112}
   m_SizeDelta: {x: 1314, y: 421}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1336066554
@@ -47984,7 +47973,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1340972200
 RectTransform:
   m_ObjectHideFlags: 0
@@ -50791,6 +50780,22 @@ PrefabInstance:
     - target: {fileID: 3640438738361733930, guid: f9ab94c177d25bb428d986844fcc9a6e, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4024952676276333081, guid: f9ab94c177d25bb428d986844fcc9a6e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4024952676276333081, guid: f9ab94c177d25bb428d986844fcc9a6e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1170770248}
+    - target: {fileID: 4024952676276333081, guid: f9ab94c177d25bb428d986844fcc9a6e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 4024952676276333081, guid: f9ab94c177d25bb428d986844fcc9a6e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.GameObject, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 4188664178453783090, guid: f9ab94c177d25bb428d986844fcc9a6e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -54377,7 +54382,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1510039926
 RectTransform:
   m_ObjectHideFlags: 0
@@ -56055,7 +56060,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -314, y: 139}
+  m_AnchoredPosition: {x: -314, y: 460}
   m_SizeDelta: {x: 1314, y: 421}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1537660749
@@ -69386,7 +69391,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1953782153
 RectTransform:
   m_ObjectHideFlags: 0

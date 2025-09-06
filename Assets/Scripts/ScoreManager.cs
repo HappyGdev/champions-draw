@@ -44,6 +44,8 @@ public class ScoreManager : MonoBehaviour
         }
         //SaveScores();
         UpdateUI();
+        FirebaseManager.Instance.SaveDataButton();
+
     }
     public int GetScore()
     {

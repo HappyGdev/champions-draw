@@ -26,14 +26,11 @@ public class ShopManager : MonoBehaviour
     public ShopItem[] shopItems;
     public GameObject userPic;
     [Header ("badge")]
-    public GameObject badge1;
-    public GameObject badge2;
+    public GameObject[] badges;
 
 
     void Start()
     {
-        badge1.SetActive(false);
-        badge2.SetActive(false);
         UpdateUI();
 
         for (int i = 0; i < shopItems.Length; i++)
@@ -60,8 +57,10 @@ public class ShopManager : MonoBehaviour
                 shopItems[i].lockIco.SetActive(true);
             }
         }
-        badge1.SetActive(false);
-        badge2.SetActive(false);
+        foreach (var bdg in badges)
+        {
+            bdg.SetActive(false);
+        }
     }
     void UpdateUI()
     {
@@ -104,6 +103,7 @@ public class ShopManager : MonoBehaviour
                 Debug.Log(item.itemName + " Sold!");
 
                 FirebaseManager.Instance.SaveUnlockedItems(shopItems);
+                UpdateUserPhoto(index);
             }
             else
             {
@@ -112,18 +112,17 @@ public class ShopManager : MonoBehaviour
             }
         }
 
-        Debug.Log("Item Selected: " + index);
-        PlayerPrefs.SetInt("UserProfileNumnber", index); 
+        //Debug.Log("Item Selected: " + index);
+        //PlayerPrefs.SetInt("UserProfileNumnber", index); 
         //FirebaseManager.Instance.SaveUserProfileNumber(index); 
-        UpdateUserPhoto();
         UpdateUI();
     }
 
 
-    public void UpdateUserPhoto()
+    public void UpdateUserPhoto(int index)
     {
-        var userprofilenum = PlayerPrefs.GetInt("UserProfileNumnber");
-        userPic.GetComponent<Image>().sprite = shopItems[userprofilenum].avatar.sprite;
+        //var userprofilenum = PlayerPrefs.GetInt("UserProfileNumnber");
+        userPic.GetComponent<Image>().sprite = shopItems[index].avatar.sprite;
     }
     public void LoadUnlockedItems(int[] unlocked)
     {
@@ -166,22 +165,15 @@ public class ShopManager : MonoBehaviour
     public void RemoveAds()
     {
     }
-    public void LoadBadges()
+    public void LoadBadges(int num,int badge)
     {
-        if (PlayerPrefs.HasKey("Badge1"))
+        if (num == 1)
         {
-            if (PlayerPrefs.GetInt("Badge1") == 1)
-            {
-                badge1.SetActive(true);
-            }
+            badges[badge].SetActive(true);
         }
-
-        if (PlayerPrefs.HasKey("Badge2"))
+        else
         {
-            if (PlayerPrefs.GetInt("Badge2") == 1)
-            {
-                badge2.SetActive(true);
-            }
+            badges[badge].SetActive(false);
         }
     }
 }
