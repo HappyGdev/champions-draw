@@ -6,27 +6,45 @@ using UnityEngine.UI;
 
 public class IAPManager : MonoBehaviour
 {
-    private string coins100 = "coins100";
-    private string coins500 = "coins500";
+    private string coins5k = "coin5k";
+    private string coins10k = "coin10k";
+    private string coins50k = "coin50k";
+    private string coins5100k = "coin5100k";
     private string removeAds = "removeads";
     public ShopManager shopController;
 
     [SerializeField]
-    private Button coins100Button;
+    private Button coins5kButton;
     [SerializeField]
-    private Button coins500Button;
+    private Button coins10kButton;
+    [SerializeField]
+    private Button coins50kButton;
+    [SerializeField]
+    private Button coins5100kButton;
     [SerializeField]
     private Button removeAdsButton;
 
     public void OnPurchaseComplete(Product product)
     {
-        if (product.definition.id == coins100)
+        if (product.definition.id.Equals("coin5k"))
         {
-            shopController.Coin100Button();
+            Debug.Log("Add 100 money");
+            shopController.Coin5kButton();
         }
-        else if (product.definition.id == coins500)
+        else if (product.definition.id.Equals("coin10k"))// == coins500)
         {
-            shopController.Coin500Button();
+            Debug.Log("Add 500 money");
+            shopController.Coin10kButton();
+        }
+        else if (product.definition.id.Equals("coin50k"))// == coins500)
+        {
+            Debug.Log("Add 500 money");
+            shopController.Coin50kButton();
+        }
+        else if (product.definition.id.Equals("coin5100k"))// == coins500)
+        {
+            Debug.Log("Add 500 money");
+            shopController.Coin5100kButton();
         }
         else if (product.definition.id == removeAds)
         {
@@ -39,13 +57,21 @@ public class IAPManager : MonoBehaviour
     }
     public void OnProductFetched(Product product)
     {
-        if (product.definition.id == coins100)
+        if (product.definition.id == coins5k)
         {
-            UpdateButtonPrice(coins100Button, product);
+            UpdateButtonPrice(coins5kButton, product);
         }
-        else if(product.definition.id== coins500)
+        else if(product.definition.id== coins10k)
         {
-            UpdateButtonPrice(coins500Button, product);
+            UpdateButtonPrice(coins10kButton, product);
+        }
+        else if (product.definition.id == coins50k)
+        {
+            UpdateButtonPrice(coins50kButton, product);
+        }
+        else if (product.definition.id == coins5100k)
+        {
+            UpdateButtonPrice(coins5100kButton, product);
         }
         else if (product.definition.id == removeAds)
         {

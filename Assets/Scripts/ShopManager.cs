@@ -132,16 +132,25 @@ public class ShopManager : MonoBehaviour
         }
         UpdateUI();
     }
-
-    public void Coin100Button()
+    public void Coin5kButton()
     {
-        Debug.Log("Coin 100");
-        AddCoin(100);
+        Debug.Log("Coin 20");
+        AddCoin(20);
     }
-    public void Coin500Button()
+    public void Coin10kButton()
+    {
+        Debug.Log("Coin 200");
+        AddCoin(200);
+    }
+    public void Coin50kButton()
     {
         Debug.Log("Coin 500");
         AddCoin(500);
+    }
+    public void Coin5100kButton()
+    {
+        Debug.Log("Coin 1000");
+        AddCoin(1000);
     }
     public void RemoveAdsButton()
     {
@@ -151,10 +160,10 @@ public class ShopManager : MonoBehaviour
     //public void AddCoin(int coinAmounts)
     //{
     //    int currentValue;
-    //    if(int.TryParse(shopCoinText.text, out currentValue))
+    //    if (int.TryParse(shopCoinText.text, out currentValue))
     //    {
     //        currentValue += coinAmounts;
-    //        shopCoinText.text=currentValue.ToString();   
+    //        shopCoinText.text = currentValue.ToString();
     //    }
     //}
     public void AddCoin(int coinAmounts)
