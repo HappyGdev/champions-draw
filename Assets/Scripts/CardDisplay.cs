@@ -23,6 +23,13 @@ public class CardDisplay : MonoBehaviour
 
     public void DisplayCard()
     {
+        
+        //if (Card == null)
+        //{
+        //    Debug.LogError("Card is NULL on CardDisplay! Cannot display.");
+        //    Debug.Log(this.gameObject.name);
+        //    return;
+        //}
         nameText.text = Card.name;
         descriptionText.text = Card.description;
 

@@ -113,7 +113,7 @@ public class GameManager : MonoBehaviour
         SetSampleCardNull();
         //send to CardDisplay to Set Display Data For All cards -- whenever we wanna update Display Of cards we need to Invoke This
         onCardDisplay?.Invoke();
-        MainPanel.SetActive(false);
+       // MainPanel.SetActive(false);
         
     }
 
@@ -199,6 +199,7 @@ public class GameManager : MonoBehaviour
     //if Player didn't Obtain Any Cards this is default Cards (3 cards)
     private void GiveInitialInventory()
     {
+
         if (cardHolder == null || uiItemSpawner == null || cardHolder.PlayerAvaiableCards.Count < 4)
         {
             Debug.LogWarning("CardHolder or UIItemSpawner not assigned properly.");

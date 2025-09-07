@@ -14,7 +14,7 @@ public class UIManager : MonoBehaviour
     public GameObject LosePanel;
     public GameObject WinPanel;
     public GameObject BoosApearPanel;
-    //public GameObject player_BossTurn;
+    public GameObject FinalWinPanel;
     public GameObject Player_turn_Over_button;
 
     public GameObject Playerturn_ui;
@@ -98,9 +98,17 @@ public class UIManager : MonoBehaviour
     }
     public void Win()
     {
-        WinPanel.SetActive(true);
         LoadAndSaveBoss();
-        GameManager.instance.ResetGame();
+        if(currentBossNumber != 6)
+        {
+            WinPanel.SetActive(true);
+            GameManager.instance.ResetGame();
+        }
+        else
+        {
+            FinalWinPanel.SetActive(true);
+        }
+
     }
     private void LoadAndSaveBoss()
     {

@@ -10,15 +10,20 @@ public class StoryManagere : MonoBehaviour
 
     [Header ("All Boss")]
     public List<GameObject> bossType=new List<GameObject>();
+    public List<GameObject>Levels=new List<GameObject>();
     [Space]
     [Header ("Boss Cards")]
     public List<Card> bossGammaCards;
     public List<Card> bossBetaCards;
     public List<Card> bossAlphaCards;
+    public List<Card> boss4Cards;
+    public List<Card> boss5Cards;
+    public List<Card> boss6Cards;
     public List <Card> defaultCards;
     [Space]
     [Header("Panels")]
     public GameObject bossSelectionPanel;
+    public GameObject StoryBoardPanels;
     [SerializeField] private int currentBoss;
     public GameObject badgePanel;
 
@@ -28,28 +33,33 @@ public class StoryManagere : MonoBehaviour
     }
     public void ContinueButton()
     {
-        LoadBoss();
-        StartCoroutine(ContinueGame());
+        if (currentBoss != 6)
+        {
+            LoadBoss();
+            StartCoroutine(ContinueGame());
+        }
     }
 
     IEnumerator ContinueGame()
     {
-        if (currentBoss != 0) 
+        if (currentBoss != 0 && currentBoss<=2) 
         {
             badgePanel.SetActive(true);
             yield return new WaitForSeconds(2f);
             badgePanel.SetActive(false);
         }
-        yield return new WaitForSeconds(0.5f);
+        //yield return new WaitForSeconds(0.5f);
         bossSelectionPanel.SetActive(true);
         SetBossUI();
         SetBossCards();
         yield return new WaitForSeconds(2f);
         bossSelectionPanel.SetActive(false);
-        GameManager.instance.MainPanel.SetActive(true);
+        SetLevel();   
+        StoryBoardPanels.SetActive(true);
     }
     private void LoadBoss()
     {
+        //load from uimanager after game won
         currentBoss = PlayerPrefs.GetInt("BossType");
     }
     private void SetBossUI()
@@ -59,6 +69,18 @@ public class StoryManagere : MonoBehaviour
             go.SetActive(false);
         }
         bossType[currentBoss].SetActive(true);
+    }
+    public void StartStory()
+    {
+        GameManager.instance.MainPanel.SetActive(true);
+    }
+    private void SetLevel()
+    {
+        foreach (GameObject lvl in Levels)
+        {
+            lvl.SetActive(false);
+        }
+        Levels[currentBoss].SetActive(true);
     }
     private void SetBossCards()
     {
@@ -81,6 +103,18 @@ public class StoryManagere : MonoBehaviour
                 OnBossCards?.Invoke(bossAlphaCards);
                 Debug.Log("bossBetaCards");
                 FirebaseManager.Instance.SaveBadge(2);
+                //sendbadgetoleaderboard
+                break;
+            case 3:
+                OnBossCards?.Invoke(boss4Cards);
+                //sendbadgetoleaderboard
+                break;
+            case 4:
+                OnBossCards?.Invoke(boss5Cards);
+                //sendbadgetoleaderboard
+                break;
+            case 5:
+                OnBossCards?.Invoke(boss6Cards);
                 //sendbadgetoleaderboard
                 break;
 
