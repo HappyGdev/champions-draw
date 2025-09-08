@@ -20,9 +20,10 @@ MonoBehaviour:
   isBoss: 0
   isPlayerInventory: 0
   isDefenseDown: 0
-  value1: 3
+  value1: 100
   value2: 0
   value3: 0
+  cardScore: 105
   actionType: 1
   multiActionType: 0
   cardPack: 0

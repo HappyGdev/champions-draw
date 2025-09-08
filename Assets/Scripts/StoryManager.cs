@@ -11,6 +11,7 @@ public class StoryManagere : MonoBehaviour
     [Header ("All Boss")]
     public List<GameObject> bossType=new List<GameObject>();
     public List<GameObject>Levels=new List<GameObject>();
+    public GameObject[] CheckBox=new GameObject[6]; 
     [Space]
     [Header ("Boss Cards")]
     public List<Card> bossGammaCards;
@@ -22,7 +23,7 @@ public class StoryManagere : MonoBehaviour
     public List <Card> defaultCards;
     [Space]
     [Header("Panels")]
-    public GameObject bossSelectionPanel;
+    //public GameObject bossSelectionPanel;
     public GameObject StoryBoardPanels;
     [SerializeField] private int currentBoss;
     public GameObject badgePanel;
@@ -49,13 +50,16 @@ public class StoryManagere : MonoBehaviour
             badgePanel.SetActive(false);
         }
         //yield return new WaitForSeconds(0.5f);
-        bossSelectionPanel.SetActive(true);
+        //bossSelectionPanel.SetActive(true);
         SetBossUI();
         SetBossCards();
-        yield return new WaitForSeconds(2f);
-        bossSelectionPanel.SetActive(false);
-        SetLevel();   
+
+        SetLevel();
+        SetCheckBox();
         StoryBoardPanels.SetActive(true);
+        //yield return new WaitForSeconds(2f);
+        //bossSelectionPanel.SetActive(false);
+
     }
     private void LoadBoss()
     {
@@ -81,6 +85,18 @@ public class StoryManagere : MonoBehaviour
             lvl.SetActive(false);
         }
         Levels[currentBoss].SetActive(true);
+    }
+    private void SetCheckBox()
+    {
+        foreach (var chkbx in CheckBox)
+        {
+            chkbx.SetActive(false);
+        }
+        //CheckBox[0].SetActive(true);
+        for (int i = 0; i < currentBoss; i++)
+        {
+            CheckBox[i].SetActive(true);
+        }      
     }
     private void SetBossCards()
     {
