@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
+using Unity.VisualScripting;
 
 [System.Serializable]
 public class ShopItem
@@ -18,8 +20,8 @@ public class ShopItem
 }
 public class ShopManager : MonoBehaviour
 {
-
-    public int playerCoins = 100;  
+    public static Action<int> onCoinChanged;
+    public int playerCoins;  
     public TextMeshProUGUI coinText;
     public TextMeshProUGUI shopCoinText;
 
@@ -28,9 +30,9 @@ public class ShopManager : MonoBehaviour
     [Header ("badge")]
     public GameObject[] badges;
 
-
     void Start()
     {
+        LoadCoin(); 
         UpdateUI();
 
         for (int i = 0; i < shopItems.Length; i++)
@@ -38,6 +40,10 @@ public class ShopManager : MonoBehaviour
             int index = i; 
             shopItems[i].button.onClick.AddListener(() => OnItemClick(index));
         }
+    }
+    void LoadCoin()
+    {
+        playerCoins = PlayerPrefs.GetInt("Coin");
     }
     public void ResetShop()
     {
@@ -64,7 +70,8 @@ public class ShopManager : MonoBehaviour
     }
     void UpdateUI()
     {
-        coinText.text = "Coins: " + playerCoins;
+        coinText.text = "Coins: " + playerCoins.ToString();
+        shopCoinText.text = playerCoins.ToString();
 
         for (int i = 0; i < shopItems.Length; i++)
         {
@@ -135,12 +142,12 @@ public class ShopManager : MonoBehaviour
     public void Coin5kButton()
     {
         Debug.Log("Coin 20");
-        AddCoin(20);
+        AddCoin(5);
     }
     public void Coin10kButton()
     {
         Debug.Log("Coin 200");
-        AddCoin(200);
+        AddCoin(50);
     }
     public void Coin50kButton()
     {
@@ -168,9 +175,16 @@ public class ShopManager : MonoBehaviour
     //}
     public void AddCoin(int coinAmounts)
     {
-        playerCoins += coinAmounts;
-        shopCoinText.text = playerCoins.ToString();
+        FirebaseManager.Instance.SetAndSaveCoin(coinAmounts);
     }
+
+    private void CoinAddedsuccessfully(int val)
+    {
+        playerCoins = val;
+        shopCoinText.text = playerCoins.ToString();
+        PlayerPrefs.SetInt("Coin",playerCoins);
+    }
+
     public void RemoveAds()
     {
     }
@@ -184,5 +198,13 @@ public class ShopManager : MonoBehaviour
         {
             badges[badge].SetActive(false);
         }
+    }
+    private void OnEnable()
+    {
+        FirebaseManager.onBuycomplete += CoinAddedsuccessfully;
+    }
+    private void OnDisable()
+    {
+        FirebaseManager.onBuycomplete -= CoinAddedsuccessfully;
     }
 }

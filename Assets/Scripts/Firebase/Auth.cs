@@ -12,7 +12,7 @@ using System;
 public class FirebaseManager : MonoBehaviour
 {
     public static FirebaseManager Instance;
-
+    public static Action<int> onBuycomplete;
     #region Firebase Variables
     [Header("Firebase")]
     public DependencyStatus dependencyStatus;
@@ -27,6 +27,7 @@ public class FirebaseManager : MonoBehaviour
     public TMP_InputField passwordLoginField;
     public TMP_Text warningLoginText;
     public TMP_Text confirmLoginText;
+    public TextMeshProUGUI InfoText;
 
     [Header("Register")]
     public TMP_InputField usernameRegisterField;
@@ -55,6 +56,10 @@ public class FirebaseManager : MonoBehaviour
     //public TMP_InputField userProfileNumber_txt;
     public GameObject scoreElement;
     public Transform scoreboardContent;
+    public int coin;
+    public TMP_Text coinText;
+
+
     #endregion
 
     [Header("Auto-Login")]
@@ -121,11 +126,73 @@ public class FirebaseManager : MonoBehaviour
             loginPanel.SetActive(true);
         }
 
-        // پایان بررسی
         isCheckingAutoLogin = false;
         if (autoLoginText != null) autoLoginText.text = "";
     }
+    //public int GetCoin()
+    //{
+    //    return coin;
+    //}
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Space) && User != null)
+    //    {
+    //        coin += 10;
+    //        Debug.Log("Coin increased to: " + coin);
+    //        coinText.text = "Coin: " + coin;
+    //        StartCoroutine(UpdateCoin(coin));
+    //    }
+    //}
+    public void SetAndSaveCoin(int amount)
+    {
+        Debug.Log("Coin Updated" + amount);
+        StartCoroutine(UpdateCoin(amount));
+    }
+    private IEnumerator UpdateCoin(int valueToAdd)
+    {
+        // Step 1: دریافت مقدار فعلی coin از Firebase
+        var getCoinTask = DBreference.Child("users").Child(User.UserId).Child("coin").GetValueAsync();
+        yield return new WaitUntil(() => getCoinTask.IsCompleted);
 
+        if (getCoinTask.Exception != null)
+        {
+            Debug.LogWarning("Failed to retrieve current coin: " + getCoinTask.Exception);
+            InfoText.text = getCoinTask.Exception.Message;
+            yield return new WaitForSeconds(2f);
+            InfoText.text = " ";
+            yield break;
+        }
+
+        int currentCoin = 0;
+        if (getCoinTask.Result.Exists && getCoinTask.Result.Value != null)
+        {
+            currentCoin = Convert.ToInt32(getCoinTask.Result.Value);
+        }
+
+        // محاسبه مقدار جدید coin
+        int newCoin = currentCoin + valueToAdd;
+
+        //ذخیره مقدار جدید در Firebase
+        var setCoinTask = DBreference.Child("users").Child(User.UserId).Child("coin").SetValueAsync(newCoin);
+        yield return new WaitUntil(() => setCoinTask.IsCompleted);
+
+        if (setCoinTask.Exception != null)
+        {
+            Debug.LogWarning("Failed to update coin: " + setCoinTask.Exception);
+            InfoText.text = setCoinTask.Exception.Message;
+            yield return new WaitForSeconds(2f);
+            InfoText.text = " ";
+        }
+        else
+        {
+            // Step 4: آپدیت مقدار داخلی (local) و UI
+            coin = newCoin;
+            coinText.text = "Coin: " + coin;
+            PlayerPrefs.SetInt("Coin", coin); // optional: save locally
+            onBuycomplete?.Invoke(coin);
+            Debug.Log($"Coin updated and saved: {valueToAdd}, total: {coin}");
+        }
+    }
 
     private IEnumerator CheckAndInitializeFirebase()
     {
@@ -175,6 +242,9 @@ public class FirebaseManager : MonoBehaviour
             PlayerPrefs.SetString("SavedPassword", _password);
             PlayerPrefs.Save();
             StartCoroutine(LoadUserData());
+
+            yield return StartCoroutine(LoadUserData()); // ✅ صبر کن تا لود کامل بشه
+
 
             SetUIAfterLogin(User.DisplayName);
         }
@@ -456,7 +526,7 @@ public class FirebaseManager : MonoBehaviour
             //killsField.text = "0";
             //deathsField.text = "0";
             Debug.Log("In Value Null");
-
+            PlayerPrefs.SetInt("Coin", 0);
         }
         else
         {
@@ -464,6 +534,20 @@ public class FirebaseManager : MonoBehaviour
 
             //Data has been retrieved
             DataSnapshot snapshot = DBTask.Result;
+            if (snapshot.Child("coin").Value != null)
+            {
+                coin = Convert.ToInt32(snapshot.Child("coin").Value);
+                coinText.text = coin.ToString();
+                Debug.Log("Coin Loaded: " + coin);
+                PlayerPrefs.SetInt("Coin",coin);    
+            }
+            else
+            {
+                coin = 0;
+                coinText.text = coin.ToString();
+                Debug.Log("Coin not found, defaulted to 0.");
+                PlayerPrefs.SetInt("Coin", 0);
+            }
             if (snapshot.Child("unlockedItems").Value != null)
             {
                 string jsonArray = snapshot.Child("unlockedItems").GetRawJsonValue();
@@ -487,7 +571,12 @@ public class FirebaseManager : MonoBehaviour
             //killsField.text = snapshot.Child("kills").Value.ToString();
             //deathsField.text = snapshot.Child("deaths").Value.ToString();
             LoadBadges(snapshot);
+
+            coinText.text = "Coin: " + coin; // ✅ مقدار UI را به‌روزرسانی کن
+
         }
+
+
     }
 
     private IEnumerator LoadScoreboardData()
