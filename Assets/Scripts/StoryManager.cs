@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using System;
+using UnityEngine.UI;
 
 public class StoryManagere : MonoBehaviour
 {
@@ -11,15 +12,18 @@ public class StoryManagere : MonoBehaviour
     [Header ("All Boss")]
     public List<GameObject> bossType=new List<GameObject>();
     public List<GameObject>Levels=new List<GameObject>();
-    public GameObject[] CheckBox=new GameObject[6]; 
+    public GameObject[] CheckBox=new GameObject[6];
+    //0 gamma 1 beta  2 gamma  4 bots
+    public Sprite[] bossImages=new Sprite[4];
+    public GameObject[] bossAvatar;
     [Space]
     [Header ("Boss Cards")]
     public List<Card> bossGammaCards;
     public List<Card> bossBetaCards;
     public List<Card> bossAlphaCards;
-    public List<Card> boss4Cards;
-    public List<Card> boss5Cards;
-    public List<Card> boss6Cards;
+    public List<Card> bot1;
+    public List<Card> bot2;
+    public List<Card> bot3;
     public List <Card> defaultCards;
     [Space]
     [Header("Panels")]
@@ -104,38 +108,63 @@ public class StoryManagere : MonoBehaviour
         switch (currentBoss)
         {
             case 0:
-                OnBossCards?.Invoke(bossGammaCards);
+                OnBossCards?.Invoke(bot1);
+                foreach (var boss in bossAvatar)
+                {
+                    boss.GetComponent<Image>().sprite = bossImages[3];
+                }
                 Debug.Log("bossGammaCards");
                 break;
 
             case 1:
-                OnBossCards?.Invoke(bossBetaCards);
+                OnBossCards?.Invoke(bossGammaCards);
+                foreach (var boss in bossAvatar)
+                {
+                    boss.GetComponent<Image>().sprite = bossImages[0];
+                }
                 Debug.Log("bossBetaCards");
                 FirebaseManager.Instance.SaveBadge(1);
                 //sendbadge to leaderBoard
                 break;
 
             case 2:
-                OnBossCards?.Invoke(bossAlphaCards);
-                Debug.Log("bossBetaCards");
+                OnBossCards?.Invoke(bot2);
+                foreach (var boss in bossAvatar)
+                {
+                    boss.GetComponent<Image>().sprite = bossImages[3];
+                }
                 FirebaseManager.Instance.SaveBadge(2);
                 //sendbadgetoleaderboard
                 break;
             case 3:
-                OnBossCards?.Invoke(boss4Cards);
+                OnBossCards?.Invoke(bossBetaCards);
+                foreach (var boss in bossAvatar)
+                {
+                    boss.GetComponent<Image>().sprite = bossImages[1];
+                }
                 //sendbadgetoleaderboard
                 break;
             case 4:
-                OnBossCards?.Invoke(boss5Cards);
-                //sendbadgetoleaderboard
+                OnBossCards?.Invoke(bot3);
+                foreach (var boss in bossAvatar)
+                {
+                    boss.GetComponent<Image>().sprite = bossImages[3];
+                }                //sendbadgetoleaderboard
                 break;
             case 5:
-                OnBossCards?.Invoke(boss6Cards);
-                //sendbadgetoleaderboard
+                OnBossCards?.Invoke(bossAlphaCards);
+                foreach (var boss in bossAvatar)
+                {
+                    boss.GetComponent<Image>().sprite = bossImages[2];
+                }                //sendbadgetoleaderboard
                 break;
 
             default:
                 OnBossCards?.Invoke(defaultCards);
+                foreach (var boss in bossAvatar)
+                {
+                    boss.GetComponent<Image>().sprite = bossImages[3];
+                }
                 Debug.Log("this is Default card");
                 break;
 
