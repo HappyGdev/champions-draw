@@ -1,0 +1,10 @@
+# ninja log v5
+11	7272	7792692941159172	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	1de4091c3fa1d113
+210	7335	7792692941240167	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	ca22b960bd24d43e
+223	7572	7792692942957414	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	a97cbd80263ce26b
+96	8541	7792692950262645	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	45b37db8530e5775
+199	11007	7792692975690928	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	ca360a486d347e0b
+37	12890	7792692996675282	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	2201598a0c151bf7
+7281	20854	7792693077195953	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	45c19aad3df6cf54
+7336	21582	7792693084938128	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	8ce54f5eef0faeb5
+21582	21781	7792693086968504	T:/Projects/champions-draw/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/1v58223d/obj/arm64-v8a/libgame.so	4cd9082c1a662c8
