@@ -579,56 +579,109 @@ public class FirebaseManager : MonoBehaviour
 
     }
 
+    //private IEnumerator LoadScoreboardData()
+    //{
+    //    //Get all the users data ordered by kills amount
+    //    Task<DataSnapshot> DBTask = DBreference.Child("users").OrderByChild("score").GetValueAsync();
+
+    //    yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+    //    if (DBTask.Exception != null)
+    //    {
+    //        Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+    //    }
+    //    else
+    //    {
+    //        //Data has been retrieved
+    //        DataSnapshot snapshot = DBTask.Result;
+
+    //        //Destroy any existing scoreboard elements
+    //        foreach (Transform child in scoreboardContent.transform)
+    //        {
+    //            Destroy(child.gameObject);
+    //        }
+
+    //        //Loop through every users UID
+    //        foreach (DataSnapshot childSnapshot in snapshot.Children.Reverse<DataSnapshot>())
+    //        {
+    //            //Instantiate new scoreboard elements
+    //            string username = "Unknown";
+
+    //            if (childSnapshot.HasChild("username") && childSnapshot.Child("username").Value != null)
+    //            {
+    //                username = childSnapshot.Child("username").Value.ToString();
+    //            }
+    //            else
+    //            {
+    //                Debug.LogWarning("Username missing for user: " + childSnapshot.Key);
+    //                continue; // or skip this user if username is critical
+    //            }
+    //            //string username = childSnapshot.Child("username").Value.ToString();
+
+    //            //int kills = int.Parse(childSnapshot.Child("kills").Value.ToString());
+    //            //int deaths = int.Parse(childSnapshot.Child("deaths").Value.ToString());
+    //            int score = int.Parse(childSnapshot.Child("score").Value.ToString());
+
+    //            //Instantiate new scoreboard elements
+    //            GameObject scoreboardElement = Instantiate(scoreElement, scoreboardContent);
+    //            scoreboardElement.GetComponent<ScoreElement>().NewScoreElement(username, score);
+    //        }
+
+    //        //Go to scoareboard screen
+    //        //UIManager.instance.ScoreboardScreen();
+    //    }
+    //}
     private IEnumerator LoadScoreboardData()
     {
-        //Get all the users data ordered by kills amount
+        // Get all users data ordered by score
         Task<DataSnapshot> DBTask = DBreference.Child("users").OrderByChild("score").GetValueAsync();
-
-        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+        yield return new WaitUntil(() => DBTask.IsCompleted);
 
         if (DBTask.Exception != null)
         {
-            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+            Debug.LogWarning($"Failed to load leaderboard: {DBTask.Exception}");
         }
         else
         {
-            //Data has been retrieved
             DataSnapshot snapshot = DBTask.Result;
 
-            //Destroy any existing scoreboard elements
+            // Clear existing elements
             foreach (Transform child in scoreboardContent.transform)
             {
                 Destroy(child.gameObject);
             }
 
-            //Loop through every users UID
+            int rank = 1;
+
+            // Iterate through users in descending score order
             foreach (DataSnapshot childSnapshot in snapshot.Children.Reverse<DataSnapshot>())
             {
-                //Instantiate new scoreboard elements
                 string username = "Unknown";
+                int score = 0;
+                int profileNumber = 0;
 
                 if (childSnapshot.HasChild("username") && childSnapshot.Child("username").Value != null)
                 {
                     username = childSnapshot.Child("username").Value.ToString();
                 }
-                else
+
+                if (childSnapshot.HasChild("score") && childSnapshot.Child("score").Value != null)
                 {
-                    Debug.LogWarning("Username missing for user: " + childSnapshot.Key);
-                    continue; // or skip this user if username is critical
+                    int.TryParse(childSnapshot.Child("score").Value.ToString(), out score);
                 }
-                //string username = childSnapshot.Child("username").Value.ToString();
 
-                //int kills = int.Parse(childSnapshot.Child("kills").Value.ToString());
-                //int deaths = int.Parse(childSnapshot.Child("deaths").Value.ToString());
-                int score = int.Parse(childSnapshot.Child("score").Value.ToString());
+                if (childSnapshot.HasChild("userProfileNumber") && childSnapshot.Child("userProfileNumber").Value != null)
+                {
+                    int.TryParse(childSnapshot.Child("userProfileNumber").Value.ToString(), out profileNumber);
+                }
 
-                //Instantiate new scoreboard elements
                 GameObject scoreboardElement = Instantiate(scoreElement, scoreboardContent);
-                scoreboardElement.GetComponent<ScoreElement>().NewScoreElement(username, score);
+                scoreboardElement.GetComponent<ScoreElement>().NewScoreElement(username, score, profileNumber, rank);
+                rank++;
             }
 
-            //Go to scoareboard screen
-            //UIManager.instance.ScoreboardScreen();
+            // Optional: Show scoreboard UI panel
+            dataPanel.SetActive(true);
         }
     }
 

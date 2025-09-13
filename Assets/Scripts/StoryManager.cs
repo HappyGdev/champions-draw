@@ -18,11 +18,11 @@ public class StoryManagere : MonoBehaviour
     public GameObject[] bossAvatar;
     [Space]
     [Header ("Boss Cards")]
-    public List<Card> bossGammaCards;
-    public List<Card> bossBetaCards;
-    public List<Card> bossAlphaCards;
-    public List<Card> bot1;
-    public List<Card> bot2;
+    public List<Card> tutoialBossCards;
+    public List<Card> enemy1BossCards;
+    public List<Card> enemy2BossCards;
+    public List<Card> enemy3BossCards;
+    public List<Card> gammaBossCards;
     public List<Card> bot3;
     public List <Card> defaultCards;
     [Space]
@@ -108,7 +108,7 @@ public class StoryManagere : MonoBehaviour
         switch (currentBoss)
         {
             case 0:
-                OnBossCards?.Invoke(bot1);
+                OnBossCards?.Invoke(enemy3BossCards);
                 foreach (var boss in bossAvatar)
                 {
                     boss.GetComponent<Image>().sprite = bossImages[3];
@@ -117,7 +117,7 @@ public class StoryManagere : MonoBehaviour
                 break;
 
             case 1:
-                OnBossCards?.Invoke(bossGammaCards);
+                OnBossCards?.Invoke(tutoialBossCards);
                 foreach (var boss in bossAvatar)
                 {
                     boss.GetComponent<Image>().sprite = bossImages[0];
@@ -128,7 +128,7 @@ public class StoryManagere : MonoBehaviour
                 break;
 
             case 2:
-                OnBossCards?.Invoke(bot2);
+                OnBossCards?.Invoke(gammaBossCards);
                 foreach (var boss in bossAvatar)
                 {
                     boss.GetComponent<Image>().sprite = bossImages[3];
@@ -137,7 +137,7 @@ public class StoryManagere : MonoBehaviour
                 //sendbadgetoleaderboard
                 break;
             case 3:
-                OnBossCards?.Invoke(bossBetaCards);
+                OnBossCards?.Invoke(enemy1BossCards);
                 foreach (var boss in bossAvatar)
                 {
                     boss.GetComponent<Image>().sprite = bossImages[1];
@@ -152,7 +152,7 @@ public class StoryManagere : MonoBehaviour
                 }                //sendbadgetoleaderboard
                 break;
             case 5:
-                OnBossCards?.Invoke(bossAlphaCards);
+                OnBossCards?.Invoke(enemy2BossCards);
                 foreach (var boss in bossAvatar)
                 {
                     boss.GetComponent<Image>().sprite = bossImages[2];
