@@ -109,7 +109,13 @@ public class ShopManager : MonoBehaviour
                 item.isUnlocked = true;
                 Debug.Log(item.itemName + " Sold!");
 
+                // ✅ Save new coin value to Firebase
+                FirebaseManager.Instance.SetCoin(playerCoins);     
+
+                // ✅ Save unlocked items
                 FirebaseManager.Instance.SaveUnlockedItems(shopItems);
+
+                // ✅ Update profile picture
                 UpdateUserPhoto(index);
             }
             else
@@ -175,7 +181,7 @@ public class ShopManager : MonoBehaviour
     //}
     public void AddCoin(int coinAmounts)
     {
-        FirebaseManager.Instance.SetAndSaveCoin(coinAmounts);
+        FirebaseManager.Instance.AddCoins(coinAmounts);
     }
 
     private void CoinAddedsuccessfully(int val)

@@ -143,56 +143,120 @@ public class FirebaseManager : MonoBehaviour
     //        StartCoroutine(UpdateCoin(coin));
     //    }
     //}
-    public void SetAndSaveCoin(int amount)
+    public void SetCoin(int absoluteAmount)
     {
-        Debug.Log("Coin Updated" + amount);
-        StartCoroutine(UpdateCoin(amount));
+        StartCoroutine(SetCoinCoroutine(absoluteAmount));
     }
-    private IEnumerator UpdateCoin(int valueToAdd)
+
+    private IEnumerator SetCoinCoroutine(int newAmount)
     {
-        // Step 1: دریافت مقدار فعلی coin از Firebase
-        var getCoinTask = DBreference.Child("users").Child(User.UserId).Child("coin").GetValueAsync();
-        yield return new WaitUntil(() => getCoinTask.IsCompleted);
-
-        if (getCoinTask.Exception != null)
-        {
-            Debug.LogWarning("Failed to retrieve current coin: " + getCoinTask.Exception);
-            InfoText.text = getCoinTask.Exception.Message;
-            yield return new WaitForSeconds(2f);
-            InfoText.text = " ";
-            yield break;
-        }
-
-        int currentCoin = 0;
-        if (getCoinTask.Result.Exists && getCoinTask.Result.Value != null)
-        {
-            currentCoin = Convert.ToInt32(getCoinTask.Result.Value);
-        }
-
-        // محاسبه مقدار جدید coin
-        int newCoin = currentCoin + valueToAdd;
-
-        //ذخیره مقدار جدید در Firebase
-        var setCoinTask = DBreference.Child("users").Child(User.UserId).Child("coin").SetValueAsync(newCoin);
+        var setCoinTask = DBreference.Child("users").Child(User.UserId).Child("coin").SetValueAsync(newAmount);
         yield return new WaitUntil(() => setCoinTask.IsCompleted);
 
         if (setCoinTask.Exception != null)
         {
-            Debug.LogWarning("Failed to update coin: " + setCoinTask.Exception);
+            Debug.LogWarning("Failed to set coin: " + setCoinTask.Exception);
             InfoText.text = setCoinTask.Exception.Message;
             yield return new WaitForSeconds(2f);
             InfoText.text = " ";
         }
         else
         {
-            // Step 4: آپدیت مقدار داخلی (local) و UI
-            coin = newCoin;
+            coin = newAmount;
             coinText.text = "Coin: " + coin;
-            PlayerPrefs.SetInt("Coin", coin); // optional: save locally
+            PlayerPrefs.SetInt("Coin", coin);
             onBuycomplete?.Invoke(coin);
-            Debug.Log($"Coin updated and saved: {valueToAdd}, total: {coin}");
+            Debug.Log($"[SetCoin] Coin set to {coin}");
         }
     }
+    public void AddCoins(int amountToAdd)
+    {
+        StartCoroutine(AddCoinsCoroutine(amountToAdd));
+    }
+
+    private IEnumerator AddCoinsCoroutine(int amount)
+    {
+        var getCoinTask = DBreference.Child("users").Child(User.UserId).Child("coin").GetValueAsync();
+        yield return new WaitUntil(() => getCoinTask.IsCompleted);
+
+        if (getCoinTask.Exception != null)
+        {
+            Debug.LogWarning("Failed to retrieve current coin: " + getCoinTask.Exception);
+            yield break;
+        }
+
+        int currentCoin = 0;
+        if (getCoinTask.Result.Exists && getCoinTask.Result.Value != null)
+            currentCoin = Convert.ToInt32(getCoinTask.Result.Value);
+
+        int newCoin = currentCoin + amount;
+
+        var setCoinTask = DBreference.Child("users").Child(User.UserId).Child("coin").SetValueAsync(newCoin);
+        yield return new WaitUntil(() => setCoinTask.IsCompleted);
+
+        if (setCoinTask.Exception != null)
+        {
+            Debug.LogWarning("Failed to add coin: " + setCoinTask.Exception);
+        }
+        else
+        {
+            coin = newCoin;
+            coinText.text = "Coin: " + coin;
+            PlayerPrefs.SetInt("Coin", coin);
+            onBuycomplete?.Invoke(coin);
+            Debug.Log($"[AddCoins] Coin updated: +{amount}, total: {coin}");
+        }
+    }
+    //public void SetAndSaveCoin(int amount)
+    //{
+    //    Debug.Log("Coin Updated" + amount);
+    //    StartCoroutine(UpdateCoin(amount));
+    //}
+    //private IEnumerator UpdateCoin(int valueToAdd)
+    //{
+    //    // Step 1: دریافت مقدار فعلی coin از Firebase
+    //    var getCoinTask = DBreference.Child("users").Child(User.UserId).Child("coin").GetValueAsync();
+    //    yield return new WaitUntil(() => getCoinTask.IsCompleted);
+
+    //    if (getCoinTask.Exception != null)
+    //    {
+    //        Debug.LogWarning("Failed to retrieve current coin: " + getCoinTask.Exception);
+    //        InfoText.text = getCoinTask.Exception.Message;
+    //        yield return new WaitForSeconds(2f);
+    //        InfoText.text = " ";
+    //        yield break;
+    //    }
+
+    //    int currentCoin = 0;
+    //    if (getCoinTask.Result.Exists && getCoinTask.Result.Value != null)
+    //    {
+    //        currentCoin = Convert.ToInt32(getCoinTask.Result.Value);
+    //    }
+
+    //    // محاسبه مقدار جدید coin
+    //    int newCoin = currentCoin + valueToAdd;
+
+    //    //ذخیره مقدار جدید در Firebase
+    //    var setCoinTask = DBreference.Child("users").Child(User.UserId).Child("coin").SetValueAsync(newCoin);
+    //    yield return new WaitUntil(() => setCoinTask.IsCompleted);
+
+    //    if (setCoinTask.Exception != null)
+    //    {
+    //        Debug.LogWarning("Failed to update coin: " + setCoinTask.Exception);
+    //        InfoText.text = setCoinTask.Exception.Message;
+    //        yield return new WaitForSeconds(2f);
+    //        InfoText.text = " ";
+    //    }
+    //    else
+    //    {
+    //        // Step 4: آپدیت مقدار داخلی (local) و UI
+    //        coin = newCoin;
+    //        coinText.text = "Coin: " + coin;
+    //        PlayerPrefs.SetInt("Coin", coin); // optional: save locally
+    //        onBuycomplete?.Invoke(coin);
+    //        Debug.Log($"Coin updated and saved: {valueToAdd}, total: {coin}");
+    //    }
+    //}
 
     private IEnumerator CheckAndInitializeFirebase()
     {
@@ -275,41 +339,6 @@ public class FirebaseManager : MonoBehaviour
         StartCoroutine(Register(emailRegisterField.text, passwordRegisterField.text, usernameRegisterField.text));
     }
 
-    //private IEnumerator Register(string _email, string _password, string _username)
-    //{
-    //    // Validate inputs
-    //    if (string.IsNullOrEmpty(_username))
-    //    {
-    //        warningRegisterText.text = "Missing Username";
-    //        yield break;
-    //    }
-    //    if (_password != passwordRegisterVerifyField.text)
-    //    {
-    //        warningRegisterText.text = "Password Does Not Match!";
-    //        yield break;
-    //    }
-
-    //    // Firebase create user
-    //    var registerTask = auth.CreateUserWithEmailAndPasswordAsync(_email, _password);
-    //    yield return new WaitUntil(() => registerTask.IsCompleted);
-
-    //    if (registerTask.Exception != null)
-    //    {
-    //        HandleRegisterError(registerTask.Exception);
-    //    }
-    //    else
-    //    {
-    //        User = registerTask.Result.User;
-
-    //        // Update display name
-    //        var profileTask = User.UpdateUserProfileAsync(new UserProfile { DisplayName = _username });
-    //        yield return new WaitUntil(() => profileTask.IsCompleted);
-    //        shopManager.ResetShop();
-    //        PlayerPrefs.SetString("SavedEmail", _email);
-    //        PlayerPrefs.SetString("SavedPassword", _password);
-    //        SetUIAfterLogin(_username);
-    //    }
-    //}
     private IEnumerator Register(string _email, string _password, string _username)
     {
         // Validate inputs
@@ -622,111 +651,6 @@ public class FirebaseManager : MonoBehaviour
 
     }
 
-    //private IEnumerator LoadScoreboardData()
-    //{
-    //    //Get all the users data ordered by kills amount
-    //    Task<DataSnapshot> DBTask = DBreference.Child("users").OrderByChild("score").GetValueAsync();
-
-    //    yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
-
-    //    if (DBTask.Exception != null)
-    //    {
-    //        Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
-    //    }
-    //    else
-    //    {
-    //        //Data has been retrieved
-    //        DataSnapshot snapshot = DBTask.Result;
-
-    //        //Destroy any existing scoreboard elements
-    //        foreach (Transform child in scoreboardContent.transform)
-    //        {
-    //            Destroy(child.gameObject);
-    //        }
-
-    //        //Loop through every users UID
-    //        foreach (DataSnapshot childSnapshot in snapshot.Children.Reverse<DataSnapshot>())
-    //        {
-    //            //Instantiate new scoreboard elements
-    //            string username = "Unknown";
-
-    //            if (childSnapshot.HasChild("username") && childSnapshot.Child("username").Value != null)
-    //            {
-    //                username = childSnapshot.Child("username").Value.ToString();
-    //            }
-    //            else
-    //            {
-    //                Debug.LogWarning("Username missing for user: " + childSnapshot.Key);
-    //                continue; // or skip this user if username is critical
-    //            }
-    //            //string username = childSnapshot.Child("username").Value.ToString();
-
-    //            //int kills = int.Parse(childSnapshot.Child("kills").Value.ToString());
-    //            //int deaths = int.Parse(childSnapshot.Child("deaths").Value.ToString());
-    //            int score = int.Parse(childSnapshot.Child("score").Value.ToString());
-
-    //            //Instantiate new scoreboard elements
-    //            GameObject scoreboardElement = Instantiate(scoreElement, scoreboardContent);
-    //            scoreboardElement.GetComponent<ScoreElement>().NewScoreElement(username, score);
-    //        }
-
-    //        //Go to scoareboard screen
-    //        //UIManager.instance.ScoreboardScreen();
-    //    }
-    //}
-    //private IEnumerator LoadScoreboardData()
-    //{
-    //    // Get all users data ordered by score
-    //    Task<DataSnapshot> DBTask = DBreference.Child("users").OrderByChild("score").GetValueAsync();
-    //    yield return new WaitUntil(() => DBTask.IsCompleted);
-
-    //    if (DBTask.Exception != null)
-    //    {
-    //        Debug.LogWarning($"Failed to load leaderboard: {DBTask.Exception}");
-    //    }
-    //    else
-    //    {
-    //        DataSnapshot snapshot = DBTask.Result;
-
-    //        // Clear existing elements
-    //        foreach (Transform child in scoreboardContent.transform)
-    //        {
-    //            Destroy(child.gameObject);
-    //        }
-
-    //        int rank = 1;
-
-    //        // Iterate through users in descending score order
-    //        foreach (DataSnapshot childSnapshot in snapshot.Children.Reverse<DataSnapshot>())
-    //        {
-    //            string username = "Unknown";
-    //            int score = 0;
-    //            int profileNumber = 0;
-
-    //            if (childSnapshot.HasChild("username") && childSnapshot.Child("username").Value != null)
-    //            {
-    //                username = childSnapshot.Child("username").Value.ToString();
-    //            }
-
-    //            if (childSnapshot.HasChild("score") && childSnapshot.Child("score").Value != null)
-    //            {
-    //                int.TryParse(childSnapshot.Child("score").Value.ToString(), out score);
-    //            }
-
-    //            if (childSnapshot.HasChild("userProfileNumber") && childSnapshot.Child("userProfileNumber").Value != null)
-    //            {
-    //                int.TryParse(childSnapshot.Child("userProfileNumber").Value.ToString(), out profileNumber);
-    //            }
-
-    //            GameObject scoreboardElement = Instantiate(scoreElement, scoreboardContent);
-    //            scoreboardElement.GetComponent<ScoreElement>().NewScoreElement(username, score, profileNumber, rank);
-    //            rank++;
-    //        }
-
-    //        // Optional: Show scoreboard UI panel
-    //        dataPanel.SetActive(true);
-    //    }
-    //}
     private IEnumerator LoadScoreboardData()
     {
         // Get all users data ordered by score
