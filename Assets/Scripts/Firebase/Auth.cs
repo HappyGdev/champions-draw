@@ -245,6 +245,7 @@ public class FirebaseManager : MonoBehaviour
 
             yield return StartCoroutine(LoadUserData()); // ✅ صبر کن تا لود کامل بشه
 
+            yield return StartCoroutine(UpdateEmailDatabase(_email));
 
             SetUIAfterLogin(User.DisplayName);
         }
@@ -274,6 +275,41 @@ public class FirebaseManager : MonoBehaviour
         StartCoroutine(Register(emailRegisterField.text, passwordRegisterField.text, usernameRegisterField.text));
     }
 
+    //private IEnumerator Register(string _email, string _password, string _username)
+    //{
+    //    // Validate inputs
+    //    if (string.IsNullOrEmpty(_username))
+    //    {
+    //        warningRegisterText.text = "Missing Username";
+    //        yield break;
+    //    }
+    //    if (_password != passwordRegisterVerifyField.text)
+    //    {
+    //        warningRegisterText.text = "Password Does Not Match!";
+    //        yield break;
+    //    }
+
+    //    // Firebase create user
+    //    var registerTask = auth.CreateUserWithEmailAndPasswordAsync(_email, _password);
+    //    yield return new WaitUntil(() => registerTask.IsCompleted);
+
+    //    if (registerTask.Exception != null)
+    //    {
+    //        HandleRegisterError(registerTask.Exception);
+    //    }
+    //    else
+    //    {
+    //        User = registerTask.Result.User;
+
+    //        // Update display name
+    //        var profileTask = User.UpdateUserProfileAsync(new UserProfile { DisplayName = _username });
+    //        yield return new WaitUntil(() => profileTask.IsCompleted);
+    //        shopManager.ResetShop();
+    //        PlayerPrefs.SetString("SavedEmail", _email);
+    //        PlayerPrefs.SetString("SavedPassword", _password);
+    //        SetUIAfterLogin(_username);
+    //    }
+    //}
     private IEnumerator Register(string _email, string _password, string _username)
     {
         // Validate inputs
@@ -300,16 +336,23 @@ public class FirebaseManager : MonoBehaviour
         {
             User = registerTask.Result.User;
 
-            // Update display name
+            // ✅ Update display name in Firebase Auth
             var profileTask = User.UpdateUserProfileAsync(new UserProfile { DisplayName = _username });
             yield return new WaitUntil(() => profileTask.IsCompleted);
-            shopManager.ResetShop();
+
+            // ✅ Save username to database
+            yield return StartCoroutine(UpdateUsernameDatabase(_username));
+
+            // ✅ Save credentials locally
             PlayerPrefs.SetString("SavedEmail", _email);
             PlayerPrefs.SetString("SavedPassword", _password);
+            PlayerPrefs.Save();
+            yield return StartCoroutine(UpdateEmailDatabase(_email));
+            // ✅ Reset shop, then continue
+            shopManager.ResetShop();
             SetUIAfterLogin(_username);
         }
     }
-
     private void HandleRegisterError(System.Exception exception)
     {
         FirebaseException firebaseEx = exception.GetBaseException() as FirebaseException;
@@ -631,6 +674,59 @@ public class FirebaseManager : MonoBehaviour
     //        //UIManager.instance.ScoreboardScreen();
     //    }
     //}
+    //private IEnumerator LoadScoreboardData()
+    //{
+    //    // Get all users data ordered by score
+    //    Task<DataSnapshot> DBTask = DBreference.Child("users").OrderByChild("score").GetValueAsync();
+    //    yield return new WaitUntil(() => DBTask.IsCompleted);
+
+    //    if (DBTask.Exception != null)
+    //    {
+    //        Debug.LogWarning($"Failed to load leaderboard: {DBTask.Exception}");
+    //    }
+    //    else
+    //    {
+    //        DataSnapshot snapshot = DBTask.Result;
+
+    //        // Clear existing elements
+    //        foreach (Transform child in scoreboardContent.transform)
+    //        {
+    //            Destroy(child.gameObject);
+    //        }
+
+    //        int rank = 1;
+
+    //        // Iterate through users in descending score order
+    //        foreach (DataSnapshot childSnapshot in snapshot.Children.Reverse<DataSnapshot>())
+    //        {
+    //            string username = "Unknown";
+    //            int score = 0;
+    //            int profileNumber = 0;
+
+    //            if (childSnapshot.HasChild("username") && childSnapshot.Child("username").Value != null)
+    //            {
+    //                username = childSnapshot.Child("username").Value.ToString();
+    //            }
+
+    //            if (childSnapshot.HasChild("score") && childSnapshot.Child("score").Value != null)
+    //            {
+    //                int.TryParse(childSnapshot.Child("score").Value.ToString(), out score);
+    //            }
+
+    //            if (childSnapshot.HasChild("userProfileNumber") && childSnapshot.Child("userProfileNumber").Value != null)
+    //            {
+    //                int.TryParse(childSnapshot.Child("userProfileNumber").Value.ToString(), out profileNumber);
+    //            }
+
+    //            GameObject scoreboardElement = Instantiate(scoreElement, scoreboardContent);
+    //            scoreboardElement.GetComponent<ScoreElement>().NewScoreElement(username, score, profileNumber, rank);
+    //            rank++;
+    //        }
+
+    //        // Optional: Show scoreboard UI panel
+    //        dataPanel.SetActive(true);
+    //    }
+    //}
     private IEnumerator LoadScoreboardData()
     {
         // Get all users data ordered by score
@@ -660,9 +756,16 @@ public class FirebaseManager : MonoBehaviour
                 int score = 0;
                 int profileNumber = 0;
 
+                // ✅ Use username if available
                 if (childSnapshot.HasChild("username") && childSnapshot.Child("username").Value != null)
                 {
                     username = childSnapshot.Child("username").Value.ToString();
+                }
+                else if (childSnapshot.HasChild("email") && childSnapshot.Child("email").Value != null)
+                {
+                    // ✅ Fallback to email (before '@')
+                    string email = childSnapshot.Child("email").Value.ToString();
+                    username = email.Contains("@") ? email.Split('@')[0] : email;
                 }
 
                 if (childSnapshot.HasChild("score") && childSnapshot.Child("score").Value != null)
@@ -680,11 +783,15 @@ public class FirebaseManager : MonoBehaviour
                 rank++;
             }
 
-            // Optional: Show scoreboard UI panel
+            // Show scoreboard UI panel
             dataPanel.SetActive(true);
         }
     }
-
+    private IEnumerator UpdateEmailDatabase(string email)
+    {
+        var task = DBreference.Child("users").Child(User.UserId).Child("email").SetValueAsync(email);
+        yield return new WaitUntil(() => task.IsCompleted);
+    }
     #endregion
 
     #region Shop
