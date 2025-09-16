@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using Unity.VisualScripting;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class ShopItem
@@ -26,9 +27,23 @@ public class ShopManager : MonoBehaviour
     public TextMeshProUGUI shopCoinText;
 
     public ShopItem[] shopItems;
+    public GameObject[] profileAvatrs;
+    public GameObject[] avatarLocks;
+
     public GameObject userPic;
     [Header ("badge")]
     public GameObject[] badges;
+
+    [Header("Booster Packs")]
+    public Button boosterPack1Button;
+    public Button boosterPack2Button;
+    public TextMeshProUGUI booster1Text;
+    public TextMeshProUGUI booster2Text;
+    public int booster1Price = 100;
+    public int booster2Price = 200;
+
+    public CardHolder cardHolder;
+
 
     void Start()
     {
@@ -40,7 +55,60 @@ public class ShopManager : MonoBehaviour
             int index = i; 
             shopItems[i].button.onClick.AddListener(() => OnItemClick(index));
         }
+
+        boosterPack1Button.onClick.AddListener(() => BuyBooster(1));
+        boosterPack2Button.onClick.AddListener(() => BuyBooster(2));
+
+        UpdateBoosterUI(1, false);
+        UpdateBoosterUI(2, false);
     }
+    void BuyBooster(int boosterNumber)
+    {
+        int price = boosterNumber == 1 ? booster1Price : booster2Price;
+
+        if (playerCoins < price)
+        {
+            Debug.Log("Not enough coins for Booster Pack " + boosterNumber);
+            return;
+        }
+
+        playerCoins -= price;
+        FirebaseManager.Instance.SetCoin(playerCoins);
+
+        // Mark booster as purchased in Firebase
+        FirebaseManager.Instance.MarkBoosterAsBought(boosterNumber);
+
+        // Add booster cards to player's available cards
+        List<Card> boosterCards = boosterNumber == 1 ? cardHolder.BoosterPack1 : cardHolder.BoosterPack2;
+
+        foreach (var card in boosterCards)
+        {
+            if (!cardHolder.PlayerAvaiableCards.Contains(card))
+            {
+                cardHolder.PlayerAvaiableCards.Add(card);
+            }
+        }
+
+        // Save the updated player card list to Firebase if needed (optional)
+
+        UpdateBoosterUI(boosterNumber, true);
+
+        Debug.Log($"Booster Pack {boosterNumber} purchased.");
+    }
+    public void UpdateBoosterUI(int boosterNumber, bool isBought)
+    {
+        if (boosterNumber == 1)
+        {
+            boosterPack1Button.interactable = !isBought;
+            booster1Text.text = isBought ? "SOLD" : booster1Price.ToString();
+        }
+        else if (boosterNumber == 2)
+        {
+            boosterPack2Button.interactable = !isBought;
+            booster2Text.text = isBought ? "SOLD" : booster2Price.ToString();
+        }
+    }
+
     void LoadCoin()
     {
         playerCoins = PlayerPrefs.GetInt("Coin");
@@ -93,6 +161,27 @@ public class ShopManager : MonoBehaviour
                 // if we have Enough Money Enabled
                 shopItems[i].button.interactable = playerCoins >= shopItems[i].price;
                 shopItems[i].lockIco.SetActive(true);
+            }
+        }
+        UpdateAvatars();
+    }
+    private void UpdateAvatars()
+    {
+        foreach (var avatars in profileAvatrs) 
+        { 
+            avatars.GetComponent<Button>().enabled = false;
+        }
+        foreach (var locks in avatarLocks)
+        {
+            locks.SetActive(true);
+        }
+
+        for (int i = 0; i < shopItems.Length; i++)
+        {
+            if (shopItems[i].isUnlocked)
+            {
+                profileAvatrs[i].GetComponent<Button>().enabled = true;
+                avatarLocks[i].SetActive(false); 
             }
         }
     }
@@ -170,15 +259,8 @@ public class ShopManager : MonoBehaviour
         Debug.Log("Remove Ads");
     }
 
-    //public void AddCoin(int coinAmounts)
-    //{
-    //    int currentValue;
-    //    if (int.TryParse(shopCoinText.text, out currentValue))
-    //    {
-    //        currentValue += coinAmounts;
-    //        shopCoinText.text = currentValue.ToString();
-    //    }
-    //}
+    
+
     public void AddCoin(int coinAmounts)
     {
         FirebaseManager.Instance.AddCoins(coinAmounts);

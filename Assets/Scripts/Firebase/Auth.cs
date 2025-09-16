@@ -50,15 +50,11 @@ public class FirebaseManager : MonoBehaviour
     #region User Data UI
     [Header("User Data")]
     public TMP_InputField usernameField;
-    //public TMP_InputField scoreField;
-    //public TMP_InputField killsField;
-    //public TMP_InputField deathsField;
-    //public TMP_InputField userProfileNumber_txt;
     public GameObject scoreElement;
     public Transform scoreboardContent;
     public int coin;
     public TMP_Text coinText;
-
+    public CardHolder cardHolder;
 
     #endregion
 
@@ -129,20 +125,7 @@ public class FirebaseManager : MonoBehaviour
         isCheckingAutoLogin = false;
         if (autoLoginText != null) autoLoginText.text = "";
     }
-    //public int GetCoin()
-    //{
-    //    return coin;
-    //}
-    //private void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.Space) && User != null)
-    //    {
-    //        coin += 10;
-    //        Debug.Log("Coin increased to: " + coin);
-    //        coinText.text = "Coin: " + coin;
-    //        StartCoroutine(UpdateCoin(coin));
-    //    }
-    //}
+
     public void SetCoin(int absoluteAmount)
     {
         StartCoroutine(SetCoinCoroutine(absoluteAmount));
@@ -207,56 +190,6 @@ public class FirebaseManager : MonoBehaviour
             Debug.Log($"[AddCoins] Coin updated: +{amount}, total: {coin}");
         }
     }
-    //public void SetAndSaveCoin(int amount)
-    //{
-    //    Debug.Log("Coin Updated" + amount);
-    //    StartCoroutine(UpdateCoin(amount));
-    //}
-    //private IEnumerator UpdateCoin(int valueToAdd)
-    //{
-    //    // Step 1: دریافت مقدار فعلی coin از Firebase
-    //    var getCoinTask = DBreference.Child("users").Child(User.UserId).Child("coin").GetValueAsync();
-    //    yield return new WaitUntil(() => getCoinTask.IsCompleted);
-
-    //    if (getCoinTask.Exception != null)
-    //    {
-    //        Debug.LogWarning("Failed to retrieve current coin: " + getCoinTask.Exception);
-    //        InfoText.text = getCoinTask.Exception.Message;
-    //        yield return new WaitForSeconds(2f);
-    //        InfoText.text = " ";
-    //        yield break;
-    //    }
-
-    //    int currentCoin = 0;
-    //    if (getCoinTask.Result.Exists && getCoinTask.Result.Value != null)
-    //    {
-    //        currentCoin = Convert.ToInt32(getCoinTask.Result.Value);
-    //    }
-
-    //    // محاسبه مقدار جدید coin
-    //    int newCoin = currentCoin + valueToAdd;
-
-    //    //ذخیره مقدار جدید در Firebase
-    //    var setCoinTask = DBreference.Child("users").Child(User.UserId).Child("coin").SetValueAsync(newCoin);
-    //    yield return new WaitUntil(() => setCoinTask.IsCompleted);
-
-    //    if (setCoinTask.Exception != null)
-    //    {
-    //        Debug.LogWarning("Failed to update coin: " + setCoinTask.Exception);
-    //        InfoText.text = setCoinTask.Exception.Message;
-    //        yield return new WaitForSeconds(2f);
-    //        InfoText.text = " ";
-    //    }
-    //    else
-    //    {
-    //        // Step 4: آپدیت مقدار داخلی (local) و UI
-    //        coin = newCoin;
-    //        coinText.text = "Coin: " + coin;
-    //        PlayerPrefs.SetInt("Coin", coin); // optional: save locally
-    //        onBuycomplete?.Invoke(coin);
-    //        Debug.Log($"Coin updated and saved: {valueToAdd}, total: {coin}");
-    //    }
-    //}
 
     private IEnumerator CheckAndInitializeFirebase()
     {
@@ -339,9 +272,122 @@ public class FirebaseManager : MonoBehaviour
         StartCoroutine(Register(emailRegisterField.text, passwordRegisterField.text, usernameRegisterField.text));
     }
 
+    //private IEnumerator Register(string _email, string _password, string _username)
+    //{
+    //    // Validate inputs
+    //    if (string.IsNullOrEmpty(_username))
+    //    {
+    //        warningRegisterText.text = "Missing Username";
+    //        yield break;
+    //    }
+    //    if (_password != passwordRegisterVerifyField.text)
+    //    {
+    //        warningRegisterText.text = "Password Does Not Match!";
+    //        yield break;
+    //    }
+
+    //    // Firebase create user
+    //    var registerTask = auth.CreateUserWithEmailAndPasswordAsync(_email, _password);
+    //    yield return new WaitUntil(() => registerTask.IsCompleted);
+
+    //    if (registerTask.Exception != null)
+    //    {
+    //        HandleRegisterError(registerTask.Exception);
+    //    }
+    //    else
+    //    {
+    //        User = registerTask.Result.User;
+
+    //        // ✅ Update display name in Firebase Auth
+    //        var profileTask = User.UpdateUserProfileAsync(new UserProfile { DisplayName = _username });
+    //        yield return new WaitUntil(() => profileTask.IsCompleted);
+
+    //        // ✅ Save username to database
+    //        yield return StartCoroutine(UpdateUsernameDatabase(_username));
+
+    //        // ✅ Save credentials locally
+    //        PlayerPrefs.SetString("SavedEmail", _email);
+    //        PlayerPrefs.SetString("SavedPassword", _password);
+    //        PlayerPrefs.Save();
+    //        yield return StartCoroutine(UpdateEmailDatabase(_email));
+    //        // ✅ Reset shop, then continue
+    //        shopManager.ResetShop();
+    //        SetUIAfterLogin(_username);
+    //    }
+    //}
+    //private IEnumerator Register(string _email, string _password, string _username)
+    //{
+    //    // ✅ Validate inputs
+    //    if (string.IsNullOrEmpty(_username))
+    //    {
+    //        warningRegisterText.text = "Missing Username";
+    //        yield break;
+    //    }
+    //    if (_password != passwordRegisterVerifyField.text)
+    //    {
+    //        warningRegisterText.text = "Password Does Not Match!";
+    //        yield break;
+    //    }
+
+    //    // ✅ Firebase create user
+    //    var registerTask = auth.CreateUserWithEmailAndPasswordAsync(_email, _password);
+    //    yield return new WaitUntil(() => registerTask.IsCompleted);
+
+    //    if (registerTask.Exception != null)
+    //    {
+    //        HandleRegisterError(registerTask.Exception);
+    //    }
+    //    else
+    //    {
+    //        // ✅ User created successfully
+    //        User = registerTask.Result.User;
+
+    //        // ✅ Set display name in Firebase Auth
+    //        var profileTask = User.UpdateUserProfileAsync(new UserProfile { DisplayName = _username });
+    //        yield return new WaitUntil(() => profileTask.IsCompleted);
+
+    //        // ✅ Save username + email in database
+    //        yield return StartCoroutine(UpdateUsernameDatabase(_username));
+    //        yield return StartCoroutine(UpdateEmailDatabase(_email));
+
+    //        // ============================
+    //        // 🔹 Initialize user data here
+    //        // ============================
+
+    //        // Start coins (set to 0 or your starting amount, e.g. 100)
+    //        yield return StartCoroutine(SetCoinCoroutine(0));
+
+    //        // Create boosters entry (not bought yet)
+    //        var boostersTask = DBreference.Child("users").Child(User.UserId).Child("boosters").SetRawJsonValueAsync("{}");
+    //        yield return new WaitUntil(() => boostersTask.IsCompleted);
+
+    //        // Create badges entry (not unlocked yet)
+    //        var badgesTask = DBreference.Child("users").Child(User.UserId).Child("badges").SetRawJsonValueAsync("{}");
+    //        yield return new WaitUntil(() => badgesTask.IsCompleted);
+
+    //        // Empty unlocked items
+    //        var unlockedTask = DBreference.Child("users").Child(User.UserId).Child("unlockedItems").SetRawJsonValueAsync("[]");
+    //        yield return new WaitUntil(() => unlockedTask.IsCompleted);
+
+    //        // Default profile picture
+    //        var profileTaskDB = DBreference.Child("users").Child(User.UserId).Child("userProfileNumber").SetValueAsync(0);
+    //        yield return new WaitUntil(() => profileTaskDB.IsCompleted);
+
+    //        // ============================
+
+    //        // ✅ Save credentials locally
+    //        PlayerPrefs.SetString("SavedEmail", _email);
+    //        PlayerPrefs.SetString("SavedPassword", _password);
+    //        PlayerPrefs.Save();
+
+    //        // ✅ Reset shop + set UI
+    //        shopManager.ResetShop();
+    //        SetUIAfterLogin(_username);
+    //    }
+    //}
     private IEnumerator Register(string _email, string _password, string _username)
     {
-        // Validate inputs
+        // ✅ Validate inputs
         if (string.IsNullOrEmpty(_username))
         {
             warningRegisterText.text = "Missing Username";
@@ -353,7 +399,7 @@ public class FirebaseManager : MonoBehaviour
             yield break;
         }
 
-        // Firebase create user
+        // ✅ Firebase create user
         var registerTask = auth.CreateUserWithEmailAndPasswordAsync(_email, _password);
         yield return new WaitUntil(() => registerTask.IsCompleted);
 
@@ -363,25 +409,46 @@ public class FirebaseManager : MonoBehaviour
         }
         else
         {
+            // ✅ User created successfully
             User = registerTask.Result.User;
 
-            // ✅ Update display name in Firebase Auth
+            // ✅ Set display name in Firebase Auth
             var profileTask = User.UpdateUserProfileAsync(new UserProfile { DisplayName = _username });
             yield return new WaitUntil(() => profileTask.IsCompleted);
 
-            // ✅ Save username to database
+            // ✅ Save username + email in database
             yield return StartCoroutine(UpdateUsernameDatabase(_username));
+            yield return StartCoroutine(UpdateEmailDatabase(_email));
+
+            yield return StartCoroutine(SetCoinCoroutine(0)); // start coins
+
+            var boostersTask = DBreference.Child("users").Child(User.UserId).Child("boosters").SetRawJsonValueAsync("{}");
+            yield return new WaitUntil(() => boostersTask.IsCompleted);
+
+            var badgesTask = DBreference.Child("users").Child(User.UserId).Child("badges").SetRawJsonValueAsync("{}");
+            yield return new WaitUntil(() => badgesTask.IsCompleted);
+
+            var unlockedTask = DBreference.Child("users").Child(User.UserId).Child("unlockedItems").SetRawJsonValueAsync("[]");
+            yield return new WaitUntil(() => unlockedTask.IsCompleted);
+
+            var profileTaskDB = DBreference.Child("users").Child(User.UserId).Child("userProfileNumber").SetValueAsync(0);
+            yield return new WaitUntil(() => profileTaskDB.IsCompleted);
 
             // ✅ Save credentials locally
             PlayerPrefs.SetString("SavedEmail", _email);
             PlayerPrefs.SetString("SavedPassword", _password);
             PlayerPrefs.Save();
-            yield return StartCoroutine(UpdateEmailDatabase(_email));
-            // ✅ Reset shop, then continue
+
+            // ✅ Reset shop + set UI
             shopManager.ResetShop();
             SetUIAfterLogin(_username);
+
+            // ✅ Refresh boosters/coins/badges for the new user
+            yield return StartCoroutine(LoadUserData());
         }
     }
+
+
     private void HandleRegisterError(System.Exception exception)
     {
         FirebaseException firebaseEx = exception.GetBaseException() as FirebaseException;
@@ -460,9 +527,6 @@ public class FirebaseManager : MonoBehaviour
         StartCoroutine(UpdateUsernameDatabase(username));
         var myscore = ScoreManager.Instance.GetScore();
         StartCoroutine(UpdateScore(myscore)); 
-        //StartCoroutine(UpdateXp(int.Parse(xpField.text)));
-        //StartCoroutine(UpdateKills(int.Parse(killsField.text)));
-        //StartCoroutine(UpdateDeaths(int.Parse(deathsField.text)));
     }
 
     public void ScoreboardButton()
@@ -593,10 +657,6 @@ public class FirebaseManager : MonoBehaviour
         }
         else if (DBTask.Result.Value == null)
         {
-            //No data exists yet
-            //scoreField.text = "0";
-            //killsField.text = "0";
-            //deathsField.text = "0";
             Debug.Log("In Value Null");
             PlayerPrefs.SetInt("Coin", 0);
         }
@@ -606,6 +666,49 @@ public class FirebaseManager : MonoBehaviour
 
             //Data has been retrieved
             DataSnapshot snapshot = DBTask.Result;
+
+            if (snapshot.Child("boosters").Exists)
+            {
+                // Clear previous cards before adding starter + booster cards
+                cardHolder.PlayerAvaiableCards.Clear();
+
+                // Always add starter cards
+                cardHolder.PlayerAvaiableCards.AddRange(cardHolder.StarterCards);  // <-- Add your starter cards here!
+
+                DataSnapshot boosters = snapshot.Child("boosters");
+
+                // Add booster1 cards if bought
+                if (boosters.HasChild("booster1") && Convert.ToInt32(boosters.Child("booster1").Value) == 1)
+                {
+                    shopManager.UpdateBoosterUI(1, true);
+                    cardHolder.PlayerAvaiableCards.AddRange(cardHolder.BoosterPack1);
+                }
+                else
+                {
+                    shopManager.UpdateBoosterUI(1, false);
+                }
+
+                // Add booster2 cards if bought
+                if (boosters.HasChild("booster2") && Convert.ToInt32(boosters.Child("booster2").Value) == 1)
+                {
+                    shopManager.UpdateBoosterUI(2, true);
+                    cardHolder.PlayerAvaiableCards.AddRange(cardHolder.BoosterPack2);
+                }
+                else
+                {
+                    shopManager.UpdateBoosterUI(2, false);
+                }
+            }
+            else
+            {
+                // No boosters found, just clear and add starter cards
+                cardHolder.PlayerAvaiableCards.Clear();
+                cardHolder.PlayerAvaiableCards.AddRange(cardHolder.StarterCards);
+
+                shopManager.UpdateBoosterUI(1, false);
+                shopManager.UpdateBoosterUI(2, false);
+            }
+
             if (snapshot.Child("coin").Value != null)
             {
                 coin = Convert.ToInt32(snapshot.Child("coin").Value);
@@ -639,16 +742,10 @@ public class FirebaseManager : MonoBehaviour
             {
                 shopManager.UpdateUserPhoto(0);
             }
-            //scoreField.text = snapshot.Child("score").Value.ToString();
-            //killsField.text = snapshot.Child("kills").Value.ToString();
-            //deathsField.text = snapshot.Child("deaths").Value.ToString();
             LoadBadges(snapshot);
 
             coinText.text = "Coin: " + coin; // ✅ مقدار UI را به‌روزرسانی کن
-
         }
-
-
     }
 
     private IEnumerator LoadScoreboardData()
@@ -715,6 +812,26 @@ public class FirebaseManager : MonoBehaviour
     {
         var task = DBreference.Child("users").Child(User.UserId).Child("email").SetValueAsync(email);
         yield return new WaitUntil(() => task.IsCompleted);
+    }
+    public void MarkBoosterAsBought(int boosterNumber)
+    {
+        StartCoroutine(MarkBoosterCoroutine(boosterNumber));
+    }
+
+    private IEnumerator MarkBoosterCoroutine(int boosterNumber)
+    {
+        var task = DBreference.Child("users").Child(User.UserId)
+            .Child("boosters").Child("booster" + boosterNumber).SetValueAsync(1);
+        yield return new WaitUntil(() => task.IsCompleted);
+
+        if (task.Exception != null)
+        {
+            Debug.LogWarning("Failed to save booster purchase: " + task.Exception);
+        }
+        else
+        {
+            Debug.Log($"Booster {boosterNumber} marked as purchased in Firebase.");
+        }
     }
     #endregion
 
@@ -814,22 +931,15 @@ public class FirebaseManager : MonoBehaviour
             {
                 shopManager.LoadBadges(0, 1);
             }
-
             Debug.Log("Badge 1: " + badge1);
             Debug.Log("Badge 2: " + badge2);
-
-            // TODO UI
         }
         else
         {
             Debug.Log("badges dont exists");
             shopManager.LoadBadges(0, 0);
             shopManager.LoadBadges(0, 0);
-
         }
-
     }
-
-
     #endregion
 }

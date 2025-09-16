@@ -15,6 +15,9 @@ public class CardHolder : MonoBehaviour
     public List<Card> BossCard = new List<Card>();
 
     public List<Card> StarterCards = new List<Card>();
+    public List<Card> BoosterPack1 = new List<Card>();
+    public List<Card> BoosterPack2= new List<Card>();
+
     public List<Card> PlayerAvaiableCards = new List<Card>();
 
     public List<Card> allCardsInGame =new List<Card>();

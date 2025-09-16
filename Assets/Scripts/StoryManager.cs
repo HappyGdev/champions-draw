@@ -22,8 +22,8 @@ public class StoryManagere : MonoBehaviour
     public List<Card> enemy1BossCards;
     public List<Card> enemy2BossCards;
     public List<Card> enemy3BossCards;
+    public List<Card> enemy4BossCards;
     public List<Card> gammaBossCards;
-    public List<Card> bot3;
     public List <Card> defaultCards;
     [Space]
     [Header("Panels")]
@@ -108,19 +108,19 @@ public class StoryManagere : MonoBehaviour
         switch (currentBoss)
         {
             case 0:
-                OnBossCards?.Invoke(enemy3BossCards);
+                OnBossCards?.Invoke(tutoialBossCards);
                 foreach (var boss in bossAvatar)
                 {
-                    boss.GetComponent<Image>().sprite = bossImages[3];
+                    boss.GetComponent<Image>().sprite = bossImages[0];
                 }
                 Debug.Log("bossGammaCards");
                 break;
 
             case 1:
-                OnBossCards?.Invoke(tutoialBossCards);
+                OnBossCards?.Invoke(enemy1BossCards);
                 foreach (var boss in bossAvatar)
                 {
-                    boss.GetComponent<Image>().sprite = bossImages[0];
+                    boss.GetComponent<Image>().sprite = bossImages[1];
                 }
                 Debug.Log("bossBetaCards");
                 FirebaseManager.Instance.SaveBadge(1);
@@ -128,34 +128,34 @@ public class StoryManagere : MonoBehaviour
                 break;
 
             case 2:
-                OnBossCards?.Invoke(gammaBossCards);
+                OnBossCards?.Invoke(enemy2BossCards);
                 foreach (var boss in bossAvatar)
                 {
-                    boss.GetComponent<Image>().sprite = bossImages[3];
+                    boss.GetComponent<Image>().sprite = bossImages[2];
                 }
                 FirebaseManager.Instance.SaveBadge(2);
                 //sendbadgetoleaderboard
                 break;
             case 3:
-                OnBossCards?.Invoke(enemy1BossCards);
+                OnBossCards?.Invoke(enemy3BossCards);
                 foreach (var boss in bossAvatar)
                 {
-                    boss.GetComponent<Image>().sprite = bossImages[1];
+                    boss.GetComponent<Image>().sprite = bossImages[3];
                 }
                 //sendbadgetoleaderboard
                 break;
             case 4:
-                OnBossCards?.Invoke(bot3);
+                OnBossCards?.Invoke(enemy4BossCards);
                 foreach (var boss in bossAvatar)
                 {
-                    boss.GetComponent<Image>().sprite = bossImages[3];
+                    boss.GetComponent<Image>().sprite = bossImages[4];
                 }                //sendbadgetoleaderboard
                 break;
             case 5:
-                OnBossCards?.Invoke(enemy2BossCards);
+                OnBossCards?.Invoke(gammaBossCards);
                 foreach (var boss in bossAvatar)
                 {
-                    boss.GetComponent<Image>().sprite = bossImages[2];
+                    boss.GetComponent<Image>().sprite = bossImages[5];
                 }                //sendbadgetoleaderboard
                 break;
 
@@ -163,7 +163,7 @@ public class StoryManagere : MonoBehaviour
                 OnBossCards?.Invoke(defaultCards);
                 foreach (var boss in bossAvatar)
                 {
-                    boss.GetComponent<Image>().sprite = bossImages[3];
+                    boss.GetComponent<Image>().sprite = bossImages[2];
                 }
                 Debug.Log("this is Default card");
                 break;
