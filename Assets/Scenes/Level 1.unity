@@ -11195,11 +11195,59 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b770ad51ad76aa84e8c35e833fc35378, type: 2}
   - {fileID: 11400000, guid: 914464cc4ec6fe64f826ada52a6482da, type: 2}
   - {fileID: 11400000, guid: 63e938213a0a12f4b85395715ced7962, type: 2}
-  enemy1BossCards: []
-  enemy2BossCards: []
-  enemy3BossCards: []
-  enemy4BossCards: []
-  gammaBossCards: []
+  enemy1BossCards:
+  - {fileID: 11400000, guid: 466756ca34e4cb64e9289686d67e20a0, type: 2}
+  - {fileID: 11400000, guid: 91cca005e124bda49b98482bc2b8d8c4, type: 2}
+  - {fileID: 11400000, guid: 8b2c06c71b971354280832ea8737c83e, type: 2}
+  - {fileID: 11400000, guid: dd88d1c3f74fce0409217e3bfa990fcf, type: 2}
+  - {fileID: 11400000, guid: e80fc7b58166280448e58eba49107e40, type: 2}
+  - {fileID: 11400000, guid: aace0a0457c694241ba0511722f0ef1e, type: 2}
+  - {fileID: 11400000, guid: f37a8331dc5c0be43b7af04940729e10, type: 2}
+  - {fileID: 11400000, guid: 224212ba9a1e19d47b141828af668c40, type: 2}
+  - {fileID: 11400000, guid: 788d891b715335144880e78e76fb0f19, type: 2}
+  - {fileID: 11400000, guid: 245358f1c6dd00d4f80d82c5d4ab6949, type: 2}
+  enemy2BossCards:
+  - {fileID: 11400000, guid: 91cca005e124bda49b98482bc2b8d8c4, type: 2}
+  - {fileID: 11400000, guid: 394122a8190151a46910ba79b80eeb1b, type: 2}
+  - {fileID: 11400000, guid: dd88d1c3f74fce0409217e3bfa990fcf, type: 2}
+  - {fileID: 11400000, guid: 2a32f5b7020e4a247af0106f55fb658f, type: 2}
+  - {fileID: 11400000, guid: c84e840db7cc2b64ba8becc5ffe043be, type: 2}
+  - {fileID: 11400000, guid: b226359fac661354fad673ffb8b0fd30, type: 2}
+  - {fileID: 11400000, guid: dccdf9419e870184f98d2327c36cc99d, type: 2}
+  - {fileID: 11400000, guid: aace0a0457c694241ba0511722f0ef1e, type: 2}
+  - {fileID: 11400000, guid: 1d4d25710bb674b4587e9d33896c3bd0, type: 2}
+  - {fileID: 11400000, guid: 37bbc8ced6578e041ae5c529aa97eae8, type: 2}
+  enemy3BossCards:
+  - {fileID: 11400000, guid: 1d4d25710bb674b4587e9d33896c3bd0, type: 2}
+  - {fileID: 11400000, guid: 394122a8190151a46910ba79b80eeb1b, type: 2}
+  - {fileID: 11400000, guid: 23291ca650a3f0d4a9c6d198e0d7f103, type: 2}
+  - {fileID: 11400000, guid: 49ca12caffb7f7542a2716d90ff3be7d, type: 2}
+  - {fileID: 11400000, guid: b30be0282861fbc458386bb8f3e2c6cd, type: 2}
+  - {fileID: 11400000, guid: a00127c06c30e8d4da94eab20b5f8c27, type: 2}
+  - {fileID: 11400000, guid: 91cca005e124bda49b98482bc2b8d8c4, type: 2}
+  - {fileID: 11400000, guid: ca23eec29bf938d48bf1ba73a3d77380, type: 2}
+  - {fileID: 11400000, guid: 2b4719d175e06564e9921efa223269e5, type: 2}
+  - {fileID: 11400000, guid: 895c2489cb821784581257912d891cc1, type: 2}
+  enemy4BossCards:
+  - {fileID: 11400000, guid: c6be7c9c7a7218f4981705467cb19f27, type: 2}
+  - {fileID: 11400000, guid: 63410f289d85e60459d6fac17bf4a261, type: 2}
+  - {fileID: 11400000, guid: 289c8e20440ad2d42ba80561c92e3405, type: 2}
+  - {fileID: 11400000, guid: ac01f6d663e5a6445a562140df0c0e4c, type: 2}
+  - {fileID: 11400000, guid: 4d694adff1ad97849acecdf40af812a2, type: 2}
+  - {fileID: 11400000, guid: ab598a2e147f6a24f8ac0b249fab005c, type: 2}
+  - {fileID: 11400000, guid: 2b2bb75d06b40c94f94d1767551732eb, type: 2}
+  - {fileID: 11400000, guid: 6bc5724eb49d7af4685aa11bb763a4ce, type: 2}
+  - {fileID: 11400000, guid: 20fa16a0919509d419defd7ea81f0221, type: 2}
+  - {fileID: 11400000, guid: 2aed40f19475ffc4992fad9ff0bf36b8, type: 2}
+  gammaBossCards:
+  - {fileID: 11400000, guid: f6028dbd6ce7e5e46955fbcb80c66edb, type: 2}
+  - {fileID: 11400000, guid: ff9b88537404ff24c9fdc9dacbdbbcd8, type: 2}
+  - {fileID: 11400000, guid: ed07df3d607ce594a8a8bf257c57292b, type: 2}
+  - {fileID: 11400000, guid: 4d694adff1ad97849acecdf40af812a2, type: 2}
+  - {fileID: 11400000, guid: 394122a8190151a46910ba79b80eeb1b, type: 2}
+  - {fileID: 11400000, guid: 955ae549836a1454889f0a9c07b279cd, type: 2}
+  - {fileID: 11400000, guid: 37bbc8ced6578e041ae5c529aa97eae8, type: 2}
+  - {fileID: 11400000, guid: feed338416db4264793d8b8057b64c30, type: 2}
   defaultCards:
   - {fileID: 11400000, guid: a00127c06c30e8d4da94eab20b5f8c27, type: 2}
   - {fileID: 11400000, guid: 8746207fad4a6d246ba323acd947eb52, type: 2}
@@ -34080,7 +34128,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &850656898
 RectTransform:
   m_ObjectHideFlags: 0
