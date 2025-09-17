@@ -26,10 +26,13 @@ public class UIManager : MonoBehaviour
     [Space]
     [SerializeField] private int currentBossNumber;
     //public Image playerImage;
-
+    public AudioSource audioSource;
+    //0 deafault sound   1 boss level sound
+    public AudioClip[] audioClip;
     private void Awake()
     {
         if(Instance == null) {Instance = this;}
+        audioSource = GetComponent<AudioSource>();
     }
     private void Start()
     {
@@ -65,7 +68,11 @@ public class UIManager : MonoBehaviour
         }
 
     }
-
+    public void BackgroundMusic(int clipNum)
+    {
+        audioSource.clip = audioClip[clipNum];
+        audioSource.Play();
+    }
     public void ShowBossInformation(string info)
     {
         StartCoroutine(ShowInfo(info));

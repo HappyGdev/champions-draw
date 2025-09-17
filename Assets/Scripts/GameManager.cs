@@ -92,6 +92,7 @@ public class GameManager : MonoBehaviour
     }
     public void GameStart()
     {
+        UIManager.Instance.BackgroundMusic(0);
         MainPanel.SetActive(true);
         BossPanel.SetActive(false);
         // Set Initial Player Place to Start Game (Waypoint zero)
@@ -318,6 +319,7 @@ public class GameManager : MonoBehaviour
         PlayerDisplayProfile.SetActive(true);   
         //Start Boss Fight
         BossFight();
+        UIManager.Instance.BackgroundMusic(1);
     }
 
     public void BossFight()
