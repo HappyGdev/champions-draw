@@ -20,11 +20,12 @@ MonoBehaviour:
   isBoss: 0
   isPlayerInventory: 0
   isDefenseDown: 1
-  value1: 100
+  value1: 7
   value2: 0
   value3: 0
-  cardScore: 110
+  cardScore: 17
   actionType: 2
   multiActionType: 8
   cardPack: 0
   rarity: 1
+  bossSound: {fileID: 0}

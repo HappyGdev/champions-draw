@@ -32,9 +32,8 @@ public class CardEffectManager : MonoBehaviour
             case CardActionType.Attack:
                 int dmg = card.value1;   
                 HealthBar.instance.BossTakeDamage(dmg + dmgBoost);
-
                 GameManager.instance.SendEndAction(false);
-
+                RandomBossTakeDamageSound();
                 break;
 
             case CardActionType.Heal:
@@ -52,13 +51,22 @@ public class CardEffectManager : MonoBehaviour
                 break;
         }
     }
+    public void RandomBossTakeDamageSound()
+    {
+        var chance=UnityEngine.Random.Range(0, 4);
 
+        if (chance == 1)
+        {
+            CardSoundManager.instance.BossTakeDamage();
+        }
+    }
     private void HandleMultiAction(Card card)
     {
         switch (card.multiActionType)
         {
             case MultiActionType.AttackTwice:
                 StartCoroutine(AttackTwiceRoutine(card));
+                RandomBossTakeDamageSound();
                 break;
 
             case MultiActionType.SwapValues:
@@ -67,6 +75,7 @@ public class CardEffectManager : MonoBehaviour
 
             case MultiActionType.BossStun:
                 HealthBar.instance.BossTakeDamage(card.value1 + dmgBoost);
+                RandomBossTakeDamageSound();
                 GameManager.instance.SendEndAction(true);
                 break;
 
@@ -90,6 +99,7 @@ public class CardEffectManager : MonoBehaviour
                 dmgBoost += 2;
                 UIManager.Instance.ShowDamageBoost();
                 HealthBar.instance.BossTakeDamage(card.value1 + dmgBoost);
+                RandomBossTakeDamageSound();
                 GameManager.instance.SendEndAction(false);
                 break;
 
@@ -230,6 +240,16 @@ public class CardEffectManager : MonoBehaviour
 
             default:
                 break;
+        }
+
+        if(crd.bossSound != null)
+        {
+            CardSoundManager.instance.SetAndPlayAudio(crd.bossSound);
+            Debug.Log("Boss Sound");
+        }
+        else
+        {
+            Debug.Log("no Boss Sound");
         }
         ShowBossInfo(crd);
     }

@@ -25,6 +25,7 @@ MonoBehaviour:
   value3: 0
   cardScore: 8
   actionType: 2
-  multiActionType: 10
+  multiActionType: 1
   cardPack: 0
   rarity: 0
+  bossSound: {fileID: 0}

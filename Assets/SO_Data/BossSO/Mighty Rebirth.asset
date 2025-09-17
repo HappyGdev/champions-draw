@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cadee058d7a1094f89dee15f1af7878, type: 3}
   m_Name: Mighty Rebirth
   m_EditorClassIdentifier: 
+  cardId: 
   name: 'Mighty Rebirth '
   description: 'Boss heals 15 HP. '
   artwork: {fileID: 21300000, guid: f503e82ecf3f0aa4e8883b2f6a1532ff, type: 3}
@@ -22,7 +23,9 @@ MonoBehaviour:
   value1: 15
   value2: 0
   value3: 0
+  cardScore: 20
   actionType: 1
   multiActionType: 0
   cardPack: 0
   rarity: 0
+  bossSound: {fileID: 8300000, guid: 678b6d4f040ff784d8fe961d1aa0693f, type: 3}

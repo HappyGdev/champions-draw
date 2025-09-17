@@ -23,7 +23,9 @@ MonoBehaviour:
   value1: 4
   value2: 0
   value3: 0
+  cardScore: 9
   actionType: 0
   multiActionType: 0
   cardPack: 0
   rarity: 0
+  bossSound: {fileID: 8300000, guid: 4720c6af4c029064b852f2e7b409e137, type: 3}

@@ -65,6 +65,8 @@ public class Card : ScriptableObject
     public Packs cardPack;
     public Rarity rarity;
 
+    public AudioClip bossSound;
+
     static Dictionary<string, Card> itemLookupCache;
 
     public static Card GetFromID(string id)
@@ -138,6 +140,14 @@ public class Card : ScriptableObject
     {
         CalculateCardScoreFromRarity();
         return cardScore;
+    }
+    public AudioClip GetBossSound()
+    {
+        if(bossSound != null)
+        {
+            return bossSound;
+        }
+        return null;
     }
 
 #if UNITY_EDITOR

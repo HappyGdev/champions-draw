@@ -531,7 +531,7 @@ public class GameManager : MonoBehaviour
         else
         {
             CreateBossInventory();
-            PlayBossStartSounds();
+            //PlayBossStartSounds();
         }
 
         playerTurn = !playerTurn;

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cadee058d7a1094f89dee15f1af7878, type: 3}
   m_Name: Tail Whip
   m_EditorClassIdentifier: 
+  cardId: 
   name: Tail Whip
   description: 'Deals 6 damage to player. '
   artwork: {fileID: 21300000, guid: eb3e85a8374d7414abe083740c336b0b, type: 3}
@@ -22,7 +23,9 @@ MonoBehaviour:
   value1: 6
   value2: 0
   value3: 0
+  cardScore: 11
   actionType: 0
   multiActionType: 0
   cardPack: 0
   rarity: 0
+  bossSound: {fileID: 8300000, guid: c1f721651d8fadf4c809d7c8cf36eaec, type: 3}

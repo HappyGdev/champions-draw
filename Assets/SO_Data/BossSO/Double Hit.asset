@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cadee058d7a1094f89dee15f1af7878, type: 3}
   m_Name: Double Hit
   m_EditorClassIdentifier: 
+  cardId: 
   name: 'Double Hit '
   description: 'Deals 2x5 damage to player. '
   artwork: {fileID: 21300000, guid: ed798f157aede0849b282a2f306e4936, type: 3}
@@ -22,7 +23,9 @@ MonoBehaviour:
   value1: 5
   value2: 0
   value3: 2
+  cardScore: 10
   actionType: 2
   multiActionType: 1
   cardPack: 0
   rarity: 0
+  bossSound: {fileID: 8300000, guid: 4720c6af4c029064b852f2e7b409e137, type: 3}
