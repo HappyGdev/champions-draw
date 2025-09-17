@@ -23,7 +23,8 @@ MonoBehaviour:
   value1: 3
   value2: 0
   value3: 0
+  cardScore: 8
   actionType: 2
-  multiActionType: 11
+  multiActionType: 10
   cardPack: 0
   rarity: 0
