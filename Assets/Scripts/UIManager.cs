@@ -2,9 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -25,6 +23,11 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI bossInfoText;
     [Space]
     [SerializeField] private int currentBossNumber;
+
+    public float fadeDuration = 1.5f; // seconds
+    private Coroutine fadeCoroutine;
+    private int currentClipIndex = -1;
+
     //public Image playerImage;
     public AudioSource audioSource;
     //0 deafault sound   1 boss level sound
@@ -70,8 +73,42 @@ public class UIManager : MonoBehaviour
     }
     public void BackgroundMusic(int clipNum)
     {
+        // If already playing this clip, do nothing
+        if (clipNum == currentClipIndex)
+            return;
+
+        // Stop any previous fade if running
+        if (fadeCoroutine != null)
+            StopCoroutine(fadeCoroutine);
+
+        // Start new fade transition
+        fadeCoroutine = StartCoroutine(FadeToNewClip(clipNum));
+    }
+
+    private IEnumerator FadeToNewClip(int clipNum)
+    {
+        float startVolume = audioSource.volume;
+
+        // Fade out
+        for (float t = 0; t < fadeDuration; t += Time.deltaTime)
+        {
+            audioSource.volume = Mathf.Lerp(startVolume, 0f, t / fadeDuration);
+            yield return null;
+        }
+        audioSource.volume = 0f;
+
+        // Switch clip
         audioSource.clip = audioClip[clipNum];
         audioSource.Play();
+        currentClipIndex = clipNum;
+
+        // Fade in
+        for (float t = 0; t < fadeDuration; t += Time.deltaTime)
+        {
+            audioSource.volume = Mathf.Lerp(0f, startVolume, t / fadeDuration);
+            yield return null;
+        }
+        audioSource.volume = startVolume;
     }
     public void ShowBossInformation(string info)
     {
