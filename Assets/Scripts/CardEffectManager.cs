@@ -2,6 +2,7 @@ using System.Collections;
 using System;
 using UnityEngine;
 using DG.Tweening;
+using Unity.VisualScripting;
 
 public class CardEffectManager : MonoBehaviour
 {
@@ -256,7 +257,7 @@ public class CardEffectManager : MonoBehaviour
 
     private void ShowBossInfo(Card card)
     {
-        UIManager.Instance.ShowBossInformation(card.description);
+        UIManager.Instance.ShowBossInformation(card.bossSound.name);
     }
     private void HandleBossMultiAction(Card card)
     {
