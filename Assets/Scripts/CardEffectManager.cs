@@ -287,11 +287,23 @@ public class CardEffectManager : MonoBehaviour
                 break;
         }
     }
+    //private IEnumerator BossMultipleAtatck(Card crd, int round)
+    //{
+    //    for (int i = 0; i < round; i++)
+    //    {
+    //        GameManager.instance.BossAttackPlayer(crd.value1, false);
+    //        yield return new WaitForSeconds(0.4f);
+    //    }
+    //}
     private IEnumerator BossMultipleAtatck(Card crd, int round)
     {
         for (int i = 0; i < round; i++)
         {
-            GameManager.instance.BossAttackPlayer(crd.value1, false);
+            bool isLastAttack = (i == round - 1);
+
+            // If it's the last attack → end boss turn
+            GameManager.instance.BossAttackPlayer(crd.value1, !isLastAttack);
+
             yield return new WaitForSeconds(0.4f);
         }
     }

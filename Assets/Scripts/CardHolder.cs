@@ -36,5 +36,4 @@ public class CardHolder : MonoBehaviour
         BossCard.Clear();             // clear old data
         BossCard.AddRange(bossList);  // copy all from boss list
     }
-
 }

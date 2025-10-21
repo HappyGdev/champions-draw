@@ -19,11 +19,13 @@ MonoBehaviour:
   type: {fileID: 21300000, guid: 349cbc967fc589f40ade6569d0de04ed, type: 3}
   isBoss: 0
   isPlayerInventory: 0
-  isDefenseDown: 0
+  isDefenseDown: 1
   value1: 8
   value2: 0
   value3: 0
+  cardScore: 18
   actionType: 2
   multiActionType: 1
   cardPack: 2
   rarity: 1
+  bossSound: {fileID: 0}
